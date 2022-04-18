@@ -1,8 +1,10 @@
-# <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="drawing" width="30"/> C++ Table Tennis
+# C++ Table Tennis
 Work in progress. Not yet working.
 
-# :package: Usage
+<br>
+
+## :package: Usage
 Program will later be released as a packaged program.
 
-# :hammer: Installation
+## :hammer: Installation
 Compile the CMakeLists.txt with **cmake version 3.22.3** and link with **g++ (clang) version 13.0.0** (clang-1300.0.27.3)
