@@ -1,4 +1,4 @@
-# <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="drawing" width="30" style="transform: translateY(5px); filter: drop-shadow(3px 3px 0px #EEEEEE); margin-right: 5px"/> C++ Table Tennis
+# <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="drawing" width="30"/> C++ Table Tennis
 Work in progress. Not yet working.
 
 # :package: Usage
