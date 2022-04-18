@@ -50,7 +50,7 @@ void RenderWindow::destroy() {
     SDL_DestroyWindow(window);
 }
 
-RenderTarget *RenderWindow::createTarget(const char *file, int *posX, int *posY, int width, int height) {
+RenderTarget *RenderWindow::createTarget(const char *file, int *posX, int *posY, int width, int height) const {
     SDL_Texture *texture = IMG_LoadTexture(renderer, file);
     if (!texture) {
         throw std::runtime_error(
@@ -61,6 +61,6 @@ RenderTarget *RenderWindow::createTarget(const char *file, int *posX, int *posY,
     return new RenderTarget(texture, posX, posY, width, height);
 }
 
-RenderTarget *RenderWindow::createTarget(const char *file, EntityBase *entity, int width, int height) {
+RenderTarget *RenderWindow::createTarget(const char *file, EntityBase *entity, int width, int height) const {
     return createTarget(file, &entity->renderX, &entity->renderY, width, height);
 }

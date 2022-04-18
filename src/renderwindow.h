@@ -20,6 +20,6 @@ public:
     void clear();
     void destroy();
 
-    RenderTarget *createTarget(const char *file, int *posX, int *posY, int width, int height);
-    RenderTarget *createTarget(const char *file, EntityBase *entity, int width, int height);
+    RenderTarget *createTarget(const char *file, int *posX, int *posY, int width, int height) const;
+    RenderTarget *createTarget(const char *file, EntityBase *entity, int width, int height) const;
 };

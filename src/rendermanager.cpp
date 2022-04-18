@@ -3,14 +3,9 @@
 //
 
 #include "rendermanager.h"
+#include "vector"
 
-RenderManager::RenderManager(SDL_Renderer *renderer) {
-    this->renderer = renderer;
-}
-
-RenderManager::~RenderManager() {
-
-}
+std::vector<RenderTarget*> RenderManager::targets;
 
 void RenderManager::move(int oldIndex, int newIndex) {
     if (oldIndex > newIndex)
@@ -20,13 +15,21 @@ void RenderManager::move(int oldIndex, int newIndex) {
 }
 
 void RenderManager::addTarget(RenderTarget *target) {
-    targets.push_back(*target);
+    targets.push_back(target);
 }
 
-void RenderManager::renderAll() {
+void RenderManager::renderAll(SDL_Renderer *renderer) {
     for (auto target : targets) {
-        target.render(
+        target->render(
             renderer
         );
     }
+}
+
+int RenderManager::indexFromTarget(RenderTarget *target) {
+	for (int i = 0; i < targets.size(); i++) {
+		if (targets[i] == target)
+			return i;
+	}
+	return -1;
 }

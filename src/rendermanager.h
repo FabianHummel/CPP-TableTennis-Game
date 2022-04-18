@@ -9,14 +9,11 @@
 
 class RenderManager {
 private:
-    SDL_Renderer *renderer;
-    std::vector<RenderTarget> targets;
+    static std::vector<RenderTarget*> targets;
 
 public:
-    explicit RenderManager(SDL_Renderer *renderer);
-    ~RenderManager();
-
-    void move(int oldIndex, int newIndex);
-    void addTarget(RenderTarget *target);
-    void renderAll();
+    static void move(int oldIndex, int newIndex);
+    static void addTarget(RenderTarget *target);
+    static void renderAll(SDL_Renderer *renderer);
+	static int indexFromTarget(RenderTarget *target);
 };

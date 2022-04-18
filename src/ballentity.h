@@ -6,12 +6,14 @@
 
 #include "entitybase.h"
 #include "utility/vector3.h"
+#include "rendermanager.h"
 
 class BallEntity : public EntityBase {
 private:
     float height;
     float posX;
     float posY;
+	bool renderBehind;
 
 public:
     EntityBase *shadow;
