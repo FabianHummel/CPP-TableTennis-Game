@@ -19,17 +19,7 @@ void RenderManager::addTarget(RenderTarget *target) {
 }
 
 void RenderManager::renderAll(SDL_Renderer *renderer) {
-    for (auto target : targets) {
-        target->render(
-            renderer
-        );
-    }
-}
-
-int RenderManager::indexFromTarget(RenderTarget *target) {
-	for (int i = 0; i < targets.size(); i++) {
-		if (targets[i] == target)
-			return i;
+	for (auto &target : targets) {
+		target->render(renderer);
 	}
-	return -1;
 }

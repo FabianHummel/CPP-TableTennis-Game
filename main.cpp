@@ -15,11 +15,11 @@ int main(int argc, char** argv){
 
     SDL_Delay(500);
 
-    ball->setPosX(SCREEN_WIDTH/3.0);
-    ball->setPosY(SCREEN_HEIGHT/3.0 * 2);
+    ball->setPosX(SCREEN_WIDTH/2.0);
+    ball->setPosY(SCREEN_HEIGHT/4.0 * 3);
 
     ball->applyForce(
-        Vector3(.5f, 5.0f, -2.0f)
+        Vector3(1.0f, 4.0f, -8.0f)
     );
 
     // Load pngs

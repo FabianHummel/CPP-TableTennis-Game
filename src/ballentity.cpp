@@ -72,18 +72,24 @@ void BallEntity::setPosY(float v) {
 }
 
 void BallEntity::moveByY(float v) {
-    this->posY += v;
-
-    if (posY < 440 && !renderBehind) {
+    if (posY < 450 && !renderBehind) {
 		renderBehind = true;
-        RenderManager::move(
-            1, 3
-        );
-    } else if (posY >= 440 && renderBehind) {
+		RenderManager::move(
+			1, 3
+		);
+	} else if (posY >= 450 && renderBehind) {
 		renderBehind = false;
 		RenderManager::move(
 			3, 1
 		);
+	}
+
+	if ( (posY > 450 && posY + v < 450) || (posY < 450 && posY + v > 450) ) {
+		// Ball is going to be in the net
+		setPosY(450);
+		velocity.z *= -0.2f;
+	} else {
+		this->posY += v;
 	}
 
     updateRenderPos();
