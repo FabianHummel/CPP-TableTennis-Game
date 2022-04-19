@@ -6,7 +6,7 @@ Work in progress. Not yet working.
 ## :books: Libraries
 This project takes advantage of the [**SDL2.0 (Simple DirectMedia Layer v2) Framework**](https://www.libsdl.org/) together with the extensions [**SDL_image**](http://wiki.libsdl.org/Libraries#sdl_image) and [**SDL_mixer**](http://wiki.libsdl.org/Libraries#sdl_mixer)
 
-## :package: Usage
+## :package: Download
 Program will later be released as a packaged program.
 
 ## :hammer: Installation
