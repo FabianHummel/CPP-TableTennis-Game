@@ -5,7 +5,7 @@
 #pragma once
 
 #include "vector"
-#include "entitybase.h"
+#include "../entitybase.h"
 #include "rendertarget.h"
 
 class RenderWindow {

@@ -15,7 +15,7 @@ include_directories(
 # Add source files
 add_executable(
         TableTennis main.cpp
-        src/renderwindow.cpp src/renderwindow.h src/ballentity.cpp src/ballentity.h src/entitybase.cpp src/entitybase.h src/shadowentity.cpp src/shadowentity.h src/utility/vector3.cpp src/utility/vector3.h src/utility/mathutil.cpp src/utility/mathutil.h src/rendermanager.cpp src/rendermanager.h src/rendertarget.cpp src/rendertarget.h)
+        src/render/renderwindow.cpp src/render/renderwindow.h src/ballentity.cpp src/ballentity.h src/entitybase.cpp src/entitybase.h src/shadowentity.cpp src/shadowentity.h src/utility/vector3.cpp src/utility/vector3.h src/utility/mathutil.cpp src/utility/mathutil.h src/render/rendermanager.cpp src/render/rendermanager.h src/render/rendertarget.cpp src/render/rendertarget.h)
 
 # Link libraries
 target_link_libraries(

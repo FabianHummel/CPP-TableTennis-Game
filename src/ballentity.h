@@ -6,7 +6,7 @@
 
 #include "entitybase.h"
 #include "utility/vector3.h"
-#include "rendermanager.h"
+#include "render/rendermanager.h"
 
 class BallEntity : public EntityBase {
 private:

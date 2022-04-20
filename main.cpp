@@ -1,6 +1,6 @@
 #include <SDL.h>
-#include "src/renderwindow.h"
-#include "src/rendermanager.h"
+#include "src/render/renderwindow.h"
+#include "src/render/rendermanager.h"
 #include "src/ballentity.h"
 #include "src/utility/vector3.h"
 #include "vector"
@@ -16,10 +16,10 @@ int main(int argc, char** argv){
     SDL_Delay(500);
 
     ball->setPosX(SCREEN_WIDTH/2.0);
-    ball->setPosY(SCREEN_HEIGHT/4.0 * 3);
+    ball->setPosY(SCREEN_HEIGHT/4.0 * 3.0);
 
     ball->applyForce(
-        Vector3(0.5f, 5.5f, -8.0f)
+        Vector3(-0.5f, 4.5f, -3.0f)
     );
 
     // Load pngs
