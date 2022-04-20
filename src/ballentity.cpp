@@ -9,6 +9,7 @@
 #include <iostream>
 
 BallEntity::BallEntity() : posX(), posY(), velocity(Vector3(0.0f, 0.0f, 0.0f)) {
+	renderBehind = false;
     height = 0.0f;
     shadow = new ShadowEntity(
         this
@@ -16,13 +17,16 @@ BallEntity::BallEntity() : posX(), posY(), velocity(Vector3(0.0f, 0.0f, 0.0f)) {
 }
 
 BallEntity::~BallEntity() {
-    delete this->shadow;
-    delete this;
+	delete this->shadow;
 }
 
 void BallEntity::updateShadow() {
-    shadow->setRenderX( (int) ( getPosX() + getHeight() * ShadowEntity::SHADOW_ANGLE_Z ) );
-    shadow->setRenderY( (int) ( getPosY() + 20 - getHeight() * ShadowEntity::SHADOW_ANGLE_Y ) );
+    shadow->setRenderX(
+		(int) ( getPosX() + getHeight() * ShadowEntity::SHADOW_ANGLE_Z )
+	);
+    shadow->setRenderY(
+		(int) ( getPosY() + 20 - getHeight() * ShadowEntity::SHADOW_ANGLE_Y )
+	);
 
     shadow->moveByX(
     (int) height
@@ -30,8 +34,12 @@ void BallEntity::updateShadow() {
 }
 
 void BallEntity::updateRenderPos() {
-    setRenderX( (int) getPosX() );
-    setRenderY( (int) ( getPosY() - getHeight() ));
+    setRenderX(
+		(int) getPosX()
+	);
+    setRenderY(
+		(int) ( getPosY() - getHeight() )
+	);
 }
 
 float BallEntity::getHeight() {
@@ -84,7 +92,7 @@ void BallEntity::moveByY(float v) {
 		);
 	}
 
-	if ( (posY > 450 && posY + v < 450) || (posY < 450 && posY + v > 450) ) {
+	if ( height < 60 && ( (posY > 450 && posY + v < 450) || (posY < 450 && posY + v > 450) ) ) {
 		// Ball is going to be in the net
 		setPosY(450);
 		velocity.z *= -0.2f;
@@ -104,7 +112,7 @@ void BallEntity::applyGravity() {
 }
 
 void BallEntity::applyFriction() {
-    if (this->getHeight() > 0.0f) {
+    if (this->height > 0.0f) {
         return;
     }
 

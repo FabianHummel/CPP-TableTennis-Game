@@ -19,7 +19,7 @@ int main(int argc, char** argv){
     ball->setPosY(SCREEN_HEIGHT/4.0 * 3);
 
     ball->applyForce(
-        Vector3(1.0f, 4.0f, -8.0f)
+        Vector3(0.5f, 5.5f, -8.0f)
     );
 
     // Load pngs
