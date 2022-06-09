@@ -1,73 +1,50 @@
 #include <SDL.h>
 #include "src/render/renderwindow.h"
-#include "src/render/rendermanager.h"
-#include "src/ballentity.h"
-#include "src/utility/vector3.h"
+#include "src/entity/entity.h"
+#include "src/gameplay/clickmanager.h"
 #include "vector"
+#include "src/entity/components/spriterenderer.h"
 
-const int SCREEN_WIDTH = 700;
-const int SCREEN_HEIGHT = 1100;
 const SDL_Color BG = {203, 211, 235, 255};
 
-int main(int argc, char** argv){
-    RenderWindow *window = new RenderWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Table Tennis");
-    BallEntity *ball = new BallEntity();
+int main(int argc, char** argv) {
+	RenderWindow *window = new RenderWindow(
+		RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT, "Table Tennis"
+	);
 
-    SDL_Delay(500);
+	Entity ball = ( new Entity("Ball") )
+		->addComponent<SpriteRenderer>(new SpriteRenderer(
+			"../res/ball.png", window->renderer, 20, 20, 40, 40)
+		);
 
-    ball->setPosX(SCREEN_WIDTH/2.0);
-    ball->setPosY(SCREEN_HEIGHT/4.0 * 3.0);
+	bool running = true;
+	while (running) {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+				case SDL_QUIT:
+					running = false;
+					break;
 
-    ball->applyForce(
-        Vector3(-0.5f, 4.5f, -3.0f)
-    );
+				case SDL_MOUSEBUTTONDOWN:
+					int x, y;
+					SDL_GetMouseState(&x, &y);
+					ClickManager::onClick(x, y);
+					break;
 
-    // Load pngs
-    RenderTarget *tableTex = window->createTarget("../res/table.png", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	RenderTarget *netTex = window->createTarget("../res/net.png", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	RenderTarget *ballTex = window->createTarget("../res/ball.png", ball, 40, 40);
-	RenderTarget *ballShadowTex = window->createTarget("../res/ballshadow.png", ball->shadow, 40, 40);
+				default:
+					break;
+			}
+		}
 
-    RenderManager::addTarget(tableTex);
-    RenderManager::addTarget(netTex);
-    RenderManager::addTarget(ballShadowTex);
-    RenderManager::addTarget(ballTex);
+		window->drawBG(BG);
+		window->clear();
 
-    bool running = true;
-    while(running)
-    {
-        SDL_Event event;
-        while(SDL_PollEvent(&event))
-        {
-            switch(event.type) {
-                case SDL_QUIT:
-                    running = false;
-                    break;
+		SDL_RenderPresent(
+			window->renderer
+		);
+	}
 
-                default:
-                    break;
-            }
-        }
-
-        ball->applyGravity();
-        ball->applyFriction();
-        ball->applyVelocity();
-        ball->checkGround();
-        ball->updateShadow();
-
-        window->drawBG(BG);
-        window->clear();
-
-        // Render pngs
-        RenderManager::renderAll(
-            window->renderer
-        );
-
-        SDL_RenderPresent(
-            window->renderer
-        );
-    }
-
-    window->destroy();
-    return 0;
+	delete window;
+	return 0;
 }

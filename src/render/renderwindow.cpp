@@ -3,9 +3,7 @@
 //
 
 #include <SDL.h>
-#include <SDL_image.h>
 #include "renderwindow.h"
-#include "string"
 
 RenderWindow::RenderWindow(int width, int height, const char *title) {
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
@@ -32,35 +30,19 @@ RenderWindow::RenderWindow(int width, int height, const char *title) {
 }
 
 RenderWindow::~RenderWindow() {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    this->destroy();
 }
 
-void RenderWindow::drawBG(const SDL_Color color) {
+void RenderWindow::drawBG(const SDL_Color color) const {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
-void RenderWindow::clear() {
+void RenderWindow::clear() const {
     SDL_RenderClear(renderer);
 }
 
-void RenderWindow::destroy() {
+void RenderWindow::destroy() const {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-}
-
-RenderTarget *RenderWindow::createTarget(const char *file, int *posX, int *posY, int width, int height) const {
-    SDL_Texture *texture = IMG_LoadTexture(renderer, file);
-    if (!texture) {
-        throw std::runtime_error(
-            "Error: Failed to load texture\nSDL Error: '%s'\n" + std::string(SDL_GetError())
-        );
-    }
-
-    return new RenderTarget(texture, posX, posY, width, height);
-}
-
-RenderTarget *RenderWindow::createTarget(const char *file, EntityBase *entity, int width, int height) const {
-    return createTarget(file, &entity->renderX, &entity->renderY, width, height);
+	SDL_Quit();
 }
