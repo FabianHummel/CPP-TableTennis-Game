@@ -4,6 +4,7 @@
 
 #include "mathutil.h"
 #include <cmath>
+#include <algorithm>
 
 void MathUtil::moveTowards(float &current, float target, float maxDelta) {
     if (abs(target - current) <= maxDelta) {

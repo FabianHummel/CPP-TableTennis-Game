@@ -4,7 +4,8 @@
 
 #include "transform.h"
 
-Transform::Transform(const Vector3& position, const Vector2Int& scale) : position(position), scale(scale) {}
+Transform::Transform(const Vector3& position, const Vector2Int& scale, float angle)
+	: position(position), scale(scale), rotation(angle) {}
 
 void Transform::onInitialize() {}
 
@@ -94,4 +95,24 @@ void Transform::mvByScaleY(int v) {
 
 void Transform::printScale() const {
 	printf("Scale: %d, %d\n", scale.x, scale.y);
+}
+
+void Transform::setRotation(float v) {
+	this->rotation = v;
+}
+
+float Transform::getRotation() const {
+	return rotation;
+}
+
+void Transform::printRotation() const {
+	printf("Rotation: %f\n", rotation);
+}
+
+void Transform::setAnchor(SDL_Point v) {
+	this->anchor = new SDL_Point(v);
+}
+
+SDL_Point* Transform::getAnchor() const {
+	return anchor;
 }

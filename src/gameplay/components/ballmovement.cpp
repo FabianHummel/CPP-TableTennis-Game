@@ -6,6 +6,7 @@
 #include "../../utility/mathutil.h"
 #include "gamemanager.h"
 #include "../../entity/entitymanager.h"
+#include "../../render/renderwindow.h"
 #include <algorithm>
 #include <SDL.h>
 
@@ -15,8 +16,10 @@ void BallMovement::onInitialize() {
 }
 
 void BallMovement::onStart() {
-	this->applyForce({ 1.2, 3, -3 });
-	transform->setPosition({ 400, 0, 600 });
+	this->setIdle();
+	transform->setPosition({
+		(float) RenderWindow::trueCenterX(transform->getScaleX()), 100, 650
+	});
 }
 
 void BallMovement::onUpdate() {
@@ -61,6 +64,10 @@ void BallMovement::applyForce(const Vector3& force) {
 
 void BallMovement::setForce(const Vector3 &force) {
 	this->velocity = force;
+}
+
+Vector3 BallMovement::getForce() const {
+	return this->velocity;
 }
 
 void BallMovement::applyGravity() {

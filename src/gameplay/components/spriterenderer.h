@@ -11,6 +11,8 @@ private:
 	SDL_Renderer *renderer;
     const char *img;
 
+	bool visible = true;
+
 	Transform *transform;
 	int opacity = 255;
 
@@ -23,4 +25,7 @@ public:
 
 	void setImage(const char *img);
 	void setOpacity(int v);
+
+	void setVisible(bool v);
+	bool isVisible();
 };

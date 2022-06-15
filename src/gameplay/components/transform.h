@@ -5,18 +5,21 @@
 #pragma once
 
 #include <tuple>
+#include <SDL_rect.h>
 #include "../component.h"
 #include "../../utility/vector3.h"
 #include "../../utility/vector2int.h"
 
 class Transform : public Component {
 private:
-	Vector3 position;
-	Vector2Int scale;
-	// Vector3 rotation;
+	Vector3 position = { 0, 0, 0 };
+	Vector2Int scale = { 0, 0 };
+
+	float rotation = 0.0f;
+	SDL_Point *anchor = nullptr;
 
 public:
-	Transform(const Vector3& position, const Vector2Int& scale);
+	Transform(const Vector3& position, const Vector2Int& scale, float angle);
 
 	void onInitialize() override;
 	void onStart() override;
@@ -44,4 +47,11 @@ public:
 	void mvByScaleX(int v);
 	void mvByScaleY(int v);
 	void printScale() const;
+
+	void setRotation(float v);
+	float getRotation() const;
+	void printRotation() const;
+
+	void setAnchor(SDL_Point v);
+	SDL_Point* getAnchor() const;
 };

@@ -18,14 +18,18 @@ void SpriteRenderer::onStart() {
 }
 
 void SpriteRenderer::onUpdate() {
-	SDL_Rect rect;
-	rect.x = (int) transform->getX();
-	rect.y = (int) ( -transform->getY() + transform->getZ() );
-	rect.w = transform->getScaleX();
-	rect.h = transform->getScaleY();
+	if (isVisible()) {
+		SDL_Rect rect;
+		rect.x = (int) transform->getX();
+		rect.y = (int) ( -transform->getY() + transform->getZ() );
+		rect.w = transform->getScaleX();
+		rect.h = transform->getScaleY();
 
-	SDL_SetTextureAlphaMod(texture, opacity);
-	SDL_RenderCopy(renderer, texture, nullptr, &rect);
+		SDL_SetTextureAlphaMod(texture, opacity);
+		SDL_RenderCopyEx(
+			renderer, texture, nullptr, &rect, transform->getRotation(), transform->getAnchor(), SDL_FLIP_NONE
+		);
+	}
 }
 
 void SpriteRenderer::setImage(const char *v) {
@@ -34,4 +38,12 @@ void SpriteRenderer::setImage(const char *v) {
 
 void SpriteRenderer::setOpacity(int v) {
 	this->opacity = v;
+}
+
+void SpriteRenderer::setVisible(bool v) {
+	this->visible = v;
+}
+
+bool SpriteRenderer::isVisible() {
+	return this->visible;
 }

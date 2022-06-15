@@ -20,7 +20,7 @@ private:
 	Vector3 velocity = {0.0f, 0.0f, 0.0f};
 
 	int idleTime = 0;
-	constexpr static int IDLE_TIME = 100;
+	constexpr static int IDLE_TIME = 200;
 
 	bool renderBehind = false;
 	bool fellOff = false;
@@ -33,6 +33,7 @@ public:
 
 	void applyForce(const Vector3& force);
 	void setForce(const Vector3& force);
+	Vector3 getForce() const;
 
 	void setIdle();
 	void setActive();

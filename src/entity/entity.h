@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include "../gameplay/component.h"
+#include "../gameplay/components/transform.h"
 
 class Entity {
 private:
