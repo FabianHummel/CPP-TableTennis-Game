@@ -3,31 +3,23 @@
 //
 
 #include "entity.h"
+#include "entitymanager.h"
 
 Entity::Entity(const char *name) {
 	this->name = name;
+	EntityManager::addEntity(this);
 }
 
-template<typename T> Entity Entity::addComponent(T *v) {
-	this->components->push_back(v);
-	return *this;
+Entity::~Entity() {
+	EntityManager::removeEntity(this);
 }
 
-template<typename T> Entity Entity::removeComponent(T v) {
-	for (auto it = this->components->begin(); it != this->components->end(); it++) {
-		if (&(*it) == v) {
-			this->components->erase(it);
-			break;
-		}
+void Entity::forEachComponent(const std::function<void(Component*)>& callback) {
+	for (auto &component : components) {
+		callback(component.second);
 	}
-	return *this;
 }
 
-template<typename T> T* Entity::getComponent() {
-	for (auto &component : *this->components) {
-		if (typeid(T) == typeid(component)) {
-			return (T *) &component;
-		}
-	}
-	return nullptr;
+const char *Entity::getName() const {
+	return this->name;
 }

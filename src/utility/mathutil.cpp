@@ -17,7 +17,7 @@ void MathUtil::moveTowardsZero(float &current, float maxDelta) {
     return moveTowards(current, 0, maxDelta);
 }
 
-void MathUtil::moveTowards(Vector3 &current, Vector3 target, float maxDelta) {
+void MathUtil::moveTowards(Vector3 &current, const Vector3& target, float maxDelta) {
     float deltaX = target.x - current.x;
     float deltaY = target.y - current.y;
     float deltaZ = target.z - current.z;
@@ -32,13 +32,17 @@ void MathUtil::moveTowards(Vector3 &current, Vector3 target, float maxDelta) {
     float newX = current.x + deltaX / dist * maxDelta;
     float newY = current.y + deltaY / dist * maxDelta;
     float newZ = current.z + deltaZ / dist * maxDelta;
-    current = Vector3(newX, newY, newZ);
+    current = { newX, newY, newZ };
 }
 
 void MathUtil::moveTowardsZero(Vector3 &current, float maxDelta) {
-    return moveTowards(current, Vector3(0, 0, 0), maxDelta);
+    return moveTowards(current, { 0, 0, 0 }, maxDelta);
 }
 
 float MathUtil::sign(float x) {
     return x < 0 ? -1 : 1;
+}
+
+bool MathUtil::closeToPoint(float value, float threshold) {
+    return abs(value) <= threshold;
 }

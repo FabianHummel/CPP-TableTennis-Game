@@ -11,6 +11,9 @@ public:
 	const static int SCREEN_WIDTH = 700;
 	const static int SCREEN_HEIGHT = 1100;
 
+	const static int SCREEN_CENTER_X = SCREEN_WIDTH / 2;
+	const static int SCREEN_CENTER_Y = SCREEN_HEIGHT / 2;
+
     SDL_Window *window;
     SDL_Renderer *renderer;
 
@@ -20,4 +23,7 @@ public:
     void drawBG(SDL_Color color) const;
     void clear() const;
     void destroy() const;
+
+	static int trueCenterX(int scale);
+	static int trueCenterY(int scale);
 };
