@@ -1,5 +1,5 @@
 # C++ Table Tennis
-Work in progress. Not yet working.
+Work in strength. Not yet working.
 
 <br>
 

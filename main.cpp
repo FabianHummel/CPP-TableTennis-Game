@@ -7,6 +7,7 @@
 #include "src/gameplay/components/shadowtransformer.h"
 #include "src/gameplay/components/gamemanager.h"
 #include "src/gameplay/components/clickmanager.h"
+#include "src/gameplay/components/powerbar.h"
 
 const SDL_Color BG = {203, 211, 235, 255};
 
@@ -64,6 +65,23 @@ int main(int argc, char** argv) {
 			"../res/indicator.png", window->renderer
 		) );
 
+	Entity *powerbar = ( new Entity("Powerbar") )
+		->addComponent(new Transform(
+			{ 0, 0, 0 }, { 70, 70 }, 0.0f
+		) )
+		->addComponent(new SpriteRenderer(
+			"../res/powerbar.png", window->renderer
+		) )
+		->addComponent(new Powerbar());
+
+	Entity *powerbox = ( new Entity("Powerbox") )
+		->addComponent(new Transform(
+			{ 0, 0, 0 }, { 70, 70 }, 0.0f
+		) )
+		->addComponent(new SpriteRenderer(
+			"../res/powerbox.png", window->renderer
+		) );
+
 	EntityManager::initialize();
 	EntityManager::start();
 
@@ -118,6 +136,8 @@ int main(int argc, char** argv) {
 	delete shadow;
 	delete ball;
 	delete indicator;
+	delete powerbox;
+	delete powerbar;
 	delete global;
 
 	delete window;

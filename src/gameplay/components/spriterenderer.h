@@ -16,6 +16,8 @@ private:
 	Transform *transform;
 	int opacity = 255;
 
+	SDL_Rect *srcrect = nullptr;
+
 public:
 	SpriteRenderer(const char *img, SDL_Renderer *renderer);
 
@@ -25,7 +27,8 @@ public:
 
 	void setImage(const char *img);
 	void setOpacity(int v);
+	void setSrcrect(SDL_Rect rect);
 
 	void setVisible(bool v);
-	bool isVisible();
+	bool isVisible() const;
 };

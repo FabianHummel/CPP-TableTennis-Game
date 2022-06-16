@@ -8,6 +8,7 @@
 #include "transform.h"
 #include "spriterenderer.h"
 #include "ballmovement.h"
+#include "powerbar.h"
 
 class ClickManager : public Component {
 private:
@@ -15,12 +16,21 @@ private:
 	int startX = 0, startY = 0;
 	int currentX = 0, currentY = 0;
 	int deltaX = 0, deltaY = 0;
-
 	int angle = 0;
 
-	Transform *indicator;
-	SpriteRenderer *sprite;
+	float strength = 0;
+
 	BallMovement *ball;
+
+	Transform *indicator;
+	SpriteRenderer *indicatorSprite;
+
+	Transform *powerbox;
+	SpriteRenderer *powerboxSprite;
+
+	Transform *powerbar;
+	SpriteRenderer *powerbarSprite;
+	Powerbar *powerbarBehavior;
 
 public:
 	void onInitialize() override;
