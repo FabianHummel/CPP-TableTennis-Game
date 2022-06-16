@@ -1,5 +1,5 @@
 # C++ Table Tennis
-Work in strength. Not yet working.
+Work in progress. Not yet working.
 
 <br>
 
@@ -13,6 +13,7 @@ Program will later be released as a packaged program.
 1. Download and install SDL2.0
 2. Download and install libraries / dependencies
     * SDL_image
+    * SDL_ttf (not yet used)
     * SDL_mixer (not yet used)
 4. Compile the CMakeLists.txt with **cmake version 3.22.3** and link with **g++ (clang) version 13.0.0** (clang-1300.0.27.3)
 5. Run the application with `./TableTennis`
