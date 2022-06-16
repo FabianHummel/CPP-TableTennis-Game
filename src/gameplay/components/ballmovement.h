@@ -20,7 +20,7 @@ private:
 	Vector3 velocity = {0.0f, 0.0f, 0.0f};
 
 	int idleTime = 0;
-	constexpr static int IDLE_TIME = 200;
+	constexpr static int IDLE_TIME = 60;
 
 	bool renderBehind = false;
 	bool fellOff = false;
@@ -47,6 +47,4 @@ public:
 	void checkGround();
 	void checkIdle();
 	void checkFellOff();
-
-	bool inTableBounds();
 };

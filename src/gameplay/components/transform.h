@@ -54,4 +54,6 @@ public:
 
 	void setAnchor(SDL_Point v);
 	SDL_Point* getAnchor() const;
+
+	bool inTableBounds() const;
 };

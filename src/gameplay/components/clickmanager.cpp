@@ -40,7 +40,7 @@ void ClickManager::onClick(int x, int y) {
 	isDragging = true;
 	startX = x;
 	startY = y;
-	printf("began mouse drag at: %d, %d\n", startX, startY);
+	// printf("began mouse drag at: %d, %d\n", startX, startY);
 
 	indicator->setPosition({
 		startX - indicator->getScaleX() / 2.0f, 0,
@@ -62,15 +62,15 @@ void ClickManager::onRelease() {
 	powerbarSprite->setVisible(false);
 
 	isDragging = false;
-	printf("ended mouse drag at: %d, %d, ", currentX, currentY);
-	printf("with a delta of: %d, %d ", deltaX, deltaY);
-	printf("and an angle of: %d°\n", angle);
+	// printf("ended mouse drag at: %d, %d, ", currentX, currentY);
+	// printf("with a delta of: %d, %d ", deltaX, deltaY);
+	// printf("and an angle of: %d°\n", angle);
 
 	if (strength > 0.1f) {
 		ball->setActive();
 		ball->setForce({
 			( float ) -deltaX / strength * 0.03f,
-			ball->getForce().y,
+			ball->getForce().y * strength * 2.0f,
 			( float ) -deltaY / strength * 0.03f
 		});
 	}

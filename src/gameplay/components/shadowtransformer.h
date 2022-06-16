@@ -12,7 +12,6 @@
 class ShadowTransformer : public Component {
 private:
 	Transform *ball;
-	BallMovement *ballMovement;
 
 	Transform *shadow;
 	SpriteRenderer *sprite;

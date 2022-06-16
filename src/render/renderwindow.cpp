@@ -13,8 +13,8 @@ RenderWindow::RenderWindow(int width, int height, const char *title) {
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     window = SDL_CreateWindow(title,
-      SDL_WINDOWPOS_UNDEFINED,
-      SDL_WINDOWPOS_UNDEFINED,
+      SDL_WINDOWPOS_CENTERED,
+	  SDL_WINDOWPOS_CENTERED,
       width / 2, height / 2, SDL_WINDOW_ALLOW_HIGHDPI + SDL_WINDOW_OPENGL
     );
     if(!window){
@@ -22,7 +22,7 @@ RenderWindow::RenderWindow(int width, int height, const char *title) {
         return;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED + SDL_RENDERER_PRESENTVSYNC);
     if(!renderer){
         printf("Error: Failed to create renderer\nSDL Error: '%s'\n", SDL_GetError());
         return;

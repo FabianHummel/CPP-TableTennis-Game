@@ -91,7 +91,7 @@ void BallMovement::applyVelocity() {
 
 void BallMovement::checkGround() {
 	if (transform->getY() < 0) {
-		if (inTableBounds()) {
+		if (transform->inTableBounds()) {
 			transform->setY(0);
 			this->velocity.y *= isIdle() ? -1.0f : -0.8f;
 			sprite->setOpacity(
@@ -135,10 +135,6 @@ void BallMovement::checkFellOff() {
 			!renderBehind
 		);
 	}
-}
-
-bool BallMovement::inTableBounds() {
-	return transform->getX() > 35 && transform->getX() < 665 && transform->getZ() > 72 && transform->getZ() < 938;
 }
 
 void BallMovement::setIdle() {

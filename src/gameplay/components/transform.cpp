@@ -116,3 +116,7 @@ void Transform::setAnchor(SDL_Point v) {
 SDL_Point* Transform::getAnchor() const {
 	return anchor;
 }
+
+bool Transform::inTableBounds() const {
+	return getX() > 35 && getX() < 665 && getZ() > 72 && getZ() < 938;
+}
