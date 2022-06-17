@@ -9,6 +9,7 @@
 #include "transform.h"
 #include "../../utility/vector3.h"
 #include "spriterenderer.h"
+#include "../../sound/soundmanager.h"
 
 class BallMovement : public Component {
 private:

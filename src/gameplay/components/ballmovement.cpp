@@ -20,6 +20,10 @@ void BallMovement::onStart() {
 	transform->setPosition({
 		(float) RenderWindow::trueCenterX(transform->getScaleX()), 100, 650
 	});
+
+	SoundManager::addSound("res/sounds/ball-bounce-1.wav", "bounce 1");
+	SoundManager::addSound("res/sounds/ball-bounce-2.wav", "bounce 2");
+	SoundManager::addSound("res/sounds/ball-bounce-3.wav", "bounce 3");
 }
 
 void BallMovement::onUpdate() {
@@ -91,13 +95,23 @@ void BallMovement::applyVelocity() {
 
 void BallMovement::checkGround() {
 	if (transform->getY() < 0) {
+
+		// Bounce off the table
 		if (transform->inTableBounds()) {
 			transform->setY(0);
-			this->velocity.y *= isIdle() ? -1.0f : -0.8f;
-			sprite->setOpacity(
-				SDL_ALPHA_OPAQUE
+
+			velocity.y *= isIdle() ? -1.0f : -0.8f;
+			if (velocity.y < 0.2f) {
+				velocity.y = 0.0f;
+			}
+
+			sprite->setOpacity(SDL_ALPHA_OPAQUE);
+			SoundManager::playRndSound(
+				{ "bounce 1", "bounce 2", "bounce 3" },
+				std::clamp(velocity.y * 50.0f, 0.0f, 100.0f)
 			);
 		} else {
+			// Otherwise, fall off the table and fade away
 			sprite->setOpacity(
 				std::clamp(SDL_ALPHA_OPAQUE - (int) abs(transform->getY()), 0, 255)
 			);

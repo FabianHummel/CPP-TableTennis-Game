@@ -8,10 +8,21 @@
 #include "src/gameplay/components/gamemanager.h"
 #include "src/gameplay/components/clickmanager.h"
 #include "src/gameplay/components/powerbar.h"
+#include "src/sound/soundmanager.h"
 
 const SDL_Color BG = {203, 211, 235, 255};
 
 int main(int argc, char** argv) {
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+		printf("SDL could not be initialized!\n" "SDL_Error: %s\n", SDL_GetError());
+		exit(1);
+	}
+
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+		printf("SDL_mixer could not initialize!\n" "SDL_mixer_Error: %s\n", Mix_GetError());
+		exit(1);
+	}
+
 	RenderWindow *window = new RenderWindow(
 		RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT, "Table Tennis"
 	);
@@ -141,5 +152,7 @@ int main(int argc, char** argv) {
 	delete global;
 
 	delete window;
+
+	SDL_Quit();
 	return 0;
 }
