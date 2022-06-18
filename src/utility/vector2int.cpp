@@ -5,10 +5,7 @@
 #include "vector2int.h"
 #include <cmath>
 
-Vector2Int::Vector2Int(int x, int y) {
-	this->x = x;
-	this->y = y;
-}
+Vector2Int::Vector2Int(int x, int y) : x(x), y(y) {};
 
 Vector2Int::~Vector2Int() = default;
 

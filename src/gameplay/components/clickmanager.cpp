@@ -34,9 +34,7 @@ void ClickManager::onStart() {
 	 });
 }
 
-void ClickManager::onUpdate() {
-
-}
+void ClickManager::onUpdate(double deltaTime) {}
 
 void ClickManager::onClick(int x, int y) {
 	isDragging = true;
@@ -72,7 +70,7 @@ void ClickManager::onRelease() {
 		ball->setActive();
 		ball->setForce({
 			( float ) -deltaX / strength * 0.03f,
-			ball->getForce().y * strength * 2.0f,
+			ball->getForce().y * strength * 2.0f + 1.0f,
 			( float ) -deltaY / strength * 0.03f
 		});
 	}

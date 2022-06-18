@@ -21,5 +21,5 @@ public:
 	/**
 	 * @brief Called every frame.
 	 */
-	virtual void onUpdate() = 0;
+	virtual void onUpdate(double deltaTime) = 0;
 };

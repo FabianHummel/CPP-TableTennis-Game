@@ -17,7 +17,7 @@ void SpriteRenderer::onStart() {
 	texture = IMG_LoadTexture(renderer, img);
 }
 
-void SpriteRenderer::onUpdate() {
+void SpriteRenderer::onUpdate(double deltaTime) {
 	if (isVisible()) {
 		SDL_Rect destrect;
 		destrect.x = (int) transform->getX() - transform->getScaleX() / 2;

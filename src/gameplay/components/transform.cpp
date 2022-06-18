@@ -13,7 +13,7 @@ void Transform::onInitialize() {
 
 void Transform::onStart() {}
 
-void Transform::onUpdate() {}
+void Transform::onUpdate(double deltaTime) {}
 
 void Transform::setPosition(const Vector3& v) {
 	position = v;

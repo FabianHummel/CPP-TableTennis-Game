@@ -23,7 +23,7 @@ public:
 
     void onInitialize() override;
     void onStart() override;
-    void onUpdate() override;
+    void onUpdate(double deltaTime) override;
 
 	void setImage(const char *img);
 	void setOpacity(int v);

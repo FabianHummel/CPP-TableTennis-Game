@@ -13,7 +13,7 @@ void Powerbar::onInitialize() {
 
 void Powerbar::onStart() {}
 
-void Powerbar::onUpdate() {}
+void Powerbar::onUpdate(double deltaTime) {}
 
 void Powerbar::setProgress(float v, float y) {
 	this->size = v;

@@ -27,40 +27,15 @@ void BallMovement::onStart() {
 	SoundManager::addSound("res/sounds/ball-bounce-3.wav", "bounce 3");
 }
 
-void BallMovement::onUpdate() {
-	this->applyGravity();
-	this->applyFriction();
-	this->applyVelocity();
-
-	this->checkGround();
-	this->checkNet();
-	this->checkIdle();
+void BallMovement::onUpdate(double deltaTime) {
+	this->checkGround(deltaTime);
+	this->checkNet(deltaTime);
+	this->checkIdle(deltaTime);
 	this->checkFellOff();
-}
 
-void BallMovement::checkNet() {
-	if (transform->getY() >= 0) {
-
-		if (transform->getZ() < 450 && !renderBehind) {
-			renderBehind = true;
-			EntityManager::renderBelow(parent, EntityManager::findEntity("Net"));
-			EntityManager::renderBelow(EntityManager::findEntity("Shadow"), parent);
-		} else if (transform->getZ() >= 450 && renderBehind) {
-			renderBehind = false;
-			EntityManager::renderAbove(parent, EntityManager::findEntity("Net"));
-			EntityManager::renderBelow(EntityManager::findEntity("Shadow"), parent);
-		}
-
-		if (transform->getY() < 60) {
-			if (( transform->getZ() > 450 && transform->getZ() + velocity.z < 450 ) ||
-				( transform->getZ() < 450 && transform->getZ() + velocity.z > 450 )) {
-				// Ball is going to be in the net
-				transform->setZ(450);
-				this->velocity.z *= -0.2;
-				this->velocity.x *= 0.5;
-			}
-		}
-	}
+	this->applyGravity(deltaTime);
+	this->applyFriction(deltaTime);
+	this->applyVelocity(deltaTime);
 }
 
 void BallMovement::applyForce(const Vector3& force) {
@@ -75,26 +50,26 @@ Vector3 BallMovement::getForce() const {
 	return this->velocity;
 }
 
-void BallMovement::applyGravity() {
-	this->velocity.y -= GRAVITY;
+void BallMovement::applyGravity(double deltaTime) {
+	this->velocity.y -= GRAVITY * deltaTime;
 }
 
-void BallMovement::applyFriction() {
+void BallMovement::applyFriction(double deltaTime) {
 	if (transform->getY() <= 0) {
-		Vector3 vel = Vector3(velocity.x, 0.0f, velocity.z);
-		MathUtil::moveTowardsZero(vel, FRICTION);
+		auto vel = Vector3(velocity.x, 0.0f, velocity.z);
+		MathUtil::moveTowardsZero(vel, FRICTION * deltaTime);
 		velocity.x = vel.x;
 		velocity.z = vel.z;
 	}
 }
 
-void BallMovement::applyVelocity() {
-	transform->mvByX(  this->velocity.x );
-	transform->mvByY(  this->velocity.y );
-	transform->mvByZ(  this->velocity.z );
+void BallMovement::applyVelocity(double deltaTime) {
+	transform->mvByX(  this->velocity.x * deltaTime );
+	transform->mvByY(  this->velocity.y * deltaTime );
+	transform->mvByZ(  this->velocity.z * deltaTime );
 }
 
-void BallMovement::checkGround() {
+void BallMovement::checkGround(double deltaTime) {
 	if (transform->getY() < 0) {
 
 		// Bounce off the table
@@ -102,7 +77,7 @@ void BallMovement::checkGround() {
 			transform->setY(0);
 
 			velocity.y *= isIdle() ? -1.0f : -0.8f;
-			if (velocity.y < 0.2f) {
+			if (velocity.y < 0.5f) {
 				velocity.y = 0.0f;
 			}
 
@@ -133,10 +108,46 @@ void BallMovement::checkGround() {
 	}
 }
 
-void BallMovement::checkIdle() {
-	if (MathUtil::closeToPoint(velocity.magnitude(), 0.3f)) {
-		idleTime++;
+void BallMovement::checkNet(double deltaTime) {
+	if (transform->getY() >= 0) {
 
+		if (transform->getZ() < 460 && !renderBehind) {
+			renderBehind = true;
+			EntityManager::renderBelow(parent, EntityManager::findEntity("Net"));
+			EntityManager::renderBelow(EntityManager::findEntity("Shadow"), parent);
+		} else if (transform->getZ() > 460 && renderBehind) {
+			renderBehind = false;
+			EntityManager::renderAbove(parent, EntityManager::findEntity("Net"));
+			EntityManager::renderBelow(EntityManager::findEntity("Shadow"), parent);
+		}
+
+		if (transform->getY() < 60) {
+			// if (( transform->getZ() > 465 && transform->getZ() + velocity.z * deltaTime <= 465 ) ||
+			// 	( transform->getZ() < 465 && transform->getZ() + velocity.z * deltaTime >= 465 )) {
+			// 	// Ball is going to be in the net
+			// 	transform->setZ(465);
+			// 	this->velocity.z *= -0.2f;
+			// 	this->velocity.x *= 0.5f;
+			// }
+
+			if ( transform->getZ() > 460 && transform->getZ() + velocity.z * deltaTime < 480 ) {
+				// Ball is going to be in the net
+				transform->setZ(480);
+				this->velocity.z *= -0.2f;
+				this->velocity.x *= 0.5f;
+			} else if ( transform->getZ() < 460 && transform->getZ() + velocity.z * deltaTime > 440 ) {
+				// Ball is going to be in the net
+				transform->setZ(440);
+				this->velocity.z *= -0.2f;
+				this->velocity.x *= 0.5f;
+			}
+		}
+	}
+}
+
+void BallMovement::checkIdle(double deltaTime) {
+	if (MathUtil::closeToPoint(velocity.magnitude(), 0.3f)) {
+		idleTime += deltaTime * 0.01;
 		if (idleTime > IDLE_TIME) {
 			GameManager::nextRound(renderBehind);
 			idleTime = 0;

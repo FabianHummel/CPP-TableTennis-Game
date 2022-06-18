@@ -14,11 +14,9 @@ void ShadowTransformer::onInitialize() {
 	this->sprite = parent->getComponent<SpriteRenderer>();
 }
 
-void ShadowTransformer::onStart() {
+void ShadowTransformer::onStart() {}
 
-}
-
-void ShadowTransformer::onUpdate() {
+void ShadowTransformer::onUpdate(double deltaTime) {
 	//TODO: Push new values instead of pulling them! (Prevent lag behind)
 	shadow->setX(ball->getX() + ball->getY());
 	shadow->setY((float) -shadow->getScaleX() / 2);

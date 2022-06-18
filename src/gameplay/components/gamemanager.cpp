@@ -14,7 +14,7 @@ void GameManager::onInitialize() {
 
 void GameManager::onStart() {}
 
-void GameManager::onUpdate() {}
+void GameManager::onUpdate(double deltaTime) {}
 
 void GameManager::nextRound(bool side) {
 	Entity *ball = EntityManager::findEntity("Ball");

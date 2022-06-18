@@ -24,7 +24,7 @@ public:
 
 	void onInitialize() override;
 	void onStart() override;
-	void onUpdate() override;
+	void onUpdate(double deltaTime) override;
 
 	void setPosition(const Vector3& v);
 	Vector3 getPosition() const;

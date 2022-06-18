@@ -67,9 +67,9 @@ void EntityManager::start() {
 	});
 }
 
-void EntityManager::update() {
-	forEachComponent([](Component *component) {
-		component->onUpdate();
+void EntityManager::update(double deltaTime) {
+	forEachComponent([deltaTime](Component *component) {
+		component->onUpdate(deltaTime);
 	});
 }
 
@@ -81,6 +81,7 @@ void EntityManager::renderAbove(Entity *movee, Entity *target) {
 	entities.erase(
 		std::find(entities.begin(), entities.end(), movee)
 	);
+
 	entities.insert(
 		std::find(entities.begin(), entities.end(), target) + 1, movee
 	);
@@ -93,6 +94,7 @@ void EntityManager::renderBelow(Entity *movee, Entity *target) {
 	entities.erase(
 		std::find(entities.begin(), entities.end(), movee)
 	);
+
 	entities.insert(
 		std::find(entities.begin(), entities.end(), target), movee
 	);

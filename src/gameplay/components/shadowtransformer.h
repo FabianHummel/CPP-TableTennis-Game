@@ -19,5 +19,5 @@ private:
 public:
 	void onInitialize() override;
 	void onStart() override;
-	void onUpdate() override;
+	void onUpdate(double deltaTime) override;
 };

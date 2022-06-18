@@ -12,6 +12,10 @@
 
 const SDL_Color BG = {203, 211, 235, 255};
 
+Uint64 currentTick = 0;
+Uint64 lastTick = 0;
+double deltaTime = 0;
+
 int main(int argc, char** argv) {
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		printf("SDL could not be initialized!\n" "SDL_Error: %s\n", SDL_GetError());
@@ -102,8 +106,14 @@ int main(int argc, char** argv) {
 
 	ClickManager *clickManager = global->getComponent<ClickManager>();
 
+	currentTick = SDL_GetPerformanceCounter();
+
 	bool running = true;
 	while (running) {
+		lastTick = currentTick;
+		currentTick = SDL_GetPerformanceCounter();
+		deltaTime = (double) ((currentTick - lastTick) * 1000 / (double) SDL_GetPerformanceFrequency());
+
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -139,7 +149,7 @@ int main(int argc, char** argv) {
 		window->drawBG(BG);
 		window->clear();
 
-		EntityManager::update();
+		EntityManager::update(deltaTime * 0.1);
 
 		SDL_RenderPresent(
 			window->renderer

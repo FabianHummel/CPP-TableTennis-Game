@@ -25,5 +25,5 @@ public:
 
 	static void initialize();
 	static void start();
-	static void update();
+	static void update(double deltaTime);
 };
