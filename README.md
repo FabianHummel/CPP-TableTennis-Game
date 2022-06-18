@@ -17,9 +17,9 @@ Program will later be released as a packaged program.
 ## 🔨 Building
 1. Download and install SDL2.0
 2. Download and install libraries / dependencies
-    * SDL_image [(docs)](https://www.libsdl.org/projects/SDL_image/docs/index.html)
-    * SDL_mixer [(docs)](https://www.libsdl.org/projects/SDL_mixer/docs/index.html)
-    * SDL_ttf (not yet used) [(docs)](https://www.libsdl.org/projects/docs/SDL_ttf/)
+   * SDL_image [(docs)](https://www.libsdl.org/projects/SDL_image/docs/index.html)
+   * SDL_mixer [(docs)](https://www.libsdl.org/projects/SDL_mixer/docs/index.html)
+   * SDL_ttf (not yet used) [(docs)](https://www.libsdl.org/projects/docs/SDL_ttf/)
 3. Build the `CMakeLists.txt` with **cmake version 3.22.3** and link with **g++ (clang) version 13.0.0** *(clang-1300.0.27.3)*
 4. The output will be located in `./cmake-build-default` together with the resources.
 5. Run the application with `./TableTennis`
