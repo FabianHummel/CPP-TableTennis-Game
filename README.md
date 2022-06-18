@@ -51,8 +51,8 @@ As you can see in the following code snippet, the key of the map is the typeid o
 
 ```cpp
 template<class T> Entity* addComponent(T *component) {
-	this->components[typeid(*component).name()] = component;
-	return this;
+    this->components[typeid(*component).name()] = component;
+    return this;
 };
 ```
 
@@ -60,9 +60,9 @@ In order to get a component from an entity, we will upcast the base component to
 
 ```cpp
 template<class T> T* getComponent() {
-	return dynamic_cast<T*>(
-		components[typeid(T).name()]
-	);
+    return dynamic_cast<T*>(
+        components[typeid(T).name()]
+    );
 };
 ```
 
@@ -70,8 +70,8 @@ Components can also be removed from an entity by erasing the key (typeid) from t
 
 ```cpp
 template<class T> Entity* removeComponent() {
-	components.erase(typeid(T).name());
-	return this;
+    components.erase(typeid(T).name());
+    return this;
 };
 ```
 
@@ -81,19 +81,19 @@ For rendering, I chose to use a spriteRenderer-component architecture on each of
 
 ```cpp
 void SpriteRenderer::onInitialize() {
-	transform = parent->getComponent<Transform>();
+    transform = parent->getComponent<Transform>();
 }
 
 void SpriteRenderer::onStart() {
-	printf("Loading Texture %s\n", img);
-	texture = IMG_LoadTexture(renderer, img);
+    printf("Loading Texture %s\n", img);
+    texture = IMG_LoadTexture(renderer, img);
 }
 
 void SpriteRenderer::onUpdate() {
-	SDL_Rect destrect; // [initialization...]
-	SDL_RenderCopyEx(
-		renderer, texture, &srcrect, &destrect, transform->getRotation(), transform->getAnchor(), SDL_FLIP_NONE
-	);
+    SDL_Rect destrect; // [initialization...]
+    SDL_RenderCopyEx(
+        renderer, texture, &srcrect, &destrect, transform->getRotation(), transform->getAnchor(), SDL_FLIP_NONE
+    );
 }
 ```
 
