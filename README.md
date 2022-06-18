@@ -1,14 +1,17 @@
 # C++ Table Tennis
 Inspired by [**Twini-Golf**](https://polymars.itch.io/twini-golf) by Polymars, this project is a work in progress Table Tennis game made in SDL2 (C++).
 This is my first C++ project ever and I made this game to learn the basics of the programming language. (may also contain a lot of memory leaks, but I don't know how to fix them)
+
 <br>
 
 ## 📚 Libraries
 This project takes advantage of the [**SDL2.0 (Simple DirectMedia Layer v2) Framework**](https://www.libsdl.org/) together with the extensions [**SDL_image**](http://wiki.libsdl.org/Libraries#sdl_image) and [**SDL_mixer**](http://wiki.libsdl.org/Libraries#sdl_mixer)
+
 <br>
 
 ## 📦 Download
 Program will later be released as a packaged program.
+
 <br>
 
 ## 🔨 Building
@@ -20,10 +23,12 @@ Program will later be released as a packaged program.
 3. Build the `CMakeLists.txt` with **cmake version 3.22.3** and link with **g++ (clang) version 13.0.0** *(clang-1300.0.27.3)*
 4. The output will be located in `./cmake-build-default` together with the resources.
 5. Run the application with `./TableTennis`
+
 <br>
 
 ## 📝 Notes
 * Because I'm using a retina display, the game may not be optimized for other displays. (The game calculates with only half the resolution, so on 'normal displays' the textures may only fill up a quarter of the screen).
+
 <br>
 
 ## 🎯 Coming soon
@@ -32,6 +37,7 @@ Program will later be released as a packaged program.
 * *multiplayer maybe maybe maybe...*
 * Suitable logo
 * Music
+
 <br>
 
 ## 💡 Concept
