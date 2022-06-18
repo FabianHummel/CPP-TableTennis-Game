@@ -8,7 +8,9 @@
 #include "ballmovement.h"
 #include "../../render/renderwindow.h"
 
-void GameManager::onInitialize() {}
+void GameManager::onInitialize() {
+	printf("Initializing Game Manager on %s\n", parent->getName());
+}
 
 void GameManager::onStart() {}
 

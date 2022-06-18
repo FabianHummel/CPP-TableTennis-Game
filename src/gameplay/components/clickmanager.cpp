@@ -8,6 +8,8 @@
 #include <SDL.h>
 
 void ClickManager::onInitialize() {
+	printf("Initializing Click Manager on %s\n", parent->getName());
+
 	indicator = EntityManager::findEntity("Indicator")->getComponent<Transform>();
 	indicatorSprite = EntityManager::findEntity("Indicator")->getComponent<SpriteRenderer>();
 	ball = EntityManager::findEntity("Ball")->getComponent<BallMovement>();

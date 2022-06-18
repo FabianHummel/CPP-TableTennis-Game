@@ -8,6 +8,7 @@
 std::unordered_map<const char*, Mix_Chunk*> SoundManager::sounds;
 
 void SoundManager::addSound(const char *path, const char *name) {
+	printf("Loading Sound %s\n", path);
 	Mix_Chunk *sound = Mix_LoadWAV(path);
 	if (!sound) {
 		printf("Error loading sound!\n" "SDL_mixer_Error: %s\n", Mix_GetError());

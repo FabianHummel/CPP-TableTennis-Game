@@ -7,7 +7,9 @@
 Transform::Transform(const Vector3& position, const Vector2Int& scale, float angle)
 	: position(position), scale(scale), rotation(angle) {}
 
-void Transform::onInitialize() {}
+void Transform::onInitialize() {
+	printf("Initializing Transform on %s\n", parent->getName());
+}
 
 void Transform::onStart() {}
 

@@ -6,6 +6,7 @@
 #include "../../entity/entitymanager.h"
 
 void ShadowTransformer::onInitialize() {
+	printf("Initializing Shadow Transformer on %s\n", parent->getName());
 	Entity *ballEntity = EntityManager::findEntity("Ball");
 	this->ball = ballEntity->getComponent<Transform>();
 

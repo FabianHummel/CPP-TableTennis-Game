@@ -5,6 +5,8 @@
 #include "powerbar.h"
 
 void Powerbar::onInitialize() {
+	printf("Initializing Powerbar Behavior on %s\n", parent->getName());
+
 	sprite = parent->getComponent<SpriteRenderer>();
 	bar = parent->getComponent<Transform>();
 }

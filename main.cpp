@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 			{ RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
-			"../res/table.png", window->renderer
+			"res/table.png", window->renderer
 		) );
 
 	Entity *net = ( new Entity("Net") )
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 			{ RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
-			"../res/net.png", window->renderer
+			"res/net.png", window->renderer
 		) );
 
 	Entity *shadow = ( new Entity("Shadow") )
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 			{ 40, 40 }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
-			"../res/shadow.png", window->renderer
+			"res/shadow.png", window->renderer
 		) )
 		->addComponent(new ShadowTransformer());
 
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
 			{ 40, 40 }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
-			"../res/ball.png", window->renderer
+			"res/ball.png", window->renderer
 		) )
 		->addComponent(new BallMovement());
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 			{ 0, 0, 0 }, { 70, 70 }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
-			"../res/indicator.png", window->renderer
+			"res/indicator.png", window->renderer
 		) );
 
 	Entity *powerbar = ( new Entity("Powerbar") )
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 			{ 0, 0, 0 }, { 70, 70 }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
-			"../res/powerbar.png", window->renderer
+			"res/powerbar.png", window->renderer
 		) )
 		->addComponent(new Powerbar());
 
@@ -94,7 +94,7 @@ int main(int argc, char** argv) {
 			{ 0, 0, 0 }, { 70, 70 }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
-			"../res/powerbox.png", window->renderer
+			"res/powerbox.png", window->renderer
 		) );
 
 	EntityManager::initialize();

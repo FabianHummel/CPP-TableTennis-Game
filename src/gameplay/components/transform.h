@@ -7,6 +7,7 @@
 #include <tuple>
 #include <SDL_rect.h>
 #include "../component.h"
+#include "../../entity/entity.h"
 #include "../../utility/vector3.h"
 #include "../../utility/vector2int.h"
 
