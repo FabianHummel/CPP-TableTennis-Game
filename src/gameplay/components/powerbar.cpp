@@ -22,5 +22,5 @@ void Powerbar::setProgress(float v, float y) {
 	);
 
 	bar->setScaleY(size / 100.0f * 70);
-	bar->setZ(y + 70 / 2.0f - size / 100.0f * 70);
+	bar->setZ(y - size / 100.0f * 70 / 2);
 }

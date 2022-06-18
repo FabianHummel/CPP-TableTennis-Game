@@ -46,11 +46,3 @@ void RenderWindow::destroy() const {
     SDL_DestroyWindow(window);
 	SDL_Quit();
 }
-
-int RenderWindow::trueCenterX(int scaleX) {
-	return RenderWindow::SCREEN_CENTER_X - scaleX / 2;
-}
-
-int RenderWindow::trueCenterY(int scaleY) {
-	return RenderWindow::SCREEN_CENTER_Y - scaleY / 2;
-}

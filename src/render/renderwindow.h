@@ -23,7 +23,4 @@ public:
     void drawBG(SDL_Color color) const;
     void clear() const;
     void destroy() const;
-
-	static int trueCenterX(int scale);
-	static int trueCenterY(int scale);
 };

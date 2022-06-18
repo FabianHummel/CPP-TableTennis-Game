@@ -73,6 +73,7 @@ void EntityManager::update() {
 	});
 }
 
+// TODO: Short flashing when called
 void EntityManager::renderAbove(Entity *movee, Entity *target) {
 	// { global, ball, table, net } ->
 	// { global, table, net } ->

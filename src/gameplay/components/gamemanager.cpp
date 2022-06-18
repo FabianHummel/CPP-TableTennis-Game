@@ -18,7 +18,7 @@ void GameManager::nextRound(bool side) {
 	Entity *ball = EntityManager::findEntity("Ball");
 
 	auto transform = ball->getComponent<Transform>();
-	transform->setPosition({ (float) RenderWindow::trueCenterX(transform->getScaleX()), 10, 650 });
+	transform->setPosition({ RenderWindow::SCREEN_CENTER_X, 10, 650 });
 
 	auto ballMovement = ball->getComponent<BallMovement>();
 	ballMovement->setIdle();

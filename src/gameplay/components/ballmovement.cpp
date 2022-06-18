@@ -17,9 +17,9 @@ void BallMovement::onInitialize() {
 
 void BallMovement::onStart() {
 	this->setIdle();
-	transform->setPosition({
-		(float) RenderWindow::trueCenterX(transform->getScaleX()), 100, 650
-	});
+	transform->setPosition(
+		{ RenderWindow::SCREEN_CENTER_X, 100, 650 }
+	);
 
 	SoundManager::addSound("res/sounds/ball-bounce-1.wav", "bounce 1");
 	SoundManager::addSound("res/sounds/ball-bounce-2.wav", "bounce 2");

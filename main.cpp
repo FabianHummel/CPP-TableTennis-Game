@@ -36,7 +36,8 @@ int main(int argc, char** argv) {
 
 	Entity *table = ( new Entity("Table") )
 		->addComponent(new Transform(
-			{ 0, 0, 0 }, { RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT }, 0.0f
+			{ RenderWindow::SCREEN_CENTER_X, 0, RenderWindow::SCREEN_CENTER_Y },
+			{ RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
 			"../res/table.png", window->renderer
@@ -44,7 +45,8 @@ int main(int argc, char** argv) {
 
 	Entity *net = ( new Entity("Net") )
 		->addComponent(new Transform(
-			{ 0, 0, 0 }, { RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT }, 0.0f
+			{ RenderWindow::SCREEN_CENTER_X, 0, RenderWindow::SCREEN_CENTER_Y },
+			{ RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
 			"../res/net.png", window->renderer
@@ -52,7 +54,8 @@ int main(int argc, char** argv) {
 
 	Entity *shadow = ( new Entity("Shadow") )
 		->addComponent(new Transform(
-			{ 0, 0, 0 }, { 40, 40 }, 0.0f
+			{ RenderWindow::SCREEN_CENTER_X, 0, RenderWindow::SCREEN_CENTER_Y },
+			{ 40, 40 }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
 			"../res/shadow.png", window->renderer
@@ -61,7 +64,8 @@ int main(int argc, char** argv) {
 
 	Entity *ball = ( new Entity("Ball") )
 		->addComponent(new Transform(
-			{ (float) RenderWindow::trueCenterX(40), 0, (float) RenderWindow::trueCenterY(40) }, { 40, 40 }, 0.0f
+			{ RenderWindow::SCREEN_CENTER_X, 0, RenderWindow::SCREEN_CENTER_Y },
+			{ 40, 40 }, 0.0f
 		) )
 		->addComponent(new SpriteRenderer(
 			"../res/ball.png", window->renderer

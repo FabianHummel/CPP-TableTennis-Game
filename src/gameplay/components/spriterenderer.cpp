@@ -20,8 +20,8 @@ void SpriteRenderer::onStart() {
 void SpriteRenderer::onUpdate() {
 	if (isVisible()) {
 		SDL_Rect destrect;
-		destrect.x = (int) transform->getX();
-		destrect.y = (int) ( -transform->getY() + transform->getZ() );
+		destrect.x = (int) transform->getX() - transform->getScaleX() / 2;
+		destrect.y = (int) ( -transform->getY() + transform->getZ() ) - transform->getScaleY() / 2;
 		destrect.w = transform->getScaleX();
 		destrect.h = transform->getScaleY();
 
