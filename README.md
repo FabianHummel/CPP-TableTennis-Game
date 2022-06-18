@@ -24,6 +24,7 @@ Program will later be released as a packaged program.
 
 ## 📝 Notes
 * Because I'm using a retina display, the game may not be optimized for other displays. (The game calculates with only half the resolution, so on 'normal displays' the textures may only fill up a quarter of the screen).
+<br>
 
 ## 🎯 Coming soon
 * Start / Options menu
