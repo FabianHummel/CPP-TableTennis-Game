@@ -3,15 +3,15 @@ Inspired by [**Twini-Golf**](https://polymars.itch.io/twini-golf) by Polymars, t
 This is my first C++ project ever and I made this game to learn the basics of the programming language. (may also contain a lot of memory leaks, but I don't know how to fix them)
 <br>
 
-## 📚 Libraries <hr>
+## 📚 Libraries
 This project takes advantage of the [**SDL2.0 (Simple DirectMedia Layer v2) Framework**](https://www.libsdl.org/) together with the extensions [**SDL_image**](http://wiki.libsdl.org/Libraries#sdl_image) and [**SDL_mixer**](http://wiki.libsdl.org/Libraries#sdl_mixer)
 <br>
 
-## 📦 Download <hr>
+## 📦 Download
 Program will later be released as a packaged program.
 <br>
 
-## 🔨 Building <hr>
+## 🔨 Building
 1. Download and install SDL2.0
 2. Download and install libraries / dependencies
     * SDL_image [(docs)](https://www.libsdl.org/projects/SDL_image/docs/index.html)
@@ -22,10 +22,10 @@ Program will later be released as a packaged program.
 5. Run the application with `./TableTennis`
 <br>
 
-## Notes <hr>
+## 📝 Notes
 * Because I'm using a retina display, the game may not be optimized for other displays. (The game calculates with only half the resolution, so on 'normal displays' the textures may only fill up a quarter of the screen).
 
-## 🎯 Coming soon <hr>
+## 🎯 Coming soon
 * Start / Options menu
 * Play against computer
 * *multiplayer maybe maybe maybe...*
@@ -33,7 +33,7 @@ Program will later be released as a packaged program.
 * Music
 <br>
 
-## 💡 Concept <hr>
+## 💡 Concept
 The game uses a custom-made [**ECS (Entity Component System)**](https://en.wikipedia.org/wiki/Entity_component_system) which is very small in code size and does not require component signatures, multiple maps or registry. Every entity has one simple unordered map of components.
 
 ```cpp
