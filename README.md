@@ -1,6 +1,6 @@
 # C++ Table Tennis
 Inspired by [**Twini-Golf**](https://polymars.itch.io/twini-golf) by Polymars, this project is a work in progress Table Tennis game made in SDL2 (C++).
-This is my first C++ project ever and I made this game to learn the basics of the programming language. (may also contain a lot of memory leaks, but I don't know how to fix them)
+This is my first C++ project ever and I made this game to learn the basics of the programming language. (it may also contain a lot of memory leaks, but I don't know how to write leak-free cpp code)
 
 <br>
 
@@ -17,9 +17,9 @@ Program will later be released as a packaged program.
 ## 🔨 Building
 1. Download and install SDL2.0
 2. Download and install libraries / dependencies
-    * SDL_image [(docs)](https://www.libsdl.org/projects/SDL_image/docs/index.html)
-    * SDL_mixer [(docs)](https://www.libsdl.org/projects/SDL_mixer/docs/index.html)
-    * SDL_ttf (not yet used) [(docs)](https://www.libsdl.org/projects/docs/SDL_ttf/)
+   * SDL_image [(docs)](https://www.libsdl.org/projects/SDL_image/docs/index.html)
+   * SDL_mixer [(docs)](https://www.libsdl.org/projects/SDL_mixer/docs/index.html)
+   * SDL_ttf (not yet used) [(docs)](https://www.libsdl.org/projects/docs/SDL_ttf/)
 3. Build the `CMakeLists.txt` with **cmake version 3.22.3** and link with **g++ (clang) version 13.0.0** *(clang-1300.0.27.3)*
 4. The output will be located in `./cmake-build-default` together with the resources.
 5. Run the application with `./TableTennis`
@@ -52,8 +52,8 @@ As you can see in the following code snippet, the key of the map is the typeid o
 
 ```cpp
 template<class T> Entity* addComponent(T *component) {
-	this->components[typeid(*component).name()] = component;
-	return this;
+    this->components[typeid(*component).name()] = component;
+    return this;
 };
 ```
 
@@ -61,9 +61,9 @@ In order to get a component from an entity, we will upcast the base component to
 
 ```cpp
 template<class T> T* getComponent() {
-	return dynamic_cast<T*>(
-		components[typeid(T).name()]
-	);
+    return dynamic_cast<T*>(
+        components[typeid(T).name()]
+    );
 };
 ```
 
@@ -71,8 +71,8 @@ Components can also be removed from an entity by erasing the key (typeid) from t
 
 ```cpp
 template<class T> Entity* removeComponent() {
-	components.erase(typeid(T).name());
-	return this;
+    components.erase(typeid(T).name());
+    return this;
 };
 ```
 
@@ -82,19 +82,19 @@ For rendering, I chose to use a spriteRenderer-component architecture on each of
 
 ```cpp
 void SpriteRenderer::onInitialize() {
-	transform = parent->getComponent<Transform>();
+    transform = parent->getComponent<Transform>();
 }
 
 void SpriteRenderer::onStart() {
-	printf("Loading Texture %s\n", img);
-	texture = IMG_LoadTexture(renderer, img);
+    printf("Loading Texture %s\n", img);
+    texture = IMG_LoadTexture(renderer, img);
 }
 
 void SpriteRenderer::onUpdate() {
-	SDL_Rect destrect; // [initialization...]
-	SDL_RenderCopyEx(
-		renderer, texture, &srcrect, &destrect, transform->getRotation(), transform->getAnchor(), SDL_FLIP_NONE
-	);
+    SDL_Rect destrect; // [initialization...]
+    SDL_RenderCopyEx(
+        renderer, texture, &srcrect, &destrect, transform->getRotation(), transform->getAnchor(), SDL_FLIP_NONE
+    );
 }
 ```
 
