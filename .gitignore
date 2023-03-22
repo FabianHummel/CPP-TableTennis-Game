@@ -8,8 +8,12 @@
 /.idea/
 /.vscode/
 
+/res/reference/
+/res/illustrator/
+
 .DS_Store
 TableTennis
 compile_commands.json
 cmake_install.cmake
 CMakeCache.txt
+Makefile

@@ -19,17 +19,17 @@ Pane *currentPane;
 
 int main(int argc, char** argv) {
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-		printf("SDL could not be initialized!\n" "SDL_Error: %s\n", SDL_GetError());
+		printf("SDL could not be initialized!\n SDL_Error: %s\n", SDL_GetError());
 		exit(1);
 	}
 
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-		printf("SDL_mixer could not initialize!\n" "SDL_mixer_Error: %s\n", Mix_GetError());
+		printf("SDL_mixer could not initialize!\n SDL_mixer_Error: %s\n", Mix_GetError());
 		exit(1);
 	}
 
 	if (TTF_Init() < 0) {
-		printf("SDL_ttf could not initialize!\n" "SDL_ttf_Error: %s\n", TTF_GetError());
+		printf("SDL_ttf could not initialize!\n SDL_ttf_Error: %s\n", TTF_GetError());
 		exit(1);
 	}
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 	while (running) {
 		lastTick = currentTick;
 		currentTick = SDL_GetPerformanceCounter();
-		deltaTime = (double) ((currentTick - lastTick) * 1 / (double) SDL_GetPerformanceFrequency());
+		deltaTime = (currentTick - lastTick) / SDL_GetPerformanceFrequency();
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
