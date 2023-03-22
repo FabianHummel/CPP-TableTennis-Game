@@ -1,6 +1,6 @@
 # C++ Table Tennis
 Inspired by [**Twini-Golf**](https://polymars.itch.io/twini-golf) by Polymars, this project is a work in progress Table Tennis game made in SDL2 (C++).
-This is my first C++ project ever and I made this game to learn the basics of the programming language. (it may also contain a lot of memory leaks, but I don't know how to write leak-free cpp code)
+This is my first C++ project ever, and I made this game to learn the basics of the programming language. (it may also contain a lot of memory leaks, but I don't know how to write leak-free cpp code)
 
 <br>
 
@@ -48,7 +48,7 @@ The game uses a custom-made [**ECS (Entity Component System)**](https://en.wikip
 std::unordered_map<const char*, Component*> components;
 ```
 
-As you can see in the following code snippet, the key of the map is the typeid of the component and the value is the component itself. Also the entity with the newly added component gets returned, so you can use it to add other components in the same line of code.
+As you can see in the following code snippet, the key of the map is the typeid of the component and the value is the component itself. Also, the entity with the newly added component gets returned, so you can use it to add other components in the same line of code.
 
 ```cpp
 template<class T> Entity* addComponent(T *component) {
@@ -57,7 +57,7 @@ template<class T> Entity* addComponent(T *component) {
 };
 ```
 
-In order to get a component from an entity, we will upcast the base component to the derived class we want to have:
+In order to get a component from an entity, we will up-cast the base component to the derived class we want to have:
 
 ```cpp
 template<class T> T* getComponent() {

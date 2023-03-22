@@ -1,19 +1,34 @@
 #pragma once
 
 #include <unordered_map>
-#include "../gameplay/component.h"
-#include "../gameplay/components/transform.h"
+#include "../components/component.h"
+#include "../components/transform.h"
+
+class Transform;
 
 class Entity {
 private:
 	const char *name;
 	std::unordered_map<const char*, Component*> components;
+	Transform *transform;
 
 public:
 	Entity(const char *name);
 	~Entity();
 
-	template<class T> Entity* addComponent(T *component) {
+	void forEachComponent(const std::function<void(Component*)>& callback);
+
+	const char *getName() const;
+
+	Transform* getTransform();
+
+	/*template<typename T> Entity* addComponent(T *component);
+
+	template<class T> T* getComponent();
+
+	template<class T> Entity* removeComponent(); */
+
+	template<typename T> Entity* addComponent(T *component) {
 		((Component*) component)->parent = this;
 		this->components[typeid(*component).name()] = component;
 		return this;
@@ -31,8 +46,4 @@ public:
 		);
 		return this;
 	};
-
-	void forEachComponent(const std::function<void(Component*)>& callback);
-
-	const char* getName() const;
 };

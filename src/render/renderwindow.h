@@ -5,14 +5,16 @@
 #pragma once
 
 #include "vector"
+#include <SDL.h>
 
-class RenderWindow {
+class RenderWindow
+{
 public:
-	const static int SCREEN_WIDTH = 700;
-	const static int SCREEN_HEIGHT = 1100;
+    const static int SCREEN_WIDTH = 700;
+    const static int SCREEN_HEIGHT = 1100;
 
-	const static int SCREEN_CENTER_X = SCREEN_WIDTH / 2;
-	const static int SCREEN_CENTER_Y = SCREEN_HEIGHT / 2;
+    const static int SCREEN_CENTER_X = SCREEN_WIDTH / 2;
+    const static int SCREEN_CENTER_Y = SCREEN_HEIGHT / 2;
 
     SDL_Window *window;
     SDL_Renderer *renderer;

@@ -1,3 +1,15 @@
 # Project exclude paths
 /cmake-build-default/
-/cmake/sdl2/*
+/CMakeFiles/
+/build/
+/.cache/
+/.cmake/
+/.git/
+/.idea/
+/.vscode/
+
+.DS_Store
+TableTennis
+compile_commands.json
+cmake_install.cmake
+CMakeCache.txt
