@@ -1,7 +1,3 @@
-//
-// Created by Fabian Hummel on 12.06.22.
-//
-
 #include "ballmovement.h"
 #include "../utility/mathutil.h"
 #include "../gameplay/gamemanager.h"

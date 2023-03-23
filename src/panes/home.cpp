@@ -4,9 +4,13 @@
 #include "../components/spriterenderer.h"
 #include "../components/menutitle.h"
 #include "../components/bubbledrawer.h"
-#include "../components/textrenderer.h"
 #include "../components/button.h"
 #include "../components/debugger.h"
+#include "../utility/magic_enum.hpp"
+#include "../gameplay/gamemanager.h"
+#include "game.h"
+#include <SDL_events.h>
+#include <SDL_keycode.h>
 #include <cstdio>
 #include <functional>
 
@@ -46,33 +50,66 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
       ->getTransform()->apply(
 	 { RenderWindow::SCREEN_CENTER_X + 200, 0, 800 },
 	 { 40, 40 }, { 0.5f, 0.5f }, 0.0f, RenderIndexes::UI);
-
-   EntityManager::initialize();
 }
 
 void HomePane::onStart()
 {     
-   EntityManager::start();
+   this->gamemodeText = gamemode->getComponent<TextRenderer>();
 }
 
-void HomePane::onGui(double deltaTime)
+void HomePane::onEvent(SDL_Event event)
 {
-   EntityManager::sort();
-   EntityManager::update(deltaTime);
+   switch (event.type) {
+      case SDL_KEYDOWN:
+	 switch (event.key.keysym.sym) {
+	    case SDLK_LEFT:
+	       previousGameMode();
+	       break;
+	    case SDLK_RIGHT:
+	       nextGameMode();
+	       break;
+	    case SDLK_RETURN:
+	       startGame();
+	       break;
+	 }
+   }
 }
 
 void HomePane::dispose()
 {
    delete title;
+   delete background;
+   delete gamemode;
+   delete previous;
+   delete next;
+}
+
+void HomePane::previousGameMode()
+{
+   this->currentGameMode--;
+   auto text = magic_enum::enum_name(currentGameMode).data();
+   this->gamemodeText->setText(text);
+}
+
+void HomePane::nextGameMode()
+{
+   this->currentGameMode++;
+   auto text = magic_enum::enum_name(currentGameMode).data();
+   this->gamemodeText->setText(text);
+}
+
+void HomePane::startGame()
+{
    EntityManager::clear();
-}
+   Pane *pane;
+   switch (currentGameMode) {
+      case GameMode::SINGLEPLAYER:
+	 pane = new GamePane(window);
+	 break;
+      case GameMode::MULTIPLAYER:
+	 pane = new GamePane(window);
+	 break;
+   }
 
-void HomePane::previousGameMode() const
-{
-   printf("Previous");
-}
-
-void HomePane::nextGameMode() const
-{
-   printf("Next");
+   GameManager::switchScene(this, pane);
 }

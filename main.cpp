@@ -8,14 +8,13 @@
 #include "src/render/renderwindow.h"
 #include "src/render/fontmanager.h"
 #include "src/entity/entitymanager.h"
+#include "src/gameplay/gamemanager.h"
 
 const SDL_Color BG = {203, 211, 235, 255};
 
 uint64_t currentTick = 0;
 uint64_t lastTick = 0;
 double deltaTime = 0;
-
-Pane *currentPane;
 
 int main(int argc, char** argv) {
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
@@ -33,20 +32,25 @@ int main(int argc, char** argv) {
 		exit(1);
 	}
 
+
 	RenderWindow *window = new RenderWindow(
 		RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT, "Table Tennis");
 	FontManager::init();
+	GameManager::switchScene(nullptr, new HomePane(window));
 
-	currentPane = new HomePane(window);
 	currentTick = SDL_GetPerformanceCounter();
 
-	currentPane->onStart();
+	EntityManager::initialize();
+	EntityManager::start();
+	GameManager::currentPane->onStart();
 
 	bool running = true;
 	while (running) {
 		lastTick = currentTick;
 		currentTick = SDL_GetPerformanceCounter();
-		deltaTime = (currentTick - lastTick) / SDL_GetPerformanceFrequency();
+		deltaTime = (currentTick - lastTick) / (float) SDL_GetPerformanceFrequency();
+
+		EntityManager::sort();
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -56,6 +60,7 @@ int main(int argc, char** argv) {
 				}
 
 				default:
+					GameManager::currentPane->onEvent(event);
 					EntityManager::event(event);
 			}
 		}
@@ -63,13 +68,15 @@ int main(int argc, char** argv) {
 		window->drawBG(BG);
 		window->clear();
 
-		currentPane->onGui(deltaTime);
+		EntityManager::update(deltaTime);
+		GameManager::currentPane->onGui(deltaTime);
 
 		SDL_RenderPresent(window->renderer);
 	}
 
-	currentPane->dispose();
+	GameManager::currentPane->dispose();
 	FontManager::close();
+	EntityManager::clear();
 
 	SDL_Quit();
 	Mix_Quit();

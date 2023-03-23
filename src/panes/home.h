@@ -2,6 +2,8 @@
 
 #include "../menu/pane.h"
 #include "../entity/entity.h"
+#include "../components/textrenderer.h"
+#include "../gameplay/gamemode.h"
 
 class HomePane : public Pane
 {
@@ -12,12 +14,16 @@ class HomePane : public Pane
 		Entity *previous;
 		Entity *next;
 
+		GameMode currentGameMode;
+		TextRenderer *gamemodeText;
+
 	public:
 		HomePane(RenderWindow *window);
 		void onStart() override;
-		void onGui(double deltaTime) override;
+		void onEvent(SDL_Event event) override;
 		void dispose() override;
 
-		void previousGameMode() const;
-		void nextGameMode() const;
+		void previousGameMode();
+		void nextGameMode();
+		void startGame();
 };

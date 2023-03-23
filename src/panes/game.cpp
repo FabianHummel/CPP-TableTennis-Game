@@ -49,19 +49,6 @@ GamePane::GamePane(RenderWindow *window) : Pane(window)
 	powerbox = ( new Entity("Powerbox") )
 		->getTransform()->apply({ 0, 0, 0 }, { 70, 70 }, { 0.5f, 0.5f }, 0.0f, RenderIndexes::UI+1)
 		->addComponent(new SpriteRenderer("res/powerbox.png", window->renderer) );
-
-	EntityManager::initialize();
-}
-
-void GamePane::onStart()
-{
-	EntityManager::start();
-}
-
-void GamePane::onGui(double deltaTime)
-{
-	EntityManager::sort();
-	EntityManager::update(deltaTime);
 }
 
 void GamePane::dispose()
@@ -74,5 +61,4 @@ void GamePane::dispose()
 	delete indicator;
 	delete powerbar;
 	delete powerbox;
-	EntityManager::clear();
 }

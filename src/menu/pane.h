@@ -15,15 +15,20 @@ public:
 	/**
 	 * @brief Called once when the game starts.
 	 */
-	virtual void onStart() = 0;
+	virtual void onStart() {};
 
 	/**
 	 * @brief Called every frame.
 	 */
-	virtual void onGui(double deltaTime) = 0;
+	virtual void onGui(double deltaTime) {};
+
+	/**
+	 * @brief Called when an event fires.
+	 */
+	virtual void onEvent(SDL_Event event) {};
 
 	/**
 	 * @brief Called when the window stops existing
 	 */
-	virtual void dispose() = 0;
+	virtual void dispose() {};
 };

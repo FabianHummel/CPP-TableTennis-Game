@@ -18,7 +18,5 @@ class GamePane : public Pane
 
 	public:
 		GamePane(RenderWindow *window);
-		void onStart() override;
-		void onGui(double deltaTime) override;
 		void dispose() override;
 };
