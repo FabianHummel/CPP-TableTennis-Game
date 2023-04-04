@@ -10,6 +10,7 @@
 #include "../components/shadowtransformer.h"
 #include "../components/powerbar.h"
 #include "../components/debugger.h"
+#include "../components/prediction.h"
 #include "../sound/soundmanager.h"
 
 GamePane::GamePane(RenderWindow *window) : Pane(window)
@@ -49,6 +50,12 @@ GamePane::GamePane(RenderWindow *window) : Pane(window)
 	powerbox = ( new Entity("Powerbox") )
 		->getTransform()->apply({ 0, 0, 0 }, { 70, 70 }, { 0.5f, 0.5f }, 0.0f, RenderIndexes::UI+1)
 		->addComponent(new SpriteRenderer("res/powerbox.png", window->renderer) );
+
+	prediction = ( new Entity("Prediction") )
+		->addComponent(new Prediction())
+		->getTransform()->apply(
+			{ 0, 0, 0 }, { RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT },
+			{ 0.0f, 0.0f }, 0.0f, RenderIndexes::PREDICTION);
 }
 
 void GamePane::dispose()
@@ -61,4 +68,5 @@ void GamePane::dispose()
 	delete indicator;
 	delete powerbar;
 	delete powerbox;
+	delete prediction;
 }

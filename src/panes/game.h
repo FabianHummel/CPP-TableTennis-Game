@@ -15,6 +15,7 @@ class GamePane : public Pane
 		Entity *indicator;
 		Entity *powerbar;
 		Entity *powerbox;
+		Entity *prediction;
 
 	public:
 		GamePane(RenderWindow *window);

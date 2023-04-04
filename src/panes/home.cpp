@@ -32,7 +32,10 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 	 { 0.5f, 0.5f }, -3.8, RenderIndexes::MENUBACKGROUND);
 
    gamemode = ( new Entity("Gamemode") )
-      ->addComponent(new TextRenderer(window->renderer, "MULTIPLAYER", {40, 40, 40}))
+      ->addComponent(new TextRenderer(
+	 window->renderer,
+	 magic_enum::enum_name(GameMode::SINGLEPLAYER).data(),
+	 {40, 40, 40}))
       ->getTransform()->apply(
 	 { RenderWindow::SCREEN_CENTER_X, 0, 800},
 	 { 0, 0 }, { 0.5f, 0.5f }, 0.0f, RenderIndexes::UI);

@@ -1,7 +1,9 @@
 #include "powerbar.h"
 #include "../entity/entitymanager.h"
 #include "ballmovement.h"
+#include "prediction.h"
 #include "transform.h"
+#include <cstdio>
 
 void Powerbar::onInitialize()
 {
@@ -18,6 +20,9 @@ void Powerbar::onInitialize()
 	Entity *powerbarEntity = EntityManager::findEntity("Powerbar");
 	powerbar = powerbarEntity->getComponent<Transform>();
 	powerbarSprite = powerbarEntity->getComponent<SpriteRenderer>();
+
+	Entity *predictionEntity = EntityManager::findEntity("Prediction");
+	prediction = predictionEntity->getComponent<Prediction>();
 }
 
 void Powerbar::onEvent(SDL_Event event)
@@ -93,7 +98,7 @@ void Powerbar::onRelease()
 	// printf("with a delta of: %d, %d ", deltaX, deltaY);
 	// printf("and an angle of: %d°\n", angle);
 
-	if (strength > 0.1f) {
+	if (strength > 0.1f && ball->parent->getTransform()->getY() > -10.0f) {
 		ball->setActive();
 
 		double length = sqrt(deltaX*deltaX + deltaY*deltaY);
@@ -123,6 +128,13 @@ void Powerbar::onDrag(int x, int y)
 		indicator->setRotation(angle);
 
 		strength = std::clamp((float)sqrt(deltaX*deltaX + deltaY*deltaY) / 200.0f, 0.0f, 1.0f);
-		setProgress(strength * 100.0f, startY);
+	   setProgress(strength * 100.0f, startY);
+		report();
 	}
+}
+
+void Powerbar::report()
+{
+	prediction->onMotion(
+	   startX, startY, deltaX, deltaY, strength);
 }

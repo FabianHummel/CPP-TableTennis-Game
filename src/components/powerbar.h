@@ -1,6 +1,7 @@
 #pragma once
 
 #include "component.h"
+#include "prediction.h"
 #include "spriterenderer.h"
 #include "transform.h"
 #include "ballmovement.h"
@@ -20,12 +21,14 @@ private:
 	SpriteRenderer *powerboxSprite;
 	Transform *powerbar;
 	SpriteRenderer *powerbarSprite;
+	Prediction *prediction;
 
 	void onClick(int x, int y);
 	void onRelease();
 	void onDrag(int x, int y);
 
 	void setProgress(float v, float y);
+	void report();
 
 public:
 	void onInitialize() override;
