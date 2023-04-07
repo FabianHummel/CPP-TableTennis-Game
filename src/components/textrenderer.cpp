@@ -1,13 +1,13 @@
-#include <SDL.h>
-#include <SDL_rect.h>
-#include <SDL_surface.h>
-#include <SDL_ttf.h>
-#include <SDL_render.h>
-#include <SDL_events.h>
-#include <cstdlib>
-#include <string>
 #include "textrenderer.h"
 #include "../render/fontmanager.h"
+#include <SDL.h>
+#include <SDL_events.h>
+#include <SDL_rect.h>
+#include <SDL_render.h>
+#include <SDL_surface.h>
+#include <SDL_ttf.h>
+#include <cstdlib>
+#include <string>
 
 TextRenderer::TextRenderer(SDL_Renderer *renderer, const char *text, SDL_Color color)
 {
@@ -33,11 +33,10 @@ void TextRenderer::onUpdate(double deltaTime)
 	dstrect.y = transform->getZ() - h * transform->getAnchor().y;
 	dstrect.w = w;
 	dstrect.h = h;
-	
+
 	SDL_FPoint anchor = transform->getAnchor();
 
-	SDL_RenderCopyExF(
-		renderer, texture, nullptr, &dstrect, transform->getRotation(), &anchor, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(renderer, texture, nullptr, &dstrect, transform->getRotation(), &anchor, SDL_FLIP_NONE);
 }
 
 void TextRenderer::setText(const char *text)

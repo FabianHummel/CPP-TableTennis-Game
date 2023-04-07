@@ -2,5 +2,5 @@
 
 Pane::Pane(RenderWindow *window)
 {
-   this->window = window;
+	this->window = window;
 }

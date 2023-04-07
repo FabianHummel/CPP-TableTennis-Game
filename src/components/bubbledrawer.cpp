@@ -1,13 +1,13 @@
 #include "bubbledrawer.h"
+#include "../render/renderwindow.h"
+#include "../utility/circle.h"
 #include <SDL_blendmode.h>
+#include <SDL_image.h>
 #include <SDL_pixels.h>
 #include <SDL_rect.h>
 #include <SDL_render.h>
-#include <SDL_image.h>
 #include <cmath>
 #include <cstdio>
-#include "../utility/circle.h"
-#include "../render/renderwindow.h"
 #include <math.h>
 
 BubbleDrawer::BubbleDrawer(SDL_Renderer *renderer)

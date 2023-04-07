@@ -15,12 +15,12 @@ void Debugger::onInitialize()
 void Debugger::onUpdate(double deltaTime)
 {
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	
+
 	SDL_Rect rec = transform->asRect();
 
 	SDL_Rect pos;
-	pos.x = rec.x -5;
-	pos.y = rec.y -5;
+	pos.x = rec.x - 5;
+	pos.y = rec.y - 5;
 	pos.w = 10;
 	pos.h = 10;
 	SDL_SetRenderDrawColor(renderer, 20, 60, 160, 255);
@@ -32,8 +32,8 @@ void Debugger::onUpdate(double deltaTime)
 	SDL_RenderFillRect(renderer, &rec);
 
 	SDL_Rect anchor;
-	anchor.x = rec.x -5;
-	anchor.y = rec.y -5;
+	anchor.x = rec.x - 5;
+	anchor.y = rec.y - 5;
 	anchor.w = 10;
 	anchor.h = 10;
 	SDL_SetRenderDrawColor(renderer, 55, 160, 20, 255);
@@ -42,5 +42,4 @@ void Debugger::onUpdate(double deltaTime)
 
 void Debugger::onEvent(SDL_Event event)
 {
-
 }

@@ -1,11 +1,13 @@
 #pragma once
 
-enum class TableSideX {
+enum class TableSideX
+{
 	LEFT,
 	RIGHT
 };
 
-enum class TableSideY {
+enum class TableSideY
+{
 	TOP,
 	BOTTOM
 };

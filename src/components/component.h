@@ -5,27 +5,28 @@
 
 class Entity;
 
-class Component {
-public:
+class Component
+{
+  public:
 	Entity *parent;
 
 	/**
 	 * @brief Initializes the component. Only use to reference other components.
 	 */
-	virtual void onInitialize() {};
+	virtual void onInitialize(){};
 
 	/**
 	 * @brief Called once when the game starts.
 	 */
-	virtual void onStart() {};
+	virtual void onStart(){};
 
 	/**
 	 * @brief Called every frame.
 	 */
-	virtual void onUpdate(double deltaTime) {};
+	virtual void onUpdate(double deltaTime){};
 
 	/**
 	 * @brief Called on an event.
 	 */
-	virtual void onEvent(SDL_Event event) {};
+	virtual void onEvent(SDL_Event event){};
 };

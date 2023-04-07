@@ -6,16 +6,17 @@
 #include "spriterenderer.h"
 #include <SDL_events.h>
 
-class ShadowTransformer : public Component {
-private:
-  Transform *ball;
-  Transform *transform;
-  SpriteRenderer *sprite;
-  Entity *target;
+class ShadowTransformer : public Component
+{
+  private:
+	Transform *ball;
+	Transform *transform;
+	SpriteRenderer *sprite;
+	Entity *target;
 
-public:
-  ShadowTransformer(Entity *shadow);
+  public:
+	ShadowTransformer(Entity *shadow);
 
-  void onInitialize() override;
-  void onUpdate(double deltaTime) override;
+	void onInitialize() override;
+	void onUpdate(double deltaTime) override;
 };

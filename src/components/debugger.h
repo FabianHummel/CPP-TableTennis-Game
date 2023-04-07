@@ -7,13 +7,13 @@
 
 class Debugger : public Component
 {
-	private:
-		Transform *transform;
-		SDL_Renderer *renderer;
+  private:
+	Transform *transform;
+	SDL_Renderer *renderer;
 
-	public:
-		Debugger(SDL_Renderer *renderer);
-		void onInitialize() override;
-		void onUpdate(double deltaTime) override;
-		void onEvent(SDL_Event event) override;
+  public:
+	Debugger(SDL_Renderer *renderer);
+	void onInitialize() override;
+	void onUpdate(double deltaTime) override;
+	void onEvent(SDL_Event event) override;
 };

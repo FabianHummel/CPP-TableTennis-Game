@@ -1,15 +1,16 @@
 #pragma once
 
-#include "component.h"
 #include "../entity/entity.h"
-#include "transform.h"
-#include "../utility/vector3.h"
-#include "spriterenderer.h"
-#include "../sound/soundmanager.h"
 #include "../gameplay/tableside.h"
+#include "../sound/soundmanager.h"
+#include "../utility/vector3.h"
+#include "component.h"
+#include "spriterenderer.h"
+#include "transform.h"
 
-class BallMovement : public Component {
-private:
+class BallMovement : public Component
+{
+  private:
 	constexpr static float GRAVITY = 20.0f;
 	constexpr static float FRICTION = 5.0f;
 
@@ -23,13 +24,13 @@ private:
 	bool fellOff = false;
 	bool idle = false;
 
-public:
+  public:
 	void onInitialize() override;
 	void onStart() override;
 	void onUpdate(double deltaTime) override;
 
-	void applyForce(const Vector3& force);
-	void setForce(const Vector3& force);
+	void applyForce(const Vector3 &force);
+	void setForce(const Vector3 &force);
 	Vector3 getForce() const;
 
 	void setIdle();

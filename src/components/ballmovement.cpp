@@ -1,10 +1,10 @@
 #include "ballmovement.h"
-#include "../utility/mathutil.h"
 #include "../gameplay/gamemanager.h"
-#include "../render/renderwindow.h"
 #include "../render/renderindexes.h"
-#include <algorithm>
+#include "../render/renderwindow.h"
+#include "../utility/mathutil.h"
 #include <SDL.h>
+#include <algorithm>
 #include <cstdio>
 
 void BallMovement::onInitialize()
@@ -21,9 +21,7 @@ void BallMovement::onInitialize()
 void BallMovement::onStart()
 {
 	this->setIdle();
-	transform->setPosition(
-		{ RenderWindow::SCREEN_CENTER_X, 100, 650 }
-	);
+	transform->setPosition({RenderWindow::SCREEN_CENTER_X, 100, 650});
 }
 
 void BallMovement::onUpdate(double deltaTime)
@@ -39,7 +37,7 @@ void BallMovement::onUpdate(double deltaTime)
 	this->applyVelocity(deltaTime);
 }
 
-void BallMovement::applyForce(const Vector3& force)
+void BallMovement::applyForce(const Vector3 &force)
 {
 	this->velocity += force;
 }
@@ -47,9 +45,11 @@ void BallMovement::applyForce(const Vector3& force)
 void BallMovement::setForce(const Vector3 &force)
 {
 	this->velocity = force;
+	printf("%s: Velocity: %f, %f, %f\n", parent->getName(), force.x, force.y, force.z);
 }
 
-Vector3 BallMovement::getForce() const {
+Vector3 BallMovement::getForce() const
+{
 	return this->velocity;
 }
 
@@ -60,7 +60,8 @@ void BallMovement::applyGravity(double deltaTime)
 
 void BallMovement::applyFriction(double deltaTime)
 {
-	if (MathUtil::closeToPoint(transform->getY(), 0.1)) {
+	if (MathUtil::closeToPoint(transform->getY(), 0.1))
+	{
 		auto vel = Vector3(velocity.x, 0.0f, velocity.z);
 		MathUtil::moveTowardsZero(vel, FRICTION * deltaTime);
 		velocity.x = vel.x;
@@ -70,9 +71,9 @@ void BallMovement::applyFriction(double deltaTime)
 
 void BallMovement::applyVelocity(double deltaTime)
 {
-	transform->mvByX( this->velocity.x * deltaTime * 100.0 );
-	transform->mvByY( this->velocity.y * deltaTime * 100.0 );
-	transform->mvByZ( this->velocity.z * deltaTime * 100.0 );
+	transform->mvByX(this->velocity.x * deltaTime * 100.0);
+	transform->mvByY(this->velocity.y * deltaTime * 100.0);
+	transform->mvByZ(this->velocity.z * deltaTime * 100.0);
 }
 
 void BallMovement::applyZIndex(double deltaTime)
@@ -80,17 +81,17 @@ void BallMovement::applyZIndex(double deltaTime)
 	// Move ball behind when it falls off at the top
 	if (transform->getY() < 0 /* && transform->getZ() < 470 */)
 	{
-		transform->setI(RenderIndexes::TABLE-1);
+		transform->setI(RenderIndexes::TABLE - 1);
 		return;
 	}
 
 	if (transform->getZ() > 470)
 	{
-		transform->setI(RenderIndexes::NET+2);
+		transform->setI(RenderIndexes::NET + 2);
 	}
-	else 
+	else
 	{
-		transform->setI(RenderIndexes::NET-2);
+		transform->setI(RenderIndexes::NET - 2);
 	}
 }
 
@@ -98,8 +99,7 @@ void BallMovement::checkGround(double deltaTime)
 {
 	if (transform->getY() >= 0)
 	{
-		sprite->setOpacity(
-			SDL_ALPHA_OPAQUE);
+		sprite->setOpacity(SDL_ALPHA_OPAQUE);
 		return;
 	}
 
@@ -109,26 +109,23 @@ void BallMovement::checkGround(double deltaTime)
 		transform->setY(0);
 
 		velocity.y *= -0.8f;
-		if (velocity.y < 0.5f) {
+		if (velocity.y < 0.5f)
+		{
 			velocity.y = 0.0f;
 		}
 
-		if (isIdle()) {
+		if (isIdle())
+		{
 			velocity.y = 8.0f;
 		}
 
 		sprite->setOpacity(SDL_ALPHA_OPAQUE);
-		SoundManager::playRndSound(
-			{ "bounce 1", "bounce 2", "bounce 3" },
-			std::clamp(velocity.y * 50.0f, 0.0f, 100.0f)
-		);
+		SoundManager::playRndSound({"bounce 1", "bounce 2", "bounce 3"}, std::clamp(velocity.y * 50.0f, 0.0f, 100.0f));
 	}
-	else 
+	else
 	{
 		// Otherwise, fall off the table and fade away
-		sprite->setOpacity(
-			std::clamp(SDL_ALPHA_OPAQUE - (int) abs(transform->getY()), 0, 255)
-		);
+		sprite->setOpacity(std::clamp(SDL_ALPHA_OPAQUE - (int)abs(transform->getY()), 0, 255));
 	}
 }
 
@@ -138,14 +135,14 @@ void BallMovement::checkNet(double deltaTime)
 		return;
 
 	double newZ = transform->getZ() + velocity.z * deltaTime * 100.0;
-	if ( transform->getZ() > 470 && newZ < 470 )
+	if (transform->getZ() > 470 && newZ < 470)
 	{
 		// Ball is going to be in the net
 		transform->setZ(470);
 		this->velocity.z *= -0.2f;
 		this->velocity.x *= 0.5f;
 	}
-	else if ( transform->getZ() < 470 && newZ > 470 )
+	else if (transform->getZ() < 470 && newZ > 470)
 	{
 		// Ball is going to be in the net
 		transform->setZ(470);
@@ -156,24 +153,30 @@ void BallMovement::checkNet(double deltaTime)
 
 void BallMovement::checkIdle(double deltaTime)
 {
-	if (MathUtil::closeToPoint(velocity.magnitude(), 0.3f)) {
+	if (MathUtil::closeToPoint(velocity.magnitude(), 0.3f))
+	{
 		idleTime += deltaTime;
-		if (idleTime > IDLE_TIME) {
+		if (idleTime > IDLE_TIME)
+		{
 			GameManager::nextRound();
 			idleTime = 0;
 		}
-	} else {
+	}
+	else
+	{
 		idleTime = 0.0;
 	}
 }
 
 void BallMovement::checkFellOff()
 {
-	if (transform->getY() < 0) {
-		//setIdle();
+	if (transform->getY() < 0)
+	{
+		// setIdle();
 	}
 
-	if (transform->getY() < -1000) {
+	if (transform->getY() < -1000)
+	{
 		GameManager::nextRound();
 	}
 }
@@ -195,14 +198,10 @@ bool BallMovement::isIdle() const
 
 TableSideX BallMovement::getSideX()
 {
-	return transform->getX() < RenderWindow::SCREEN_CENTER_X
-	  ? TableSideX::LEFT
-	  : TableSideX::RIGHT;
+	return transform->getX() < RenderWindow::SCREEN_CENTER_X ? TableSideX::LEFT : TableSideX::RIGHT;
 }
 
 TableSideY BallMovement::getSideY()
 {
-	return transform->getY() < RenderWindow::SCREEN_CENTER_Y
-	  ? TableSideY::BOTTOM
-	  : TableSideY::TOP;
+	return transform->getY() < RenderWindow::SCREEN_CENTER_Y ? TableSideY::BOTTOM : TableSideY::TOP;
 }

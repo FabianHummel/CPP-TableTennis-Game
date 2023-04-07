@@ -5,6 +5,6 @@
 
 class CircleDrawer
 {
-    public:
+  public:
 	static void DrawCircle(int x, int y, int radius, SDL_Color color, SDL_Renderer *renderer);
 };

@@ -1,8 +1,8 @@
-echo Building CMake Configuration...
-cmake .
+echo Building CMake Configuration... && \
+cmake . && \
 
-echo Building CPP Sources...
-make
+echo Building CPP Sources... && \
+make && \
 
-echo Running Application...
+echo Running Application... && \
 ./TableTennis

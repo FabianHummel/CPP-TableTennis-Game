@@ -4,20 +4,21 @@
 
 #pragma once
 
+#include "entity.h"
 #include <SDL_events.h>
 #include <vector>
-#include "entity.h"
 
-class EntityManager {
-private:
-	static std::vector<Entity*> entities;
-	static void forEachEntity(const std::function<void(Entity*)>& callback);
-	static void forEachComponent(const std::function<void(Component*)>& callback);
+class EntityManager
+{
+  private:
+	static std::vector<Entity *> entities;
+	static void forEachEntity(const std::function<void(Entity *)> &callback);
+	static void forEachComponent(const std::function<void(Component *)> &callback);
 
-public:
+  public:
 	static void addEntity(Entity *entity);
 	static void removeEntity(Entity *entity);
-	static Entity* findEntity(const char *name);
+	static Entity *findEntity(const char *name);
 
 	static void initialize();
 	static void start();
