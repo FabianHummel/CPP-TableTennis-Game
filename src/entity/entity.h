@@ -2,6 +2,7 @@
 
 #include "../components/component.h"
 #include "../components/transform.h"
+#include <functional>
 #include <unordered_map>
 
 class Transform;

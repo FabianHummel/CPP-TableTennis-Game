@@ -11,9 +11,6 @@
 class BallMovement : public Component
 {
   private:
-	constexpr static float GRAVITY = 20.0f;
-	constexpr static float FRICTION = 5.0f;
-
 	Transform *transform;
 	SpriteRenderer *sprite;
 	Vector3 velocity = {0.0f, 0.0f, 0.0f};
@@ -25,6 +22,9 @@ class BallMovement : public Component
 	bool idle = false;
 
   public:
+	constexpr static float GRAVITY = 0.2f;
+	constexpr static float FRICTION = 5.0f;
+
 	void onInitialize() override;
 	void onStart() override;
 	void onUpdate(double deltaTime) override;

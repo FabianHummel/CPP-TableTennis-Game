@@ -1,6 +1,5 @@
 #include "entity.h"
 #include "entitymanager.h"
-#include <functional>
 
 Entity::Entity(const char *name)
 {

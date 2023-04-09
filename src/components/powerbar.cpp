@@ -67,6 +67,23 @@ void Powerbar::onStart()
 	powerbarSprite->setVisible(false);
 }
 
+void Powerbar::onUpdate(double deltaTime)
+{
+	if (isDragging)
+	{
+		Vector3 force = calcForce();
+		prediction->onPredict(force);
+	}
+}
+
+Vector3 Powerbar::calcForce()
+{
+	double length = sqrt(deltaX * deltaX + deltaY * deltaY);
+	double forceX = -(double)deltaX / length * strength * 7.0;
+	double forceY = -(double)deltaY / length * strength * 7.0;
+	return {(float)forceX, 7.f, (float)forceY};
+}
+
 void Powerbar::onClick(int x, int y)
 {
 	isDragging = true;
@@ -94,10 +111,8 @@ void Powerbar::onRelease()
 	{
 		ball->setActive();
 
-		double length = sqrt(deltaX * deltaX + deltaY * deltaY);
-		double forceX = -(double)deltaX / length * strength * 7.0;
-		double forceY = -(double)deltaY / length * strength * 7.0;
-		ball->setForce({(float)forceX, 7.f, (float)forceY});
+		Vector3 force = calcForce();
+		ball->setForce(force);
 	}
 
 	strength = 0.0f;
@@ -122,11 +137,5 @@ void Powerbar::onDrag(int x, int y)
 
 		strength = std::clamp((float)sqrt(deltaX * deltaX + deltaY * deltaY) / 200.0f, 0.0f, 1.0f);
 		setProgress(strength * 100.0f, startY);
-		report();
 	}
-}
-
-void Powerbar::report()
-{
-	prediction->onMotion(startX, startY, deltaX, deltaY, strength);
 }

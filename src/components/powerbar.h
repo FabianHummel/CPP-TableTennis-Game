@@ -27,12 +27,12 @@ class Powerbar : public Component
 	void onClick(int x, int y);
 	void onRelease();
 	void onDrag(int x, int y);
-
 	void setProgress(float v, float y);
-	void report();
+	Vector3 calcForce();
 
   public:
 	void onInitialize() override;
 	void onStart() override;
+	void onUpdate(double deltaTime) override;
 	void onEvent(SDL_Event event) override;
 };

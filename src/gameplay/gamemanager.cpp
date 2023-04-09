@@ -1,7 +1,3 @@
-//
-// Created by Fabian Hummel on 14.06.22.
-//
-
 #include "gamemanager.h"
 #include "../components/ballmovement.h"
 #include "../components/transform.h"

@@ -45,7 +45,6 @@ void BallMovement::applyForce(const Vector3 &force)
 void BallMovement::setForce(const Vector3 &force)
 {
 	this->velocity = force;
-	printf("%s: Velocity: %f, %f, %f\n", parent->getName(), force.x, force.y, force.z);
 }
 
 Vector3 BallMovement::getForce() const
@@ -55,7 +54,7 @@ Vector3 BallMovement::getForce() const
 
 void BallMovement::applyGravity(double deltaTime)
 {
-	this->velocity.y -= GRAVITY * deltaTime;
+	this->velocity.y -= GRAVITY * deltaTime * 100.0;
 }
 
 void BallMovement::applyFriction(double deltaTime)
@@ -107,8 +106,8 @@ void BallMovement::checkGround(double deltaTime)
 	if (transform->inTableBounds())
 	{
 		transform->setY(0);
-
 		velocity.y *= -0.8f;
+
 		if (velocity.y < 0.5f)
 		{
 			velocity.y = 0.0f;
