@@ -73,8 +73,8 @@ int main(int argc, char **argv)
 		window->drawBG(BG);
 		window->clear();
 
-		EntityManager::update(deltaTime * 0.3);
-		GameManager::currentPane->onGui(deltaTime * 0.3);
+		EntityManager::update(deltaTime);
+		GameManager::currentPane->onGui(deltaTime);
 
 		SDL_RenderPresent(window->renderer);
 	}
