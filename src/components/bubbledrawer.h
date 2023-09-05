@@ -1,7 +1,6 @@
 #pragma once
 
-#include "component.h"
-#include "transform.h"
+#include "../ecs/ecs.h"
 #include <SDL.h>
 #include <SDL_render.h>
 

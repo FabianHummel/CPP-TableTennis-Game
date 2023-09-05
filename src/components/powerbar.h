@@ -1,10 +1,8 @@
 #pragma once
 
-#include "./ballmovement.h"
-#include "./component.h"
-#include "./prediction.h"
-#include "./spriterenderer.h"
-#include "./transform.h"
+#include "../ecs/ecs.h"
+#include "ballmovement.h"
+#include "prediction.h"
 
 class Powerbar : public Component
 {

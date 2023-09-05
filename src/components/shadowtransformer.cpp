@@ -3,7 +3,7 @@
 //
 
 #include "shadowtransformer.h"
-#include "../entity/entitymanager.h"
+#include "spriterenderer.h"
 
 ShadowTransformer::ShadowTransformer(Entity *shadow)
 {

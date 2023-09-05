@@ -1,9 +1,36 @@
 #pragma once
 
-#include "../components/component.h"
-#include "../components/transform.h"
-#include <functional>
-#include <unordered_map>
+#include <SDL_events.h>
+#include "unordered_map"
+#include "functional"
+
+class Entity;
+
+class Component
+{
+  public:
+	Entity *parent{};
+
+	/**
+	 * @brief Initializes the component. Only use to reference other components.
+	 */
+	virtual void onInitialize(){};
+
+	/**
+	 * @brief Called once when the game starts.
+	 */
+	virtual void onStart(){};
+
+	/**
+	 * @brief Called every frame.
+	 */
+	virtual void onUpdate(double deltaTime){};
+
+	/**
+	 * @brief Called on an event.
+	 */
+	virtual void onEvent(SDL_Event event){};
+};
 
 class Transform;
 
@@ -15,20 +42,12 @@ class Entity
 	Transform *transform;
 
   public:
-	Entity(const char *name);
+	explicit Entity(const char *name);
 	~Entity();
 
 	void forEachComponent(const std::function<void(Component *)> &callback);
-
-	const char *getName() const;
-
+	[[nodiscard]] const char *getName() const;
 	Transform *getTransform();
-
-	/*template<typename T> Entity* addComponent(T *component);
-
-	template<class T> T* getComponent();
-
-	template<class T> Entity* removeComponent(); */
 
 	template <typename T> Entity *addComponent(T *component)
 	{
@@ -48,3 +67,5 @@ class Entity
 		return this;
 	};
 };
+
+#include "../components/transform.h"

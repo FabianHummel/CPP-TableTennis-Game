@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../entity/entity.h"
-#include "../menu/pane.h"
+#include "pane.h"
 #include <SDL_events.h>
 
 class GamePane : public Pane
@@ -18,6 +17,6 @@ class GamePane : public Pane
 	Entity *prediction;
 
   public:
-	GamePane(RenderWindow *window);
+	explicit GamePane(RenderWindow *window);
 	void dispose() override;
 };

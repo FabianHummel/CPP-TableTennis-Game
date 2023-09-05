@@ -1,27 +1,27 @@
 #include "powerbar.h"
-#include "../entity/entitymanager.h"
+#include "../ecs/ecsmanager.h"
 #include "ballmovement.h"
 #include "prediction.h"
-#include "transform.h"
+#include "spriterenderer.h"
 #include <cstdio>
 
 void Powerbar::onInitialize()
 {
 	printf("Initializing Powerbar Behavior on %s\n", parent->getName());
 
-	indicator = EntityManager::findEntity("Indicator")->getComponent<Transform>();
-	indicatorSprite = EntityManager::findEntity("Indicator")->getComponent<SpriteRenderer>();
-	ball = EntityManager::findEntity("Ball")->getComponent<BallMovement>();
+	indicator = EcsManager::findEntity("Indicator")->getComponent<Transform>();
+	indicatorSprite = EcsManager::findEntity("Indicator")->getComponent<SpriteRenderer>();
+	ball = EcsManager::findEntity("Ball")->getComponent<BallMovement>();
 
-	Entity *powerboxEntity = EntityManager::findEntity("Powerbox");
+	Entity *powerboxEntity = EcsManager::findEntity("Powerbox");
 	powerbox = powerboxEntity->getComponent<Transform>();
 	powerboxSprite = powerboxEntity->getComponent<SpriteRenderer>();
 
-	Entity *powerbarEntity = EntityManager::findEntity("Powerbar");
+	Entity *powerbarEntity = EcsManager::findEntity("Powerbar");
 	powerbar = powerbarEntity->getComponent<Transform>();
 	powerbarSprite = powerbarEntity->getComponent<SpriteRenderer>();
 
-	Entity *predictionEntity = EntityManager::findEntity("Prediction");
+	Entity *predictionEntity = EcsManager::findEntity("Prediction");
 	prediction = predictionEntity->getComponent<Prediction>();
 }
 
@@ -81,7 +81,7 @@ Vector3 Powerbar::calcForce()
 	double length = sqrt(deltaX * deltaX + deltaY * deltaY);
 	double forceX = -(double)deltaX / length * strength * 7.0;
 	double forceY = -(double)deltaY / length * strength * 7.0;
-	return {(float)forceX, 7.f, (float)forceY};
+	return {(float)forceX, 8.f, (float)forceY};
 }
 
 void Powerbar::onClick(int x, int y)

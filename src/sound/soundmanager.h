@@ -8,19 +8,17 @@
 #include <unordered_map>
 #include <vector>
 
-class SoundManager
+namespace SoundManager
 {
-  private:
 	static std::unordered_map<const char *, Mix_Chunk *> sounds;
 
-  public:
-	static void addSound(const char *path, const char *name);
-	static void playSound(const char *name, int volume);
-	static void playSound(const char *name);
+  void addSound(const char *path, const char *name);
+	void playSound(const char *name, int volume);
+	void playSound(const char *name);
 
-	static void playSounds(const std::vector<const char *> &names, int volume);
-	static void playSounds(const std::vector<const char *> &names);
+	void playSounds(const std::vector<const char *> &names, int volume);
+	void playSounds(const std::vector<const char *> &names);
 
-	static void playRndSound(const std::vector<const char *> &names, int volume);
-	static void playRndSound(const std::vector<const char *> &names);
+	void playRndSound(const std::vector<const char *> &names, int volume);
+	void playRndSound(const std::vector<const char *> &names);
 };

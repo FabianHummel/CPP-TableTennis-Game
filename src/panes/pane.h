@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../render/renderwindow.h"
+#include "../ecs/ecs.h"
+#include "../components/index.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <vector>
@@ -11,7 +13,7 @@ class Pane
 	RenderWindow *window;
 
   public:
-	Pane(RenderWindow *window);
+	explicit Pane(RenderWindow *window);
 	/**
 	 * @brief Called once when the game starts.
 	 */

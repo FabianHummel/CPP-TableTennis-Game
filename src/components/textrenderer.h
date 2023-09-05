@@ -1,5 +1,4 @@
-#include "component.h"
-#include "transform.h"
+#include "../ecs/ecs.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <SDL_pixels.h>

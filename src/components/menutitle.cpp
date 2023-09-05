@@ -1,6 +1,4 @@
 #include "menutitle.h"
-#include <cstdio>
-#include <ctime>
 
 void MenuTitle::onInitialize()
 {

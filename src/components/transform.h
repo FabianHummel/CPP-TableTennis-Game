@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../entity/entity.h"
+#include "../ecs/ecs.h"
 #include "../utility/vector2int.h"
 #include "../utility/vector3.h"
-#include "component.h"
 #include <SDL_rect.h>
 #include <SDL_render.h>
 
@@ -21,43 +20,43 @@ class Transform : public Component
 	Transform();
 
 	void setPosition(const Vector3 &v);
-	Vector3 getPosition() const;
+	[[nodiscard]] Vector3 getPosition() const;
 	void setX(float nX);
 	void setY(float nY);
 	void setZ(float nZ);
-	float getX() const;
-	float getY() const;
-	float getZ() const;
+	[[nodiscard]] float getX() const;
+	[[nodiscard]] float getY() const;
+	[[nodiscard]] float getZ() const;
 	void mvByX(float v);
 	void mvByY(float v);
 	void mvByZ(float v);
 	void printPosition() const;
 
 	void setScale(const Vector2Int &v);
-	Vector2Int getScale() const;
+	[[nodiscard]] Vector2Int getScale() const;
 	void setScaleX(int nX);
 	void setScaleY(int nY);
-	int getScaleX() const;
-	int getScaleY() const;
+	[[nodiscard]] int getScaleX() const;
+	[[nodiscard]] int getScaleY() const;
 	void mvByScaleX(int v);
 	void mvByScaleY(int v);
 	void printScale() const;
 
 	void setRotation(float v);
-	float getRotation() const;
+	[[nodiscard]] float getRotation() const;
 	void printRotation() const;
 
 	void setI(int v);
-	int getI() const;
+	[[nodiscard]] int getI() const;
 	void printI() const;
 
 	Entity *apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zIndex);
 
 	void setAnchor(const SDL_FPoint &v);
-	SDL_FPoint getAnchor() const;
+	[[nodiscard]] SDL_FPoint getAnchor() const;
 
-	bool inTableBounds() const;
-	bool inTransformBounds(int x, int y) const;
+	[[nodiscard]] bool inTableBounds() const;
+	[[nodiscard]] bool inTransformBounds(int x, int y) const;
 
-	SDL_Rect asRect() const;
+	[[nodiscard]] SDL_Rect asRect() const;
 };

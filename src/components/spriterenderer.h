@@ -1,17 +1,15 @@
 #pragma once
 
-#include "../entity/entity.h"
-#include "component.h"
-#include "transform.h"
+#include "../ecs/ecs.h"
 #include <SDL_events.h>
 #include <SDL_render.h>
 
 class SpriteRenderer : public Component
 {
   private:
-	SDL_Texture *texture;
+	SDL_Texture *texture{};
 	SDL_Renderer *renderer;
-	Transform *transform;
+	Transform *transform{};
 	const char *img;
 	bool visible = true;
 	int opacity = 255;

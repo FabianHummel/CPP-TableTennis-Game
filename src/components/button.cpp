@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <functional>
 
-Button::Button(const std::function<void()> onMouseDown, const std::function<void()> onMouseUp)
+Button::Button(const std::function<void()>& onMouseDown, const std::function<void()>& onMouseUp)
 {
 	this->onMouseDown = onMouseDown;
 	this->onMouseUp = onMouseUp;

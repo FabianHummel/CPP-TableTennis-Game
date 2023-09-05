@@ -1,5 +1,4 @@
 #include "debugger.h"
-#include <SDL_blendmode.h>
 #include <SDL_render.h>
 
 Debugger::Debugger(SDL_Renderer *renderer)

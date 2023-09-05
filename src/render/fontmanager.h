@@ -1,9 +1,8 @@
 #include <SDL_ttf.h>
 
-class FontManager
+namespace FontManager
 {
-  public:
-	static void init();
-	static void close();
 	static TTF_Font *main;
+	void init();
+	void close();
 };

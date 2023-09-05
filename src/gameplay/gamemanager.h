@@ -1,14 +1,11 @@
 #pragma once
 
-#include "../components/ballmovement.h"
-#include "../menu/pane.h"
+#include "../panes/pane.h"
 #include "gamemode.h"
 
-class GameManager
+namespace GameManager
 {
-  private:
-  public:
-	static Pane *currentPane;
-	static void nextRound();
-	static void switchScene(Pane *from, Pane *to);
+ 	static Pane *currentPane;
+	void nextRound();
+	void switchScene(Pane *from, Pane *to);
 };

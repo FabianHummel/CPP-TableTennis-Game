@@ -1,12 +1,10 @@
 #pragma once
 
-#include "../entity/entity.h"
+#include "../ecs/ecs.h"
 #include "../gameplay/tableside.h"
 #include "../sound/soundmanager.h"
 #include "../utility/vector3.h"
-#include "component.h"
 #include "spriterenderer.h"
-#include "transform.h"
 
 class BallMovement : public Component
 {

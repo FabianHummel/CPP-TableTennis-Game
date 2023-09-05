@@ -1,9 +1,8 @@
 #include "ballmovement.h"
 #include "../gameplay/gamemanager.h"
 #include "../render/renderindexes.h"
-#include "../render/renderwindow.h"
 #include "../utility/mathutil.h"
-#include <SDL.h>
+#include "spriterenderer.h"
 #include <algorithm>
 #include <cstdio>
 
@@ -80,17 +79,17 @@ void BallMovement::applyZIndex(double deltaTime)
 	// Move ball behind when it falls off at the top
 	if (transform->getY() < 0 /* && transform->getZ() < 470 */)
 	{
-		transform->setI(RenderIndexes::TABLE - 1);
+		transform->setI(RenderIndexes::Game::TABLE - 1);
 		return;
 	}
 
 	if (transform->getZ() > 470)
 	{
-		transform->setI(RenderIndexes::NET + 2);
+		transform->setI(RenderIndexes::Game::NET + 2);
 	}
 	else
 	{
-		transform->setI(RenderIndexes::NET - 2);
+		transform->setI(RenderIndexes::Game::NET - 2);
 	}
 }
 
