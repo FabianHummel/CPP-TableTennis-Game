@@ -6,7 +6,6 @@ project(TableTennis)
 
 # Add source files
 file(GLOB_RECURSE SrcFiles "src/*")
-file(GLOB_RECURSE HdrFiles "/usr/local/include/SDL2/*")
 
 add_executable(TableTennis main.cpp ${SrcFiles} ${HdrFiles})
 

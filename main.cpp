@@ -1,6 +1,5 @@
-#include "src/entity/entitymanager.h"
+#include "src/ecs/ecsmanager.h"
 #include "src/gameplay/gamemanager.h"
-#include "src/menu/pane.h"
 #include "src/panes/game.h"
 #include "src/panes/home.h"
 #include "src/render/fontmanager.h"
@@ -21,29 +20,25 @@ int main(int argc, char **argv)
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		printf("SDL could not be initialized!\n SDL_Error: %s\n", SDL_GetError());
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		printf("SDL_mixer could not initialize!\n SDL_mixer_Error: %s\n", Mix_GetError());
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	if (TTF_Init() < 0)
 	{
 		printf("SDL_ttf could not initialize!\n SDL_ttf_Error: %s\n", TTF_GetError());
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	RenderWindow *window = new RenderWindow(RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT, "Table Tennis");
 	FontManager::init();
 	GameManager::switchScene(nullptr, new HomePane(window));
-
 	currentTick = SDL_GetPerformanceCounter();
-
-	EntityManager::initialize();
-	EntityManager::start();
 	GameManager::currentPane->onStart();
 
 	bool running = true;
@@ -51,9 +46,9 @@ int main(int argc, char **argv)
 	{
 		lastTick = currentTick;
 		currentTick = SDL_GetPerformanceCounter();
-		deltaTime = (currentTick - lastTick) / (float)SDL_GetPerformanceFrequency();
+		deltaTime = (currentTick - lastTick) / (double)SDL_GetPerformanceFrequency();
 
-		EntityManager::sort();
+		EcsManager::sort();
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
@@ -66,14 +61,14 @@ int main(int argc, char **argv)
 
 			default:
 				GameManager::currentPane->onEvent(event);
-				EntityManager::event(event);
+				EcsManager::event(event);
 			}
 		}
 
 		window->drawBG(BG);
 		window->clear();
 
-		EntityManager::update(deltaTime);
+		EcsManager::update(deltaTime);
 		GameManager::currentPane->onGui(deltaTime);
 
 		SDL_RenderPresent(window->renderer);
@@ -81,7 +76,7 @@ int main(int argc, char **argv)
 
 	GameManager::currentPane->dispose();
 	FontManager::close();
-	EntityManager::clear();
+	EcsManager::clear();
 
 	SDL_Quit();
 	Mix_Quit();

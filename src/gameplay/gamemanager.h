@@ -5,7 +5,7 @@
 
 namespace GameManager
 {
- 	static Pane *currentPane;
+	extern Pane *currentPane;
 	void nextRound();
 	void switchScene(Pane *from, Pane *to);
 };

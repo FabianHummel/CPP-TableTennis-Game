@@ -7,6 +7,8 @@
 
 namespace SoundManager
 {
+	std::unordered_map<const char *, Mix_Chunk *> sounds = {};
+
 	void addSound(const char *path, const char *name)
 	{
 		printf("Loading Sound %s\n", path);
@@ -16,7 +18,7 @@ namespace SoundManager
 			printf("Error loading sound!\n"
 			       "SDL_mixer_Error: %s\n",
 			       Mix_GetError());
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 
 		sounds[name] = sound;

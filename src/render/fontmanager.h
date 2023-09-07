@@ -2,7 +2,7 @@
 
 namespace FontManager
 {
-	static TTF_Font *main;
+	extern TTF_Font *main;
 	void init();
 	void close();
 };

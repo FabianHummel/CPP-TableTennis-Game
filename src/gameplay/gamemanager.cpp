@@ -4,6 +4,8 @@
 
 namespace GameManager
 {
+	Pane *currentPane = {};
+
 	void nextRound()
 	{
 		Entity *ball = EcsManager::findEntity("Ball");
@@ -22,12 +24,12 @@ namespace GameManager
 			from->dispose();
 			delete from;
 		}
-		
+
 		if (to == nullptr)
 		{
 			exit(EXIT_FAILURE);
 		}
-		
+
 		currentPane = to;
 		EcsManager::initialize();
 		EcsManager::start();

@@ -28,13 +28,13 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 800}, {0, 0}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	previous = (new Entity("Previous"))
-		->addComponent(new Button(nullptr, std::bind(&HomePane::previousGameMode, this)))
+		->addComponent(new Button(nullptr, [this] { previousGameMode(); }))
 		->addComponent(new SpriteRenderer("res/arrowleft.png", window->renderer))
 		->getTransform()
 		->apply({RenderWindow::SCREEN_CENTER_X - 200, 0, 800}, {40, 40}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	next = (new Entity("Next"))
-		->addComponent(new Button(nullptr, std::bind(&HomePane::nextGameMode, this)))
+		->addComponent(new Button(nullptr, [this] { nextGameMode(); }))
 		->addComponent(new SpriteRenderer("res/arrowright.png", window->renderer))
 		->getTransform()
 		->apply({RenderWindow::SCREEN_CENTER_X + 200, 0, 800}, {40, 40}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);

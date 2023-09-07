@@ -4,6 +4,8 @@
 
 namespace FontManager
 {
+	TTF_Font *main = {};
+
 	void init()
 	{
 		TTF_Font *mainFont = TTF_OpenFont("res/fonts/Quicksand-Bold.ttf", 42);

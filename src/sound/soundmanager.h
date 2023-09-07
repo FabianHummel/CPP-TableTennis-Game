@@ -10,9 +10,9 @@
 
 namespace SoundManager
 {
-	static std::unordered_map<const char *, Mix_Chunk *> sounds;
+	extern std::unordered_map<const char *, Mix_Chunk *> sounds;
 
-  void addSound(const char *path, const char *name);
+	void addSound(const char *path, const char *name);
 	void playSound(const char *name, int volume);
 	void playSound(const char *name);
 

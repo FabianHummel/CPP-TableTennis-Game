@@ -1,7 +1,6 @@
 #include "button.h"
 #include <SDL_events.h>
 #include <SDL_mouse.h>
-#include <cstdio>
 #include <functional>
 
 Button::Button(const std::function<void()>& onMouseDown, const std::function<void()>& onMouseUp)

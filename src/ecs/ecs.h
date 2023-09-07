@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECS_H
+#define ECS_H
 
 #include <SDL_events.h>
 #include "unordered_map"
@@ -46,7 +47,7 @@ class Entity
 	~Entity();
 
 	void forEachComponent(const std::function<void(Component *)> &callback);
-	[[nodiscard]] const char *getName() const;
+	const char *getName() const;
 	Transform *getTransform();
 
 	template <typename T> Entity *addComponent(T *component)
@@ -67,5 +68,7 @@ class Entity
 		return this;
 	};
 };
+
+#endif //ECS_H
 
 #include "../components/transform.h"

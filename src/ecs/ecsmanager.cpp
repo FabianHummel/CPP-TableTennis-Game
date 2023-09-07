@@ -5,6 +5,8 @@
 
 namespace EcsManager
 {
+	std::vector<Entity*> entities = {};
+
 	void addEntity(Entity *entity)
 	{
 		entities.push_back(entity);

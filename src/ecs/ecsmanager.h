@@ -9,7 +9,7 @@ class Component;
 
 namespace EcsManager
 {
-  static std::vector<Entity*> entities;
+  	extern std::vector<Entity*> entities;
   
 	void forEachEntity(const std::function<void(Entity *)> &callback);
 	void forEachComponent(const std::function<void(Component *)> &callback);

@@ -20,43 +20,43 @@ class Transform : public Component
 	Transform();
 
 	void setPosition(const Vector3 &v);
-	[[nodiscard]] Vector3 getPosition() const;
+	Vector3 getPosition() const;
 	void setX(float nX);
 	void setY(float nY);
 	void setZ(float nZ);
-	[[nodiscard]] float getX() const;
-	[[nodiscard]] float getY() const;
-	[[nodiscard]] float getZ() const;
+	float getX() const;
+	float getY() const;
+	float getZ() const;
 	void mvByX(float v);
 	void mvByY(float v);
 	void mvByZ(float v);
 	void printPosition() const;
 
 	void setScale(const Vector2Int &v);
-	[[nodiscard]] Vector2Int getScale() const;
+	Vector2Int getScale() const;
 	void setScaleX(int nX);
 	void setScaleY(int nY);
-	[[nodiscard]] int getScaleX() const;
-	[[nodiscard]] int getScaleY() const;
+	int getScaleX() const;
+	int getScaleY() const;
 	void mvByScaleX(int v);
 	void mvByScaleY(int v);
 	void printScale() const;
 
 	void setRotation(float v);
-	[[nodiscard]] float getRotation() const;
+	float getRotation() const;
 	void printRotation() const;
 
 	void setI(int v);
-	[[nodiscard]] int getI() const;
+	int getI() const;
 	void printI() const;
 
 	Entity *apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zIndex);
 
 	void setAnchor(const SDL_FPoint &v);
-	[[nodiscard]] SDL_FPoint getAnchor() const;
+	SDL_FPoint getAnchor() const;
 
-	[[nodiscard]] bool inTableBounds() const;
-	[[nodiscard]] bool inTransformBounds(int x, int y) const;
+	bool inTableBounds() const;
+	bool inTransformBounds(int x, int y) const;
 
-	[[nodiscard]] SDL_Rect asRect() const;
+	SDL_Rect asRect() const;
 };
