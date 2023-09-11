@@ -1,19 +1,13 @@
 #pragma once
 
 #include "pane.h"
-#include "../gameplay/gamemode.h"
+#include "../game/gamemode.h"
 
 class HomePane : public Pane
 {
   private:
-	Entity *title;
-	Entity *background;
-	Entity *gamemode;
-	Entity *previous;
-	Entity *next;
-
-	GameMode currentGameMode;
-	TextRenderer *gamemodeText;
+	GameMode currentGameMode{};
+	TextRenderer *gamemodeText{};
 
   public:
 	HomePane(RenderWindow *window);

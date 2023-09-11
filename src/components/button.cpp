@@ -1,9 +1,10 @@
 #include "button.h"
+#include "../game/cursormanager.h"
 #include <SDL_events.h>
 #include <SDL_mouse.h>
 #include <functional>
 
-Button::Button(const std::function<void()>& onMouseDown, const std::function<void()>& onMouseUp)
+Button::Button(const std::function<void()> &onMouseDown, const std::function<void()> &onMouseUp)
 {
 	this->onMouseDown = onMouseDown;
 	this->onMouseUp = onMouseUp;
@@ -12,6 +13,19 @@ Button::Button(const std::function<void()>& onMouseDown, const std::function<voi
 void Button::onInitialize()
 {
 	this->transform = parent->getTransform();
+}
+
+void Button::onUpdate(double deltaTime)
+{
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	x *= 2;
+	y *= 2;
+
+	if (transform->inTransformBounds(x, y))
+		CursorManager::requestCursor(CursorManager::handCursor);
+	else
+		CursorManager::requestCursor(CursorManager::arrowCursor);
 }
 
 void Button::onEvent(SDL_Event event)

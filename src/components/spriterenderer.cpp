@@ -1,7 +1,4 @@
 #include "spriterenderer.h"
-#include <SDL_image.h>
-#include <SDL_rect.h>
-#include <SDL_render.h>
 
 SpriteRenderer::SpriteRenderer(const char *img, SDL_Renderer *renderer)
 {
@@ -32,15 +29,21 @@ void SpriteRenderer::onUpdate(double deltaTime)
 	dstrect.w = transform->getScaleX();
 	dstrect.h = transform->getScaleY();
 
-	SDL_FPoint anchor = transform->getAnchor();
-
 	SDL_SetTextureAlphaMod(texture, opacity);
 	SDL_RenderCopyExF(renderer, texture, srcrect, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
+}
+
+void SpriteRenderer::onDelete()
+{
+	printf("Unloading Texture %s\n", img);
+	SDL_DestroyTexture(this->texture);
 }
 
 void SpriteRenderer::setImage(const char *v)
 {
 	this->img = v;
+	this->onDelete();
+	this->onStart();
 }
 
 void SpriteRenderer::setOpacity(int v)

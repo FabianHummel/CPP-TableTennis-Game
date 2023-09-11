@@ -12,13 +12,18 @@ Entity::Entity(const char *name)
 Entity::~Entity()
 {
 	EcsManager::removeEntity(this);
+	this->forEachComponent([&](Component *component) {
+		component->onDelete();
+		delete component;
+	});
+	this->components.clear();
 }
 
 void Entity::forEachComponent(const std::function<void(Component *)> &callback)
 {
-	for (auto &component : components)
+	for (auto &[key, value] : this->components)
 	{
-		callback(component.second);
+		callback(value);
 	}
 }
 
@@ -29,5 +34,5 @@ const char *Entity::getName() const
 
 Transform *Entity::getTransform()
 {
-	return transform;
+	return this->transform;
 }

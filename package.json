@@ -1,0 +1,10 @@
+{
+  "name": "Table Tennis",
+  "version": "1.0.0",
+  "scripts": {
+    "preprocess": "node node/index.js"
+  },
+  "dependencies": {
+
+  }
+}

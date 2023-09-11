@@ -8,12 +8,12 @@
 class TextRenderer : public Component
 {
   private:
-	Transform *transform;
+	Transform *transform{};
 	SDL_Renderer *renderer;
 	const char *text;
-	SDL_Color color;
+	SDL_Color color{};
 	TTF_Font *font;
-	SDL_Texture *texture;
+	SDL_Texture *texture{};
 
 	void updateTexture();
 

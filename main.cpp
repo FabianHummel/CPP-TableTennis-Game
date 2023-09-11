@@ -1,5 +1,6 @@
 #include "src/ecs/ecsmanager.h"
-#include "src/gameplay/gamemanager.h"
+#include "src/game/gamemanager.h"
+#include "src/game/cursormanager.h"
 #include "src/panes/game.h"
 #include "src/panes/home.h"
 #include "src/render/fontmanager.h"
@@ -36,6 +37,7 @@ int main(int argc, char **argv)
 	}
 
 	RenderWindow *window = new RenderWindow(RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT, "Table Tennis");
+	CursorManager::loadCursors();
 	FontManager::init();
 	GameManager::switchScene(nullptr, new HomePane(window));
 	currentTick = SDL_GetPerformanceCounter();
@@ -49,6 +51,7 @@ int main(int argc, char **argv)
 		deltaTime = (currentTick - lastTick) / (double)SDL_GetPerformanceFrequency();
 
 		EcsManager::sort();
+		CursorManager::forceSetCursor(CursorManager::arrowCursor);
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
@@ -70,6 +73,7 @@ int main(int argc, char **argv)
 
 		EcsManager::update(deltaTime);
 		GameManager::currentPane->onGui(deltaTime);
+		CursorManager::update();
 
 		SDL_RenderPresent(window->renderer);
 	}

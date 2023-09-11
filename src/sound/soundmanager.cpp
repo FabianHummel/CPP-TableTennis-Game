@@ -1,7 +1,3 @@
-//
-// Created by Fabian Hummel on 17.06.22.
-//
-
 #include "soundmanager.h"
 #include <SDL_mixer.h>
 

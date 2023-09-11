@@ -2,7 +2,9 @@
 #define ECS_H
 
 #include <SDL_events.h>
+#include <SDL_image.h>
 #include "unordered_map"
+#include "vector"
 #include "functional"
 
 class Entity;
@@ -12,25 +14,11 @@ class Component
   public:
 	Entity *parent{};
 
-	/**
-	 * @brief Initializes the component. Only use to reference other components.
-	 */
 	virtual void onInitialize(){};
-
-	/**
-	 * @brief Called once when the game starts.
-	 */
 	virtual void onStart(){};
-
-	/**
-	 * @brief Called every frame.
-	 */
 	virtual void onUpdate(double deltaTime){};
-
-	/**
-	 * @brief Called on an event.
-	 */
 	virtual void onEvent(SDL_Event event){};
+	virtual void onDelete(){};
 };
 
 class Transform;
@@ -59,12 +47,12 @@ class Entity
 
 	template <class T> T *getComponent()
 	{
-		return dynamic_cast<T *>(components[typeid(T).name()]);
+		return dynamic_cast<T*>(this->components[typeid(T).name()]);
 	};
 
 	template <class T> Entity *removeComponent()
 	{
-		components.erase(typeid(T).name());
+		this->components.erase(typeid(T).name());
 		return this;
 	};
 };

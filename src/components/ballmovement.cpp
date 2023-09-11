@@ -1,5 +1,5 @@
 #include "ballmovement.h"
-#include "../gameplay/gamemanager.h"
+#include "../game/gamemanager.h"
 #include "../render/renderindexes.h"
 #include "../utility/mathutil.h"
 #include "spriterenderer.h"

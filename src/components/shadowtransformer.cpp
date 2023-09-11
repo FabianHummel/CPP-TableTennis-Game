@@ -1,7 +1,3 @@
-//
-// Created by Fabian Hummel on 12.06.22.
-//
-
 #include "shadowtransformer.h"
 #include "spriterenderer.h"
 

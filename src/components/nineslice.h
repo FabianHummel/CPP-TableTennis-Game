@@ -2,28 +2,32 @@
 
 #include "../ecs/ecs.h"
 
-class SpriteRenderer : public Component
+struct Positions
+{
+	int top, right, bottom, left;
+};
+
+class NineSlice : public Component
 {
   private:
 	SDL_Texture *texture{};
 	SDL_Renderer *renderer;
 	Transform *transform{};
+	Positions positions{};
 	const char *img;
 	bool visible = true;
 	int opacity = 255;
-	SDL_Rect *srcrect = nullptr;
 
   public:
-	SpriteRenderer(const char *img, SDL_Renderer *renderer);
+	NineSlice(const char *img, Positions positions, SDL_Renderer *renderer);
 
 	void onInitialize() override;
 	void onStart() override;
 	void onUpdate(double deltaTime) override;
 	void onDelete() override;
 
-	void setImage(const char *img);
+	void setImage(const char *img, Positions positions);
 	void setOpacity(int v);
-	void setSrcrect(SDL_Rect rect);
 
 	void setVisible(bool v);
 	bool isVisible() const;
