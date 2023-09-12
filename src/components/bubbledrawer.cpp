@@ -14,7 +14,7 @@ BubbleDrawer::BubbleDrawer(SDL_Renderer *renderer)
 
 void BubbleDrawer::onInitialize()
 {
-	this->transform = parent->getTransform();
+	this->transform = parent->transform;
 }
 
 void BubbleDrawer::onUpdate(double deltaTime)

@@ -8,7 +8,7 @@
 
 void BallMovement::onInitialize()
 {
-	printf("Initializing Ball Movement Behavior on %s\n", parent->getName());
+	printf("Initializing Ball Movement Behavior on %s\n", parent->name);
 	transform = parent->getComponent<Transform>();
 	sprite = parent->getComponent<SpriteRenderer>();
 

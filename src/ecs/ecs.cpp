@@ -6,33 +6,66 @@ Entity::Entity(const char *name)
 	this->name = name;
 	this->addComponent(new Transform());
 	this->transform = this->getComponent<Transform>();
-	EcsManager::addEntity(this);
 }
 
 Entity::~Entity()
 {
 	EcsManager::removeEntity(this);
-	this->forEachComponent([&](Component *component) {
+	for (auto &[name, component] : components)
+	{
 		component->onDelete();
 		delete component;
-	});
+	}
+
 	this->components.clear();
 }
 
-void Entity::forEachComponent(const std::function<void(Component *)> &callback)
+void Entity::update(const std::function<void(Component *)> &callback)
 {
-	for (auto &[key, value] : this->components)
+	for (auto &[name, component] : this->components)
 	{
-		callback(value);
+		callback(component);
+	}
+
+	std::sort(children.begin(), children.end(), [](Entity *a, Entity *b) {
+		Transform *trfA = a->transform;
+		Transform *trfB = b->transform;
+
+		if (trfA->getI() == trfB->getI())
+		{
+			return trfA->getZ() < trfB->getZ();
+		}
+
+		return trfA->getI() < trfB->getI();
+	});
+
+	for (auto &child : this->children)
+	{
+		child->update(callback);
 	}
 }
 
-const char *Entity::getName() const
+Entity* Entity::addChild(Entity *child)
 {
-	return this->name;
+	this->children.push_back(child);
+	child->parent = this;
+	return this;
 }
 
-Transform *Entity::getTransform()
+Entity* Entity::getChild(const char *name)
 {
-	return this->transform;
+	for (Entity *child : children)
+	{
+		if (child->name == name)
+		{
+			return child;
+		}
+	}
+}
+
+
+Entity* Entity::removeChild(Entity *child)
+{
+	this->children.erase(std::find(children.begin(), children.end(), child));
+	return child;
 }

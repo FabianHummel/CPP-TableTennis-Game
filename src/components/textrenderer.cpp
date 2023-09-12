@@ -20,7 +20,7 @@ TextRenderer::TextRenderer(SDL_Renderer *renderer, const char *text, SDL_Color c
 
 void TextRenderer::onInitialize()
 {
-	this->transform = parent->getTransform();
+	this->transform = parent->transform;
 }
 
 void TextRenderer::onUpdate(double deltaTime)

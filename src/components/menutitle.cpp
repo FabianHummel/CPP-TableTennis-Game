@@ -2,7 +2,7 @@
 
 void MenuTitle::onInitialize()
 {
-	transform = parent->getTransform();
+	transform = parent->transform;
 	initialPosition = transform->getZ();
 }
 

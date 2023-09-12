@@ -38,17 +38,26 @@ void Transform::setZ(float nZ)
 
 float Transform::getX() const
 {
-	return position.x;
+	if (parent->parent == nullptr)
+		return position.x;
+
+	return position.x + parent->parent->transform->position.x;
 }
 
 float Transform::getY() const
 {
-	return position.y;
+	if (parent->parent == nullptr)
+		return position.y;
+
+	return position.y + parent->parent->transform->position.y;
 }
 
 float Transform::getZ() const
 {
-	return position.z;
+	if (parent->parent == nullptr)
+		return position.z;
+
+	return position.z + parent->parent->transform->position.z;
 }
 
 void Transform::mvByX(float v)
@@ -68,7 +77,7 @@ void Transform::mvByZ(float v)
 
 void Transform::printPosition() const
 {
-	printf("%s: Position: %f, %f, %f\n", parent->getName(), position.x, position.y, position.z);
+	printf("%s: Position: %f, %f, %f\n", parent->name, position.x, position.y, position.z);
 }
 
 void Transform::setScale(const Vector2Int &v)
@@ -78,7 +87,10 @@ void Transform::setScale(const Vector2Int &v)
 
 Vector2Int Transform::getScale() const
 {
-	return scale;
+	if (parent->parent == nullptr)
+		return scale;
+
+	return scale + parent->parent->transform->scale;
 }
 
 void Transform::setScaleX(int nX)
@@ -93,12 +105,18 @@ void Transform::setScaleY(int nY)
 
 int Transform::getScaleX() const
 {
-	return scale.x;
+	if (parent->parent == nullptr)
+		return scale.x;
+
+	return scale.x + parent->parent->transform->scale.x;
 }
 
 int Transform::getScaleY() const
 {
-	return scale.y;
+	if (parent->parent == nullptr)
+		return scale.y;
+
+	return scale.y + parent->parent->transform->scale.y;
 }
 
 void Transform::mvByScaleX(int v)
@@ -113,7 +131,7 @@ void Transform::mvByScaleY(int v)
 
 void Transform::printScale() const
 {
-	printf("%s: Scale: %d, %d\n", parent->getName(), scale.x, scale.y);
+	printf("%s: Scale: %d, %d\n", parent->name, scale.x, scale.y);
 }
 
 void Transform::setRotation(float v)
@@ -123,12 +141,15 @@ void Transform::setRotation(float v)
 
 float Transform::getRotation() const
 {
-	return rotation;
+	if (parent->parent == nullptr)
+		return rotation;
+
+	return rotation + parent->parent->transform->rotation;
 }
 
 void Transform::printRotation() const
 {
-	printf("%s: Rotation: %f\n", parent->getName(), rotation);
+	printf("%s: Rotation: %f\n", parent->name, rotation);
 }
 
 void Transform::setI(int v)
@@ -138,12 +159,17 @@ void Transform::setI(int v)
 
 int Transform::getI() const
 {
-	return zIndex;
+	if (parent->parent == nullptr)
+	{
+		return zIndex;
+	}
+
+	return zIndex + parent->parent->transform->zIndex;
 }
 
 void Transform::printI() const
 {
-	printf("%s: Z-Index: %d\n", parent->getName(), zIndex);
+	printf("%s: Z-Index: %d\n", parent->name, zIndex);
 }
 
 Entity *Transform::apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zindex)

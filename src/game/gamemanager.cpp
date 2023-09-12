@@ -19,6 +19,7 @@ namespace GameManager
 
 	void switchScene(Pane *from, Pane *to)
 	{
+
 		if (from != nullptr)
 		{
 			from->dispose();

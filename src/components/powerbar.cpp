@@ -7,7 +7,7 @@
 
 void Powerbar::onInitialize()
 {
-	printf("Initializing Powerbar Behavior on %s\n", parent->getName());
+	printf("Initializing Powerbar Behavior on %s\n", parent->name);
 
 	indicator = EcsManager::findEntity("Indicator")->getComponent<Transform>();
 	indicatorSprite = EcsManager::findEntity("Indicator")->getComponent<SpriteRenderer>();
@@ -107,7 +107,7 @@ void Powerbar::onRelease()
 	// printf("with a delta of: %d, %d ", deltaX, deltaY);
 	// printf("and an angle of: %d°\n", angle);
 
-	if (strength > 0.1f && ball->parent->getTransform()->getY() > -10.0f)
+	if (strength > 0.1f && ball->parent->transform->getY() > -10.0f)
 	{
 		ball->setActive();
 

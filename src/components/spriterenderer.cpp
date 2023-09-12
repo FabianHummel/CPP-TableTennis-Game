@@ -8,8 +8,8 @@ SpriteRenderer::SpriteRenderer(const char *img, SDL_Renderer *renderer)
 
 void SpriteRenderer::onInitialize()
 {
-	printf("Initializing Sprite Renderer on %s\n", parent->getName());
-	this->transform = parent->getTransform();
+	printf("Initializing Sprite Renderer on %s\n", parent->name);
+	this->transform = parent->transform;
 }
 
 void SpriteRenderer::onStart()

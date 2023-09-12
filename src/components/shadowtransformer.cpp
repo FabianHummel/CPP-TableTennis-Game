@@ -8,7 +8,7 @@ ShadowTransformer::ShadowTransformer(Entity *shadow)
 
 void ShadowTransformer::onInitialize()
 {
-	printf("Initializing Shadow Transformer on %s\n", parent->getName());
+	printf("Initializing Shadow Transformer on %s\n", parent->name);
 	this->ball = parent->getComponent<Transform>();
 	this->transform = target->getComponent<Transform>();
 	this->sprite = target->getComponent<SpriteRenderer>();

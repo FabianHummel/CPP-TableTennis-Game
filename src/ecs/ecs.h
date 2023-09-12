@@ -25,18 +25,21 @@ class Transform;
 
 class Entity
 {
-  private:
-	const char *name;
-	std::unordered_map<const char *, Component *> components;
-	Transform *transform;
-
   public:
 	explicit Entity(const char *name);
 	~Entity();
 
-	void forEachComponent(const std::function<void(Component *)> &callback);
-	const char *getName() const;
-	Transform *getTransform();
+	const char *name;
+	std::unordered_map<const char *, Component*> components;
+	std::vector<Entity*> children;
+	Transform *transform;
+	Entity *parent{};
+
+	void update(const std::function<void(Component *)> &callback);
+
+	Entity* addChild(Entity *child);
+	Entity* getChild(const char *name);
+	Entity* removeChild(Entity *child);
 
 	template <typename T> Entity *addComponent(T *component)
 	{

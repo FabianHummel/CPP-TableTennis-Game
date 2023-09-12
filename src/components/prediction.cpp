@@ -17,20 +17,20 @@ void Prediction::onInitialize()
 	this->ball = EcsManager::findEntity("Ball")->getComponent<Transform>();
 
 	// uncomment this for unit-testing:
-	double x = pos_zero_crossing_f(2, 7, 200);
-	printf("Zero crossing of f(t) at x=%f\n", x);
-	double x2 = f(x, 2, 7, 200);
-	printf("Value of f(%f)=%f\n", x, x2);
-	double x3 = zero_crossing_v(2, 7);
-	printf("Zero crossing of v(t) at x=%f\n", x3);
-	double x4 = f(x3, 2, 7, 200);
-	printf("Highest value of f(t) at x=%f is y=%f\n", x3, x4);
-	double l = length_f(x, 2, 7);
-	printf("Length of arc: %f\n", l);
-	double x5 = x_from_length_f(l / 2.0, 2, 7, 200);
-	printf("X at function length %f = %f\n", l / 2.0, x5);
-	double l2 = length_f(x5, 2, 7);
-	printf("Length of arc at x=%f if %f\n", x5, l2);
+//	double x = pos_zero_crossing_f(2, 7, 200);
+//	printf("Zero crossing of f(t) at x=%f\n", x);
+//	double x2 = f(x, 2, 7, 200);
+//	printf("Value of f(%f)=%f\n", x, x2);
+//	double x3 = zero_crossing_v(2, 7);
+//	printf("Zero crossing of v(t) at x=%f\n", x3);
+//	double x4 = f(x3, 2, 7, 200);
+//	printf("Highest value of f(t) at x=%f is y=%f\n", x3, x4);
+//	double l = length_f(x, 2, 7);
+//	printf("Length of arc: %f\n", l);
+//	double x5 = x_from_length_f(l / 2.0, 2, 7, 200);
+//	printf("X at function length %f = %f\n", l / 2.0, x5);
+//	double l2 = length_f(x5, 2, 7);
+//	printf("Length of arc at x=%f if %f\n", x5, l2);
 }
 
 void Prediction::onStart()
@@ -83,20 +83,26 @@ void Prediction::onPredict(Vector3 &force)
 		rect.w = 40.0;
 		rect.h = 40.0;
 
-		double x = /* x_from_length_f(total_length / amount * i, force.x, force.y, ball->getY()); */ px / amount * i;
-		double z = /* x_from_length_f(total_length / amount * i, force.z, force.y, ball->getY()); */ pz / amount * i;
+		double x = px / amount * i;
+		double z = pz / amount * i;
 		if (force.x < 0.0)
+		{
 			rect.x = -x + ball->getX() - ball->getScaleX() * ball->getAnchor().x - 5;
+		}
 		else
-
+		{
 			rect.x = x + ball->getX() - ball->getScaleX() * ball->getAnchor().x - 5;
+		}
 
 		double h = f(z, force.z, force.y, ball->getY());
 		if (force.z < 0.0)
-
+		{
 			rect.y = -z + ball->getZ() - ball->getScaleY() * ball->getAnchor().y - abs(h) - 5;
+		}
 		else
+		{
 			rect.y = z + ball->getZ() - ball->getScaleY() * ball->getAnchor().y - abs(h) - 5;
+		}
 
 		// double angleX = atan(v(x, force.x, force.y)) * 180.0 / 3.1415;
 		// double angleZ = atan(v(z, force.z, force.y)) * 180.0 / 3.1415;
@@ -104,6 +110,7 @@ void Prediction::onPredict(Vector3 &force)
 		// if (force.x > 0.0)
 		// 	angle *= -1.0;
 
+		SDL_SetTextureAlphaMod(texture, 255);
 		SDL_RenderCopyExF(renderer, texture, nullptr, &rect, 0.0, nullptr, SDL_RendererFlip::SDL_FLIP_NONE);
 	}
 }

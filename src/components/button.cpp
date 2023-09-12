@@ -12,7 +12,7 @@ Button::Button(const std::function<void()> &onMouseDown, const std::function<voi
 
 void Button::onInitialize()
 {
-	this->transform = parent->getTransform();
+	this->transform = parent->transform;
 }
 
 void Button::onUpdate(double deltaTime)

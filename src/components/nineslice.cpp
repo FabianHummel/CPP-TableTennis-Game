@@ -9,8 +9,8 @@ NineSlice::NineSlice(const char *img, const Positions positions, SDL_Renderer *r
 
 void NineSlice::onInitialize()
 {
-	printf("Initializing 9-Slice on %s\n", parent->getName());
-	this->transform = parent->getTransform();
+	printf("Initializing 9-Slice on %s\n", parent->name);
+	this->transform = parent->transform;
 }
 
 void NineSlice::onStart()
