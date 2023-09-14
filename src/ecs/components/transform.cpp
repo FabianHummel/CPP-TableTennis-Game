@@ -172,13 +172,13 @@ void Transform::printI() const
 	printf("%s: Z-Index: %d\n", parent->name, zIndex);
 }
 
-Entity *Transform::apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zindex)
+Entity *Transform::apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zIndex)
 {
 	setPosition(pos);
 	setScale(scl);
 	setAnchor(anchor);
 	setRotation(rot);
-	setI(zindex);
+	setI(zIndex);
 	return parent;
 }
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../ecs/ecs.h"
-#include "../game/tableside.h"
-#include "../sound/soundmanager.h"
-#include "../utility/vector3.h"
+#include "../../game/tableside.h"
+#include "../../sound/soundmanager.h"
+#include "../../utility/vector3.h"
+#include "../ecs.h"
 #include "spriterenderer.h"
 
 class BallMovement : public Component

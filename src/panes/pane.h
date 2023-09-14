@@ -2,7 +2,7 @@
 
 #include "../render/renderwindow.h"
 #include "../ecs/ecs.h"
-#include "../components/index.h"
+#include "../ecs/components/index.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <vector>

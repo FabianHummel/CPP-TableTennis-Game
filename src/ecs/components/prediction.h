@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ecs/ecs.h"
+#include "../ecs.h"
 #include "ballmovement.h"
 #include <SDL_render.h>
 

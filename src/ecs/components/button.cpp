@@ -1,14 +1,20 @@
 #include "button.h"
-#include "../game/cursormanager.h"
+#include "../../game/cursormanager.h"
 #include <SDL_events.h>
 #include <SDL_mouse.h>
 #include <functional>
 
-Button::Button(const std::function<void()> &onMouseDown, const std::function<void()> &onMouseUp)
+Button::Button(
+	const std::function<void()> &onMouseDown,
+	const std::function<void()> &onMouseUp,
+	const std::function<void()> &onMouseOver,
+	const std::function<void()> &onMouseExit)
 {
 	this->onMouseDown = onMouseDown;
 	this->onMouseUp = onMouseUp;
-}
+	this->onMouseOver = onMouseOver;
+	this->onMouseExit = onMouseExit;
+};
 
 void Button::onInitialize()
 {
@@ -37,13 +43,27 @@ void Button::onEvent(SDL_Event event)
 
 	switch (event.type)
 	{
+	case SDL_MOUSEMOTION:
+		if (transform->inTransformBounds(x, y) && !isMouseOver)
+		{
+			isMouseOver = true;
+			if (onMouseOver)
+				onMouseOver();
+		}
+		else if (!transform->inTransformBounds(x, y) && isMouseOver)
+		{
+			isMouseOver = false;
+			if (onMouseExit)
+				onMouseExit();
+		}
+		break;
 	case SDL_MOUSEBUTTONDOWN:
-		if (onMouseDown != nullptr && transform->inTransformBounds(x, y))
+		if (onMouseDown && transform->inTransformBounds(x, y))
 			onMouseDown();
 		break;
 
 	case SDL_MOUSEBUTTONUP:
-		if (onMouseUp != nullptr && transform->inTransformBounds(x, y))
+		if (onMouseUp && transform->inTransformBounds(x, y))
 			onMouseUp();
 		break;
 	}

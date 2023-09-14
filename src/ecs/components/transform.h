@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../ecs/ecs.h"
-#include "../utility/vector2int.h"
-#include "../utility/vector3.h"
+#include "../../utility/vector2int.h"
+#include "../../utility/vector3.h"
+#include "../ecs.h"
 #include <SDL_rect.h>
 #include <SDL_render.h>
 

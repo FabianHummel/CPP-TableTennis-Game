@@ -1,4 +1,6 @@
-#include "../ecs/ecs.h"
+#pragma once
+
+#include "../ecs.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <SDL_pixels.h>

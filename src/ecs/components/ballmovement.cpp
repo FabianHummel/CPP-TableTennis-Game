@@ -1,7 +1,7 @@
 #include "ballmovement.h"
-#include "../game/gamemanager.h"
-#include "../render/renderindexes.h"
-#include "../utility/mathutil.h"
+#include "../../game/gamemanager.h"
+#include "../../render/renderindexes.h"
+#include "../../utility/mathutil.h"
 #include "spriterenderer.h"
 #include <algorithm>
 #include <cstdio>

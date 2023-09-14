@@ -11,7 +11,7 @@ Entity::Entity(const char *name)
 Entity::~Entity()
 {
 	EcsManager::removeEntity(this);
-	for (auto &[name, component] : components)
+	for (auto &component : components)
 	{
 		component->onDelete();
 		delete component;
@@ -22,7 +22,7 @@ Entity::~Entity()
 
 void Entity::update(const std::function<void(Component *)> &callback)
 {
-	for (auto &[name, component] : this->components)
+	for (auto &component : this->components)
 	{
 		callback(component);
 	}
@@ -61,6 +61,8 @@ Entity* Entity::getChild(const char *name)
 			return child;
 		}
 	}
+
+	return nullptr;
 }
 
 

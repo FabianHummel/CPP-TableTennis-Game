@@ -1,8 +1,9 @@
 #include "home.h"
-#include "game.h"
 #include "../ecs/ecsmanager.h"
+#include "../ecs/presets/index.h"
 #include "../game/gamemanager.h"
 #include "../render/renderindexes.h"
+#include "game.h"
 #include <functional>
 
 Entity *title;
@@ -57,15 +58,9 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 750}, {300, 6}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	settings = EcsManager::addEntity(new Entity("Settings"))
-	    ->addComponent(new Button(nullptr, [] { printf("Settings\n"); }))
-//	    ->addComponent(new NineSlice("res/button.png", { 32, 32, 48, 32 }, window->renderer))
-	    ->addComponent(new NineSlice("res/buttonhover.png", { 32, 32, 40, 32 }, window->renderer))
-	    ->addChild((new Entity("Settings.Text"))
-			->addComponent(new TextRenderer(window->renderer, "Settings", {255, 255, 255}))
-			->transform
-			->apply({0, 0, -10}, {0, 0}, {0.5f, 0.5f}, 0.0f, 0))
+	    ->usePreset(Presets::button(window->renderer, [] { printf("Settings\n"); }))
 	    ->transform
-	    ->apply({RenderWindow::SCREEN_CENTER_X, 0, 600}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
+	    ->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 }
 
 void HomePane::onStart()

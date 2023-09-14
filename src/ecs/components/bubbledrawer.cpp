@@ -1,5 +1,5 @@
 #include "bubbledrawer.h"
-#include "../render/renderwindow.h"
+#include "../../render/renderwindow.h"
 #include <SDL_image.h>
 #include <SDL_rect.h>
 #include <SDL_render.h>

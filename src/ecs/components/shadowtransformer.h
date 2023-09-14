@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ecs/ecs.h"
+#include "../ecs.h"
 #include "spriterenderer.h"
 #include <SDL_events.h>
 

@@ -1,5 +1,5 @@
 #include "powerbar.h"
-#include "../ecs/ecsmanager.h"
+#include "../ecsmanager.h"
 #include "ballmovement.h"
 #include "prediction.h"
 #include "spriterenderer.h"
