@@ -15,6 +15,7 @@ Entity *next;
 Entity *ball;
 Entity *menuline;
 Entity *settings;
+Entity *start;
 
 HomePane::HomePane(RenderWindow *window) : Pane(window)
 {
@@ -58,11 +59,16 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 750}, {300, 6}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
-	settings = EcsManager::addEntity(new Entity("Settings"))
+	settings = EcsManager::addEntity(new Entity("Start-Server-Button"))
 	    ->apply(false)
-	    ->usePreset(Presets::button(window->renderer, [] { printf("Settings\n"); }))
+	    ->usePreset(Presets::button(window->renderer, "Start server", [] { printf("Starting server...\n"); }))
 	    ->transform
 	    ->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
+
+	start = EcsManager::addEntity(new Entity("Play-Button"))
+		->usePreset(Presets::button(window->renderer, "Play", [this] { startGame(); }))
+		->transform
+		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {200, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 }
 
 void HomePane::onStart()
@@ -100,6 +106,7 @@ void HomePane::dispose()
 	delete ball;
 	delete menuline;
 	delete settings;
+	delete start;
 }
 
 void HomePane::changeGameMode()
@@ -111,12 +118,18 @@ void HomePane::changeGameMode()
 	{
 		AnimationManager::play(Animations::swipeOut(settings, true), Easings::easeOut, 0.4);
 		AnimationManager::play(Animations::fadeOut(settings), Easings::easeOut, 0.2);
+
+		AnimationManager::play(Animations::swipeIn(start, false), Easings::easeOut, 0.4);
+		AnimationManager::play(Animations::fadeIn(start), Easings::linear, 0.2);
 	}
 
 	if (this->currentGameMode == GameMode::MULTIPLAYER)
 	{
 		AnimationManager::play(Animations::swipeIn(settings, true), Easings::easeOut, 0.4);
 		AnimationManager::play(Animations::fadeIn(settings), Easings::linear, 0.2);
+
+		AnimationManager::play(Animations::swipeOut(start, false), Easings::easeOut, 0.4);
+		AnimationManager::play(Animations::fadeOut(start), Easings::easeOut, 0.2);
 	}
 }
 

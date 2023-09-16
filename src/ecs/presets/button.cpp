@@ -1,6 +1,8 @@
 #include "index.h"
 
-Preset Presets::button(SDL_Renderer *renderer, const std::function<void()> &onClick)
+#include "../../animations/animationmanager.h"
+
+Preset Presets::button(SDL_Renderer *renderer, const char *text, const std::function<void()> &onClick)
 {
 	return [=](Entity *target) {
 		NineSlice *normal = new NineSlice("res/button.png", { 32, 32, 48, 32 }, renderer);
@@ -12,6 +14,12 @@ Preset Presets::button(SDL_Renderer *renderer, const std::function<void()> &onCl
 			hover->visible = true;
 			target->transform->mvByZ(4);
 			target->transform->mvByScaleY(-8);
+
+			AnimationManager::play([=](double t) {
+				target->animation->setRotation(t * 3);
+				target->animation->setScaleX(t * 15);
+				target->animation->setScaleY(t * 20);
+			}, Easings::easeOutElastic, 0.5);
 		};
 
 		std::function<void()> onMouseExit = [=]() {
@@ -19,14 +27,20 @@ Preset Presets::button(SDL_Renderer *renderer, const std::function<void()> &onCl
 			hover->visible = false;
 			target->transform->mvByZ(-4);
 			target->transform->mvByScaleY(8);
+
+			AnimationManager::play([=](double t) {
+				target->animation->setRotation((1-t) * 3);
+				target->animation->setScaleX((1-t) * 15);
+				target->animation->setScaleY((1-t) * 20);
+			}, Easings::easeOutElastic, 0.5);
 		};
 
 		target
 			->addComponent(new Button(nullptr, onClick, onMouseEnter, onMouseExit))
 			->addComponent(normal)
 			->addComponent(hover)
-			->addChild((new Entity("Settings.Text"))
-				->addComponent(new TextRenderer(renderer, "Settings", {255, 255, 255}))
+			->addChild((new Entity("Button.Text"))
+				->addComponent(new TextRenderer(renderer, text, {255, 255, 255}))
 				->transform
 				->apply({0, 0, -10}, {0, 0}, {0.5f, 0.5f}, 0.0f, 0));
 	};

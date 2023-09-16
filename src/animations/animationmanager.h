@@ -37,4 +37,5 @@ namespace Easings
 	extern Easing easeIn;
 	extern Easing easeOut;
 	extern Easing ease;
+	extern Easing easeOutElastic;
 }
