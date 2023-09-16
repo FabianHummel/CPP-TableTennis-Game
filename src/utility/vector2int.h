@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <SDL_rect.h>
 struct Vector2Int
 {
   public:

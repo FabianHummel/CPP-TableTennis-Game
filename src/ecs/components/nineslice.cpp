@@ -95,14 +95,16 @@ void NineSlice::onUpdate(double deltaTime)
 {
 	if (!visible || !parent->isVisible()) return;
 
-	SDL_Rect dst;
+	SDL_FRect dst;
 	dst.x = transform->getX() - transform->getScaleX() * transform->getAnchor().x;
 	dst.y = -transform->getY() + transform->getZ() - transform->getScaleY() * transform->getAnchor().y;
 	dst.w = transform->getScaleX();
 	dst.h = transform->getScaleY();
 
+	SDL_FPoint anchor = {transform->getAnchor().x * transform->getScaleX(), transform->getAnchor().y * transform->getScaleY()};
+
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
-	SDL_RenderCopyEx(renderer, this->texture, nullptr, &dst, transform->getRotation(), nullptr, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(renderer, this->texture, nullptr, &dst, transform->getRotation(), &anchor, SDL_FLIP_NONE);
 }
 
 void NineSlice::onDelete()

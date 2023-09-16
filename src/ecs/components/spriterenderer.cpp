@@ -28,8 +28,10 @@ void SpriteRenderer::onUpdate(double deltaTime)
 	dstrect.w = transform->getScaleX();
 	dstrect.h = transform->getScaleY();
 
+	SDL_FPoint anchor = {transform->getAnchor().x * transform->getScaleX(), transform->getAnchor().y * transform->getScaleY()};
+
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
-	SDL_RenderCopyExF(renderer, texture, srcrect, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(renderer, texture, srcrect, &dstrect, transform->getRotation(), &anchor, SDL_FLIP_NONE);
 }
 
 void SpriteRenderer::onDelete()

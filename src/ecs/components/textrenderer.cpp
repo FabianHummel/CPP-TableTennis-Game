@@ -36,7 +36,7 @@ void TextRenderer::onUpdate(double deltaTime)
 	dstrect.w = w;
 	dstrect.h = h;
 
-	SDL_FPoint anchor = transform->getAnchor();
+	SDL_FPoint anchor = {transform->getAnchor().x * w, transform->getAnchor().y * h};
 
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
 	SDL_RenderCopyExF(renderer, texture, nullptr, &dstrect, transform->getRotation(), &anchor, SDL_FLIP_NONE);
