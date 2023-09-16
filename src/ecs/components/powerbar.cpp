@@ -1,5 +1,5 @@
 #include "powerbar.h"
-#include "../ecs/ecsmanager.h"
+#include "../ecsmanager.h"
 #include "ballmovement.h"
 #include "prediction.h"
 #include "spriterenderer.h"
@@ -7,7 +7,7 @@
 
 void Powerbar::onInitialize()
 {
-	printf("Initializing Powerbar Behavior on %s\n", parent->getName());
+	printf("Initializing Powerbar Behavior on %s\n", parent->name);
 
 	indicator = EcsManager::findEntity("Indicator")->getComponent<Transform>();
 	indicatorSprite = EcsManager::findEntity("Indicator")->getComponent<SpriteRenderer>();
@@ -62,9 +62,9 @@ void Powerbar::setProgress(float v, float y)
 
 void Powerbar::onStart()
 {
-	indicatorSprite->setVisible(false);
-	powerboxSprite->setVisible(false);
-	powerbarSprite->setVisible(false);
+	indicatorSprite->visible = false;
+	powerboxSprite->visible = false;
+	powerbarSprite->visible = false;
 }
 
 void Powerbar::onUpdate(double deltaTime)
@@ -98,18 +98,18 @@ void Powerbar::onClick(int x, int y)
 
 void Powerbar::onRelease()
 {
-	indicatorSprite->setVisible(false);
-	powerboxSprite->setVisible(false);
-	powerbarSprite->setVisible(false);
+	indicatorSprite->visible = false;
+	powerboxSprite->visible = false;
+	powerbarSprite->visible = false;
 
 	isDragging = false;
 	// printf("ended mouse drag at: %d, %d, ", currentX, currentY);
 	// printf("with a delta of: %d, %d ", deltaX, deltaY);
 	// printf("and an angle of: %d°\n", angle);
 
-	if (strength > 0.1f && ball->parent->getTransform()->getY() > -10.0f)
+	if (strength > 0.1f && ball->parent->transform->getY() > -10.0f)
 	{
-		ball->setActive();
+		ball->idle = false;
 
 		Vector3 force = calcForce();
 		ball->setForce(force);
@@ -122,9 +122,9 @@ void Powerbar::onDrag(int x, int y)
 {
 	if (isDragging)
 	{
-		indicatorSprite->setVisible(true);
-		powerboxSprite->setVisible(true);
-		powerbarSprite->setVisible(true);
+		indicatorSprite->visible = true;
+		powerboxSprite->visible = true;
+		powerbarSprite->visible = true;
 
 		int currentX = x;
 		int currentY = y;

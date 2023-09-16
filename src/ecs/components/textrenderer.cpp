@@ -1,5 +1,5 @@
 #include "textrenderer.h"
-#include "../render/fontmanager.h"
+#include "../../render/fontmanager.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <SDL_rect.h>
@@ -20,11 +20,13 @@ TextRenderer::TextRenderer(SDL_Renderer *renderer, const char *text, SDL_Color c
 
 void TextRenderer::onInitialize()
 {
-	this->transform = parent->getTransform();
+	this->transform = parent->transform;
 }
 
 void TextRenderer::onUpdate(double deltaTime)
 {
+	if (!visible || !parent->isVisible()) return;
+
 	int w, h;
 	TTF_SizeText(FontManager::main, text, &w, &h);
 
@@ -36,6 +38,7 @@ void TextRenderer::onUpdate(double deltaTime)
 
 	SDL_FPoint anchor = transform->getAnchor();
 
+	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
 	SDL_RenderCopyExF(renderer, texture, nullptr, &dstrect, transform->getRotation(), &anchor, SDL_FLIP_NONE);
 }
 

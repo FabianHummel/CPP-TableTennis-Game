@@ -1,5 +1,5 @@
 #include "bubbledrawer.h"
-#include "../render/renderwindow.h"
+#include "../../render/renderwindow.h"
 #include <SDL_image.h>
 #include <SDL_rect.h>
 #include <SDL_render.h>
@@ -14,7 +14,7 @@ BubbleDrawer::BubbleDrawer(SDL_Renderer *renderer)
 
 void BubbleDrawer::onInitialize()
 {
-	this->transform = parent->getTransform();
+	this->transform = parent->transform;
 }
 
 void BubbleDrawer::onUpdate(double deltaTime)

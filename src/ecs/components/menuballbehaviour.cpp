@@ -5,7 +5,7 @@ float initialPosition;
 
 void MenuBallBehaviour::onInitialize()
 {
-	this->transform = this->parent->getTransform();
+	this->transform = this->parent->transform;
 	initialPosition = transform->getZ();
 }
 

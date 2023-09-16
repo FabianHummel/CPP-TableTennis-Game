@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ecs/ecs.h"
+#include "../ecs.h"
 
 struct Positions
 {
@@ -15,10 +15,10 @@ class NineSlice : public Component
 	Transform *transform{};
 	Positions positions{};
 	const char *img;
-	bool visible = true;
-	int opacity = 255;
 
   public:
+	bool visible = true;
+
 	NineSlice(const char *img, Positions positions, SDL_Renderer *renderer);
 
 	void onInitialize() override;
@@ -27,8 +27,4 @@ class NineSlice : public Component
 	void onDelete() override;
 
 	void setImage(const char *img, Positions positions);
-	void setOpacity(int v);
-
-	void setVisible(bool v);
-	bool isVisible() const;
 };

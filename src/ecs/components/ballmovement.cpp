@@ -1,16 +1,15 @@
 #include "ballmovement.h"
-#include "../game/gamemanager.h"
-#include "../render/renderindexes.h"
-#include "../utility/mathutil.h"
+#include "../../game/gamemanager.h"
+#include "../../render/renderindexes.h"
+#include "../../utility/mathutil.h"
 #include "spriterenderer.h"
 #include <algorithm>
 #include <cstdio>
 
 void BallMovement::onInitialize()
 {
-	printf("Initializing Ball Movement Behavior on %s\n", parent->getName());
+	printf("Initializing Ball Movement Behavior on %s\n", parent->name);
 	transform = parent->getComponent<Transform>();
-	sprite = parent->getComponent<SpriteRenderer>();
 
 	SoundManager::addSound("res/sounds/ball-bounce-1.wav", "bounce 1");
 	SoundManager::addSound("res/sounds/ball-bounce-2.wav", "bounce 2");
@@ -19,7 +18,7 @@ void BallMovement::onInitialize()
 
 void BallMovement::onStart()
 {
-	this->setIdle();
+	this->idle = true;
 	transform->setPosition({RenderWindow::SCREEN_CENTER_X, 100, 650});
 }
 
@@ -97,7 +96,7 @@ void BallMovement::checkGround(double deltaTime)
 {
 	if (transform->getY() >= 0)
 	{
-		sprite->setOpacity(SDL_ALPHA_OPAQUE);
+		parent->opacity = SDL_ALPHA_OPAQUE;
 		return;
 	}
 
@@ -112,18 +111,18 @@ void BallMovement::checkGround(double deltaTime)
 			velocity.y = 0.0f;
 		}
 
-		if (isIdle())
+		if (idle)
 		{
 			velocity.y = 8.0f;
 		}
 
-		sprite->setOpacity(SDL_ALPHA_OPAQUE);
+		parent->opacity = SDL_ALPHA_OPAQUE;
 		SoundManager::playRndSound({"bounce 1", "bounce 2", "bounce 3"}, std::clamp(velocity.y * 50.0f, 0.0f, 100.0f));
 	}
 	else
 	{
 		// Otherwise, fall off the table and fade away
-		sprite->setOpacity(std::clamp(SDL_ALPHA_OPAQUE - (int)abs(transform->getY()), 0, 255));
+		parent->opacity = std::clamp(SDL_ALPHA_OPAQUE - (int)abs(transform->getY()), 0, 255);
 	}
 }
 
@@ -177,21 +176,6 @@ void BallMovement::checkFellOff()
 	{
 		GameManager::nextRound();
 	}
-}
-
-void BallMovement::setIdle()
-{
-	this->idle = true;
-}
-
-void BallMovement::setActive()
-{
-	this->idle = false;
-}
-
-bool BallMovement::isIdle() const
-{
-	return this->idle;
 }
 
 TableSideX BallMovement::getSideX()

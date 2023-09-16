@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../ecs/ecs.h"
-#include "../utility/vector2int.h"
-#include "../utility/vector3.h"
+#include "../../utility/vector2int.h"
+#include "../../utility/vector3.h"
+#include "../ecs.h"
 #include <SDL_rect.h>
 #include <SDL_render.h>
 
@@ -16,8 +16,12 @@ class Transform : public Component
 	SDL_FPoint anchor = {0, 0};
 
   public:
+	Transform *animation{};
+
 	Transform(const Vector3 &position, const Vector2Int &scale, const SDL_FPoint &anchor, float angle, int zIndex = 0);
 	Transform();
+
+	void onDelete() override;
 
 	void setPosition(const Vector3 &v);
 	Vector3 getPosition() const;

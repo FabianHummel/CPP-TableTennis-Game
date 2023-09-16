@@ -8,8 +8,8 @@ SpriteRenderer::SpriteRenderer(const char *img, SDL_Renderer *renderer)
 
 void SpriteRenderer::onInitialize()
 {
-	printf("Initializing Sprite Renderer on %s\n", parent->getName());
-	this->transform = parent->getTransform();
+	printf("Initializing Sprite Renderer on %s\n", parent->name);
+	this->transform = parent->transform;
 }
 
 void SpriteRenderer::onStart()
@@ -20,8 +20,7 @@ void SpriteRenderer::onStart()
 
 void SpriteRenderer::onUpdate(double deltaTime)
 {
-	if (!isVisible())
-		return;
+	if (!visible || !parent->isVisible()) return;
 
 	SDL_FRect dstrect;
 	dstrect.x = transform->getX() - transform->getScaleX() * transform->getAnchor().x;
@@ -29,7 +28,7 @@ void SpriteRenderer::onUpdate(double deltaTime)
 	dstrect.w = transform->getScaleX();
 	dstrect.h = transform->getScaleY();
 
-	SDL_SetTextureAlphaMod(texture, opacity);
+	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
 	SDL_RenderCopyExF(renderer, texture, srcrect, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
 }
 
@@ -39,29 +38,14 @@ void SpriteRenderer::onDelete()
 	SDL_DestroyTexture(this->texture);
 }
 
-void SpriteRenderer::setImage(const char *v)
-{
-	this->img = v;
-	this->onDelete();
-	this->onStart();
-}
-
-void SpriteRenderer::setOpacity(int v)
-{
-	this->opacity = v;
-}
-
 void SpriteRenderer::setSrcrect(SDL_Rect rect)
 {
 	this->srcrect = new SDL_Rect(rect);
 }
 
-void SpriteRenderer::setVisible(bool v)
+void SpriteRenderer::setImage(const char *v)
 {
-	this->visible = v;
-}
-
-bool SpriteRenderer::isVisible() const
-{
-	return this->visible;
+	this->img = v;
+	this->onDelete();
+	this->onStart();
 }

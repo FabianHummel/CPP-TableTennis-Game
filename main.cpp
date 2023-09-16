@@ -1,10 +1,11 @@
 #include "src/ecs/ecsmanager.h"
 #include "src/game/gamemanager.h"
 #include "src/game/cursormanager.h"
-#include "src/panes/game.h"
-#include "src/panes/home.h"
+#include "src/animations/animationmanager.h"
 #include "src/render/fontmanager.h"
 #include "src/render/renderwindow.h"
+#include "src/panes/game.h"
+#include "src/panes/home.h"
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
@@ -73,6 +74,7 @@ int main(int argc, char **argv)
 
 		EcsManager::update(deltaTime);
 		GameManager::currentPane->onGui(deltaTime);
+		AnimationManager::update(deltaTime);
 		CursorManager::update();
 
 		SDL_RenderPresent(window->renderer);

@@ -8,7 +8,7 @@ Debugger::Debugger(SDL_Renderer *renderer)
 
 void Debugger::onInitialize()
 {
-	this->transform = parent->getTransform();
+	this->transform = parent->transform;
 }
 
 void Debugger::onUpdate(double deltaTime)

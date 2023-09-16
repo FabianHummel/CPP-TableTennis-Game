@@ -11,6 +11,11 @@ Transform::Transform() : position(0, 0, 0), scale(0, 0), anchor(), rotation(0.0f
 {
 }
 
+void Transform::onDelete()
+{
+	delete animation;
+}
+
 void Transform::setPosition(const Vector3 &v)
 {
 	position = v;
@@ -38,17 +43,32 @@ void Transform::setZ(float nZ)
 
 float Transform::getX() const
 {
-	return position.x;
+	float x = position.x;
+	if (parent && parent->parent)
+		x += parent->parent->transform->getX();
+	if (animation)
+		x += animation->getX();
+	return x;
 }
 
 float Transform::getY() const
 {
-	return position.y;
+	float y = position.y;
+	if (parent && parent->parent)
+		y += parent->parent->transform->getY();
+	if (animation)
+		y += animation->getY();
+	return y;
 }
 
 float Transform::getZ() const
 {
-	return position.z;
+	float z = position.z;
+	if (parent && parent->parent)
+		z += parent->parent->transform->getZ();
+	if (animation)
+		z += animation->getZ();
+	return z;
 }
 
 void Transform::mvByX(float v)
@@ -68,7 +88,7 @@ void Transform::mvByZ(float v)
 
 void Transform::printPosition() const
 {
-	printf("%s: Position: %f, %f, %f\n", parent->getName(), position.x, position.y, position.z);
+	printf("%s: Position: %f, %f, %f\n", parent->name, position.x, position.y, position.z);
 }
 
 void Transform::setScale(const Vector2Int &v)
@@ -78,6 +98,11 @@ void Transform::setScale(const Vector2Int &v)
 
 Vector2Int Transform::getScale() const
 {
+	Vector2Int scale = this->scale;
+	if (parent && parent->parent)
+		scale += parent->parent->transform->getScale();
+	if (animation)
+		scale += animation->getScale();
 	return scale;
 }
 
@@ -93,12 +118,22 @@ void Transform::setScaleY(int nY)
 
 int Transform::getScaleX() const
 {
-	return scale.x;
+	int x = scale.x;
+	if (parent && parent->parent)
+		x += parent->parent->transform->getScaleX();
+	if (animation)
+		x += animation->getScaleX();
+	return x;
 }
 
 int Transform::getScaleY() const
 {
-	return scale.y;
+	int y = scale.y;
+	if (parent && parent->parent)
+		y += parent->parent->transform->getScaleY();
+	if (animation)
+		y += animation->getScaleY();
+	return y;
 }
 
 void Transform::mvByScaleX(int v)
@@ -113,7 +148,7 @@ void Transform::mvByScaleY(int v)
 
 void Transform::printScale() const
 {
-	printf("%s: Scale: %d, %d\n", parent->getName(), scale.x, scale.y);
+	printf("%s: Scale: %d, %d\n", parent->name, scale.x, scale.y);
 }
 
 void Transform::setRotation(float v)
@@ -123,12 +158,17 @@ void Transform::setRotation(float v)
 
 float Transform::getRotation() const
 {
-	return rotation;
+	float rot = rotation;
+	if (parent && parent->parent)
+		rot += parent->parent->transform->getRotation();
+	if (animation)
+		rot += animation->getRotation();
+	return rot;
 }
 
 void Transform::printRotation() const
 {
-	printf("%s: Rotation: %f\n", parent->getName(), rotation);
+	printf("%s: Rotation: %f\n", parent->name, rotation);
 }
 
 void Transform::setI(int v)
@@ -138,21 +178,26 @@ void Transform::setI(int v)
 
 int Transform::getI() const
 {
-	return zIndex;
+	int i = zIndex;
+	if (parent && parent->parent)
+		i += parent->parent->transform->getI();
+	if (animation)
+		i += animation->getI();
+	return i;
 }
 
 void Transform::printI() const
 {
-	printf("%s: Z-Index: %d\n", parent->getName(), zIndex);
+	printf("%s: Z-Index: %d\n", parent->name, zIndex);
 }
 
-Entity *Transform::apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zindex)
+Entity *Transform::apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zIndex)
 {
 	setPosition(pos);
 	setScale(scl);
 	setAnchor(anchor);
 	setRotation(rot);
-	setI(zindex);
+	setI(zIndex);
 	return parent;
 }
 

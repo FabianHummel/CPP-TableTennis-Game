@@ -23,40 +23,76 @@ class Component
 
 class Transform;
 
+typedef std::function<void(Entity*)> Preset;
+
 class Entity
 {
-  private:
-	const char *name;
-	std::unordered_map<const char *, Component *> components;
-	Transform *transform;
-
   public:
 	explicit Entity(const char *name);
 	~Entity();
 
-	void forEachComponent(const std::function<void(Component *)> &callback);
-	const char *getName() const;
-	Transform *getTransform();
+	const char *name;
+	std::vector<Component*> components;
+	std::vector<Entity*> children;
+	Transform *transform;
+	Transform *animation;
+	Entity *parent{};
+	bool visible{true};
+	int opacity{255};
 
-	template <typename T> Entity *addComponent(T *component)
+	int getOpacity() const;
+	bool isVisible() const;
+	void update(const std::function<void(Component*)> &callback);
+
+	Entity* addChild(Entity *child);
+	Entity* getChild(const char *name);
+	Entity* removeChild(Entity *child);
+	Entity* usePreset(const Preset &function);
+	Entity* apply(bool visible = true, int opacity = 255);
+
+	template <typename T> Entity* addComponent(T *component)
 	{
 		((Component *)component)->parent = this;
-		this->components[typeid(*component).name()] = component;
+		this->components.push_back(component);
 		return this;
 	};
 
-	template <class T> T *getComponent()
+	template <class T> T* getComponent()
 	{
-		return dynamic_cast<T*>(this->components[typeid(T).name()]);
+		const std::vector<T*>& components = getComponents<T>();
+		return components.empty() ? nullptr : components[0];
 	};
 
-	template <class T> Entity *removeComponent()
+	template <class T> std::vector<T*> getComponents()
 	{
-		this->components.erase(typeid(T).name());
+		std::vector<T*> result;
+		for (Component *c : this->components)
+		{
+			T* derived = dynamic_cast<T*>(c);
+			if (derived)
+			{
+				result.push_back(derived);
+			}
+		}
+
+		return result;
+	};
+
+	Entity* removeComponent(Component *component)
+	{
+		this->components.erase(std::find(this->components.begin(), this->components.end(), component));
+		return this;
+	};
+
+	template <class T> Entity* removeComponents()
+	{
+		std::erase_if(this->components.begin(), this->components.end(), [&](const auto &item) {
+			return dynamic_cast<T*>(item);
+		});
 		return this;
 	};
 };
 
 #endif //ECS_H
 
-#include "../components/transform.h"
+#include "components/transform.h"

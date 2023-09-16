@@ -8,10 +8,9 @@ ShadowTransformer::ShadowTransformer(Entity *shadow)
 
 void ShadowTransformer::onInitialize()
 {
-	printf("Initializing Shadow Transformer on %s\n", parent->getName());
+	printf("Initializing Shadow Transformer on %s\n", parent->name);
 	this->ball = parent->getComponent<Transform>();
 	this->transform = target->getComponent<Transform>();
-	this->sprite = target->getComponent<SpriteRenderer>();
 }
 
 void ShadowTransformer::onUpdate(double deltaTime)
@@ -24,10 +23,10 @@ void ShadowTransformer::onUpdate(double deltaTime)
 
 	if (transform->inTableBounds())
 	{
-		sprite->setOpacity(SDL_ALPHA_OPAQUE);
+		target->opacity = SDL_ALPHA_OPAQUE;
 	}
 	else
 	{
-		sprite->setOpacity(SDL_ALPHA_TRANSPARENT);
+		target->opacity = SDL_ALPHA_TRANSPARENT;
 	}
 }

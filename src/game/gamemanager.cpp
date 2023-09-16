@@ -13,12 +13,13 @@ namespace GameManager
 		transform->setPosition({RenderWindow::SCREEN_CENTER_X, 10, 650});
 
 		BallMovement *ballMovement = ball->getComponent<BallMovement>();
-		ballMovement->setIdle();
+		ballMovement->idle = true;
 		ballMovement->setForce({0, 8, 0});
 	}
 
 	void switchScene(Pane *from, Pane *to)
 	{
+
 		if (from != nullptr)
 		{
 			from->dispose();

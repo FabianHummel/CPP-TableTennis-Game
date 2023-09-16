@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ecs/ecs.h"
+#include "../ecs.h"
 #include <SDL.h>
 #include <SDL_render.h>
 

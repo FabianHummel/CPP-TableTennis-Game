@@ -9,8 +9,8 @@ NineSlice::NineSlice(const char *img, const Positions positions, SDL_Renderer *r
 
 void NineSlice::onInitialize()
 {
-	printf("Initializing 9-Slice on %s\n", parent->getName());
-	this->transform = parent->getTransform();
+	printf("Initializing 9-Slice on %s\n", parent->name);
+	this->transform = parent->transform;
 }
 
 void NineSlice::onStart()
@@ -93,10 +93,7 @@ void NineSlice::onStart()
 // based on https://github.com/cxong/sdl2-9-slice/blob/master/main.c
 void NineSlice::onUpdate(double deltaTime)
 {
-	if (!isVisible())
-		return;
-
-	SDL_SetTextureAlphaMod(texture, opacity);
+	if (!visible || !parent->isVisible()) return;
 
 	SDL_Rect dst;
 	dst.x = transform->getX() - transform->getScaleX() * transform->getAnchor().x;
@@ -104,6 +101,7 @@ void NineSlice::onUpdate(double deltaTime)
 	dst.w = transform->getScaleX();
 	dst.h = transform->getScaleY();
 
+	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
 	SDL_RenderCopyEx(renderer, this->texture, nullptr, &dst, transform->getRotation(), nullptr, SDL_FLIP_NONE);
 }
 
@@ -119,19 +117,4 @@ void NineSlice::setImage(const char *v, Positions positions)
 	this->positions = positions;
 	this->onDelete();
 	this->onStart();
-}
-
-void NineSlice::setOpacity(int v)
-{
-	this->opacity = v;
-}
-
-void NineSlice::setVisible(bool v)
-{
-	this->visible = v;
-}
-
-bool NineSlice::isVisible() const
-{
-	return this->visible;
 }

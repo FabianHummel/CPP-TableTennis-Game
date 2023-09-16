@@ -15,6 +15,7 @@ class HomePane : public Pane
 	void onEvent(SDL_Event event) override;
 	void dispose() override;
 
+	void changeGameMode();
 	void previousGameMode();
 	void nextGameMode();
 	void startGame();

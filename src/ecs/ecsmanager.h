@@ -10,13 +10,10 @@ class Component;
 namespace EcsManager
 {
   	extern std::vector<Entity*> entities;
-  
-	void forEachEntity(const std::function<void(Entity *)> &callback);
-	void forEachComponent(const std::function<void(Component *)> &callback);
 
-	void addEntity(Entity *entity);
-	void removeEntity(Entity *entity);
-	Entity *findEntity(const char *name);
+	Entity* addEntity(Entity *entity);
+	Entity* removeEntity(Entity *entity);
+	Entity* findEntity(const char *name);
 
 	void initialize();
 	void start();

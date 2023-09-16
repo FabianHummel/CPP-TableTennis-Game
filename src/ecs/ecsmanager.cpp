@@ -1,27 +1,32 @@
 #include "ecsmanager.h"
-#include "../components/transform.h"
+#include "components/transform.h"
 #include "ecs.h"
 #include <SDL_events.h>
 
 namespace EcsManager
 {
-	std::vector<Entity*> entities = {};
+	std::vector<Entity*> entities;
 
-	void addEntity(Entity *entity)
+	/// Returns the newly added entity
+	Entity* addEntity(Entity *entity)
 	{
 		entities.push_back(entity);
+		return entity;
 	}
 
-	void removeEntity(Entity *entity)
+	/// Returns the removed entity
+	Entity* removeEntity(Entity *entity)
 	{
 		entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+		return entity;
 	}
 
-	Entity *findEntity(const char *name)
+	/// Finds an entity in the most outer scope
+	Entity* findEntity(const char *name)
 	{
 		for (auto &entity : entities)
 		{
-			if (strcmp(entity->getName(), name) == 0)
+			if (strcmp(entity->name, name) == 0)
 			{
 				return entity;
 			}
@@ -29,46 +34,40 @@ namespace EcsManager
 		return nullptr;
 	}
 
-	void forEachEntity(const std::function<void(Entity *)> &callback)
+	void callOnEachEntity(const std::function<void(Component *)> &callback)
 	{
 		for (auto &entity : entities)
 		{
-			callback(entity);
+			entity->update(callback);
 		}
-	}
-
-	void forEachComponent(const std::function<void(Component *)> &callback)
-	{
-		forEachEntity([&](Entity *entity) { entity->forEachComponent(callback); });
 	}
 
 	void initialize()
 	{
-		forEachComponent([](Component *component) { component->onInitialize(); });
+		callOnEachEntity([](Component *component) { component->onInitialize(); });
 	}
 
 	void start()
 	{
-		forEachComponent([](Component *component) { component->onStart(); });
+		callOnEachEntity([](Component *component) { component->onStart(); });
 	}
 
 	void update(double deltaTime)
 	{
-		forEachComponent([deltaTime](Component *component) { component->onUpdate(deltaTime); });
+		callOnEachEntity([deltaTime](Component *component) { component->onUpdate(deltaTime); });
 	}
 
 	void event(SDL_Event event)
 	{
-		forEachComponent([event](Component *component) { component->onEvent(event); });
+		callOnEachEntity([event](Component *component) { component->onEvent(event); });
 	}
 
 	void sort()
 	{
 		std::sort(entities.begin(), entities.end(), [](Entity *a, Entity *b) {
-			Transform *trfA = a->getTransform();
-			Transform *trfB = b->getTransform();
-			/*return trfA->getY() > trfB->getY() &&
-			         trfA->getZ() > trfB->getZ();*/
+			Transform *trfA = a->transform;
+			Transform *trfB = b->transform;
+
 			if (trfA->getI() == trfB->getI())
 			{
 				return trfA->getZ() < trfB->getZ();
