@@ -10,17 +10,20 @@
 class TextRenderer : public Component
 {
   private:
-	Transform *transform{};
+	SDL_Texture *texture{};
 	SDL_Renderer *renderer;
+	Transform *transform{};
 	const char *text;
 	SDL_Color color{};
 	TTF_Font *font;
-	SDL_Texture *texture{};
 
 	void updateTexture();
 
   public:
+	bool visible = true;
+
 	TextRenderer(SDL_Renderer *renderer, const char *text, SDL_Color color);
+
 	void onInitialize() override;
 	void onUpdate(double deltaTime) override;
 

@@ -3,6 +3,7 @@
 #include "../ecs/presets/index.h"
 #include "../game/gamemanager.h"
 #include "../render/renderindexes.h"
+#include "../animations/animationmanager.h"
 #include "game.h"
 #include <functional>
 
@@ -58,6 +59,7 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 750}, {300, 6}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	settings = EcsManager::addEntity(new Entity("Settings"))
+	    ->apply(false)
 	    ->usePreset(Presets::button(window->renderer, [] { printf("Settings\n"); }))
 	    ->transform
 	    ->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
@@ -100,18 +102,34 @@ void HomePane::dispose()
 	delete settings;
 }
 
+void HomePane::changeGameMode()
+{
+	auto text = magic_enum::enum_name(currentGameMode).data();
+	this->gamemodeText->setText(text);
+
+	if (this->currentGameMode == GameMode::SINGLEPLAYER)
+	{
+		AnimationManager::play(Animations::swipeOut(settings, true), Easings::easeOut, 0.4);
+		AnimationManager::play(Animations::fadeOut(settings), Easings::easeOut, 0.2);
+	}
+
+	if (this->currentGameMode == GameMode::MULTIPLAYER)
+	{
+		AnimationManager::play(Animations::swipeIn(settings, true), Easings::easeOut, 0.4);
+		AnimationManager::play(Animations::fadeIn(settings), Easings::linear, 0.2);
+	}
+}
+
 void HomePane::previousGameMode()
 {
 	this->currentGameMode--;
-	auto text = magic_enum::enum_name(currentGameMode).data();
-	this->gamemodeText->setText(text);
+	this->changeGameMode();
 }
 
 void HomePane::nextGameMode()
 {
 	this->currentGameMode++;
-	auto text = magic_enum::enum_name(currentGameMode).data();
-	this->gamemodeText->setText(text);
+	this->changeGameMode();
 }
 
 void HomePane::startGame()

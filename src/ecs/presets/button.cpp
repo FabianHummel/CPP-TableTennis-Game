@@ -5,18 +5,18 @@ Preset Presets::button(SDL_Renderer *renderer, const std::function<void()> &onCl
 	return [=](Entity *target) {
 		NineSlice *normal = new NineSlice("res/button.png", { 32, 32, 48, 32 }, renderer);
 		NineSlice *hover = new NineSlice("res/buttonhover.png", { 32, 32, 40, 32 }, renderer);
-		hover->setVisible(false);
+		hover->visible = false;
 
 		std::function<void()> onMouseEnter = [=]() {
-			normal->setVisible(false);
-			hover->setVisible(true);
+			normal->visible = false;
+			hover->visible = true;
 			target->transform->mvByZ(4);
 			target->transform->mvByScaleY(-8);
 		};
 
 		std::function<void()> onMouseExit = [=]() {
-			normal->setVisible(true);
-			hover->setVisible(false);
+			normal->visible = true;
+			hover->visible = false;
 			target->transform->mvByZ(-4);
 			target->transform->mvByScaleY(8);
 		};

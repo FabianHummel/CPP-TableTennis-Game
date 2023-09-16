@@ -9,11 +9,11 @@ class SpriteRenderer : public Component
 	SDL_Renderer *renderer;
 	Transform *transform{};
 	const char *img;
-	bool visible = true;
-	int opacity = 255;
 	SDL_Rect *srcrect = nullptr;
 
   public:
+	bool visible = true;
+
 	SpriteRenderer(const char *img, SDL_Renderer *renderer);
 
 	void onInitialize() override;
@@ -21,10 +21,6 @@ class SpriteRenderer : public Component
 	void onUpdate(double deltaTime) override;
 	void onDelete() override;
 
-	void setImage(const char *img);
-	void setOpacity(int v);
 	void setSrcrect(SDL_Rect rect);
-
-	void setVisible(bool v);
-	bool isVisible() const;
+	void setImage(const char *img);
 };

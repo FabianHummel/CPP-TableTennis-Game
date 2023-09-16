@@ -18,7 +18,7 @@ GamePane::GamePane(RenderWindow *window) : Pane(window)
 	shadow = EcsManager::addEntity(new Entity("Shadow"))
 	  ->transform
 		->apply({0, 0, 0}, {40, 40}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Game::DEFAULT)
-  	->addComponent(new SpriteRenderer("res/shadow.png", window->renderer));
+  		->addComponent(new SpriteRenderer("res/shadow.png", window->renderer));
 
 	ball = EcsManager::addEntity(new Entity("Ball"))
 		->transform

@@ -11,6 +11,11 @@ Transform::Transform() : position(0, 0, 0), scale(0, 0), anchor(), rotation(0.0f
 {
 }
 
+void Transform::onDelete()
+{
+	delete animation;
+}
+
 void Transform::setPosition(const Vector3 &v)
 {
 	position = v;
@@ -38,26 +43,32 @@ void Transform::setZ(float nZ)
 
 float Transform::getX() const
 {
-	if (parent->parent == nullptr)
-		return position.x;
-
-	return position.x + parent->parent->transform->position.x;
+	float x = position.x;
+	if (parent && parent->parent)
+		x += parent->parent->transform->getX();
+	if (animation)
+		x += animation->getX();
+	return x;
 }
 
 float Transform::getY() const
 {
-	if (parent->parent == nullptr)
-		return position.y;
-
-	return position.y + parent->parent->transform->position.y;
+	float y = position.y;
+	if (parent && parent->parent)
+		y += parent->parent->transform->getY();
+	if (animation)
+		y += animation->getY();
+	return y;
 }
 
 float Transform::getZ() const
 {
-	if (parent->parent == nullptr)
-		return position.z;
-
-	return position.z + parent->parent->transform->position.z;
+	float z = position.z;
+	if (parent && parent->parent)
+		z += parent->parent->transform->getZ();
+	if (animation)
+		z += animation->getZ();
+	return z;
 }
 
 void Transform::mvByX(float v)
@@ -87,10 +98,12 @@ void Transform::setScale(const Vector2Int &v)
 
 Vector2Int Transform::getScale() const
 {
-	if (parent->parent == nullptr)
-		return scale;
-
-	return scale + parent->parent->transform->scale;
+	Vector2Int scale = this->scale;
+	if (parent && parent->parent)
+		scale += parent->parent->transform->getScale();
+	if (animation)
+		scale += animation->getScale();
+	return scale;
 }
 
 void Transform::setScaleX(int nX)
@@ -105,18 +118,22 @@ void Transform::setScaleY(int nY)
 
 int Transform::getScaleX() const
 {
-	if (parent->parent == nullptr)
-		return scale.x;
-
-	return scale.x + parent->parent->transform->scale.x;
+	int x = scale.x;
+	if (parent && parent->parent)
+		x += parent->parent->transform->getScaleX();
+	if (animation)
+		x += animation->getScaleX();
+	return x;
 }
 
 int Transform::getScaleY() const
 {
-	if (parent->parent == nullptr)
-		return scale.y;
-
-	return scale.y + parent->parent->transform->scale.y;
+	int y = scale.y;
+	if (parent && parent->parent)
+		y += parent->parent->transform->getScaleY();
+	if (animation)
+		y += animation->getScaleY();
+	return y;
 }
 
 void Transform::mvByScaleX(int v)
@@ -141,10 +158,12 @@ void Transform::setRotation(float v)
 
 float Transform::getRotation() const
 {
-	if (parent->parent == nullptr)
-		return rotation;
-
-	return rotation + parent->parent->transform->rotation;
+	float rot = rotation;
+	if (parent && parent->parent)
+		rot += parent->parent->transform->getRotation();
+	if (animation)
+		rot += animation->getRotation();
+	return rot;
 }
 
 void Transform::printRotation() const
@@ -159,12 +178,12 @@ void Transform::setI(int v)
 
 int Transform::getI() const
 {
-	if (parent->parent == nullptr)
-	{
-		return zIndex;
-	}
-
-	return zIndex + parent->parent->transform->zIndex;
+	int i = zIndex;
+	if (parent && parent->parent)
+		i += parent->parent->transform->getI();
+	if (animation)
+		i += animation->getI();
+	return i;
 }
 
 void Transform::printI() const

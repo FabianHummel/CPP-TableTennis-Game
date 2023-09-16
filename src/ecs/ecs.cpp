@@ -4,8 +4,13 @@
 Entity::Entity(const char *name)
 {
 	this->name = name;
-	this->addComponent(new Transform());
-	this->transform = this->getComponent<Transform>();
+
+	Transform *transform = new Transform();
+	this->addComponent(transform);
+	transform->animation = new Transform();
+
+	this->transform = transform;
+	this->animation = transform->animation;
 }
 
 Entity::~Entity()
@@ -18,6 +23,26 @@ Entity::~Entity()
 	}
 
 	this->components.clear();
+}
+
+int Entity::getOpacity() const
+{
+	if (this->parent != nullptr)
+	{
+		return this->opacity * this->parent->getOpacity() / 255;
+	}
+
+	return this->opacity;
+}
+
+bool Entity::isVisible() const
+{
+	if (this->parent != nullptr)
+	{
+		return this->visible && this->parent->isVisible();
+	}
+
+	return this->visible;
 }
 
 void Entity::update(const std::function<void(Component *)> &callback)
@@ -65,9 +90,21 @@ Entity* Entity::getChild(const char *name)
 	return nullptr;
 }
 
-
 Entity* Entity::removeChild(Entity *child)
 {
 	this->children.erase(std::find(children.begin(), children.end(), child));
 	return child;
+}
+
+Entity* Entity::usePreset(const Preset &function)
+{
+	function(this);
+	return this;
+}
+
+Entity* Entity::apply(bool visible, int opacity)
+{
+	this->opacity = opacity;
+	this->visible = visible;
+	return this;
 }

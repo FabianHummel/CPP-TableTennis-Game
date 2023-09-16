@@ -35,19 +35,20 @@ class Entity
 	std::vector<Component*> components;
 	std::vector<Entity*> children;
 	Transform *transform;
+	Transform *animation;
 	Entity *parent{};
+	bool visible{true};
+	int opacity{255};
 
+	int getOpacity() const;
+	bool isVisible() const;
 	void update(const std::function<void(Component*)> &callback);
 
 	Entity* addChild(Entity *child);
 	Entity* getChild(const char *name);
 	Entity* removeChild(Entity *child);
-
-	Entity* usePreset(const Preset &function)
-	{
-		function(this);
-		return this;
-	}
+	Entity* usePreset(const Preset &function);
+	Entity* apply(bool visible = true, int opacity = 255);
 
 	template <typename T> Entity* addComponent(T *component)
 	{

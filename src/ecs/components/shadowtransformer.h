@@ -9,7 +9,6 @@ class ShadowTransformer : public Component
   private:
 	Transform *ball{};
 	Transform *transform{};
-	SpriteRenderer *sprite{};
 	Entity *target;
 
   public:
