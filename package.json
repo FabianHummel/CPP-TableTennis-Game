@@ -1,8 +1,8 @@
 {
-  "name": "Table Tennis",
+  "name": "table-tennis",
   "version": "1.0.0",
   "scripts": {
-    "preprocess": "node node/index.js"
+    "preprocess": "node scripts/generate_index.js"
   },
   "dependencies": {
 
