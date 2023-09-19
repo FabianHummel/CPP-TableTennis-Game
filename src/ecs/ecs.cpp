@@ -1,5 +1,5 @@
 #include "ecs.h"
-#include "ecsmanager.h"
+#include "../ecsmanager.h"
 
 Entity::Entity(const char *name)
 {

@@ -1,7 +1,7 @@
 #pragma once
 
+#include "ecs/ecs.h"
 #include "functional"
-#include "../ecs/ecs.h"
 
 typedef std::function<void(double)> Animation;
 
@@ -33,9 +33,9 @@ namespace Animations
 
 namespace Easings
 {
-	extern Easing linear;
-	extern Easing easeIn;
-	extern Easing easeOut;
-	extern Easing ease;
-	extern Easing easeOutElastic;
+	double linear(double t);
+	double easeIn(double t);
+	double easeOut(double t);
+	double ease(double t);
+	double easeOutElastic(double t);
 }

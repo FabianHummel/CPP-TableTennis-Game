@@ -1,6 +1,6 @@
 #include "ecsmanager.h"
-#include "components/transform.h"
-#include "ecs.h"
+#include "ecs/components/transform.h"
+#include "ecs/ecs.h"
 #include <SDL_events.h>
 
 namespace EcsManager

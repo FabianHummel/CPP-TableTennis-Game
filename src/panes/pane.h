@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../render/renderwindow.h"
-#include "../ecs/ecs.h"
 #include "../ecs/components/index.h"
+#include "../ecs/ecs.h"
+#include "../utility/renderwindow.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <vector>
@@ -14,6 +14,8 @@ class Pane
 
   public:
 	explicit Pane(RenderWindow *window);
+	~Pane();
+
 	/**
 	 * @brief Called once when the game starts.
 	 */
@@ -28,9 +30,4 @@ class Pane
 	 * @brief Called when an event fires.
 	 */
 	virtual void onEvent(SDL_Event event){};
-
-	/**
-	 * @brief Called when the window stops existing
-	 */
-	virtual void dispose(){};
 };

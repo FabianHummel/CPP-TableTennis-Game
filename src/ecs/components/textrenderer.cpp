@@ -1,5 +1,5 @@
 #include "textrenderer.h"
-#include "../../render/fontmanager.h"
+#include "../../fontmanager.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <SDL_rect.h>

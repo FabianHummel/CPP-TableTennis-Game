@@ -6,7 +6,6 @@
 class GamePane : public Pane
 {
   private:
-	Entity *global;
 	Entity *table;
 	Entity *net;
 	Entity *shadow;
@@ -18,5 +17,5 @@ class GamePane : public Pane
 
   public:
 	explicit GamePane(RenderWindow *window);
-	void dispose() override;
+	~GamePane();
 };

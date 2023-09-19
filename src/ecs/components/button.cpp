@@ -1,8 +1,7 @@
 #include "button.h"
-#include "../../game/cursormanager.h"
+#include "../../cursormanager.h"
 #include <SDL_events.h>
 #include <SDL_mouse.h>
-#include <functional>
 
 Button::Button(
 	const std::function<void()> &onMouseDown,
@@ -23,6 +22,8 @@ void Button::onInitialize()
 
 void Button::onUpdate(double deltaTime)
 {
+	if (!parent->isVisible()) return;
+
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	x *= 2;
@@ -36,6 +37,8 @@ void Button::onUpdate(double deltaTime)
 
 void Button::onEvent(SDL_Event event)
 {
+	if (!parent->isVisible()) return;
+
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	x *= 2;

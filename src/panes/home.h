@@ -8,12 +8,22 @@ class HomePane : public Pane
   private:
 	GameMode currentGameMode{};
 	TextRenderer *gamemodeText{};
+	Entity *title;
+	Entity *background;
+	Entity *gamemode;
+	Entity *previous;
+	Entity *next;
+	Entity *ball;
+	Entity *menuline;
+	Entity *settings;
+	Entity *start;
 
   public:
-	HomePane(RenderWindow *window);
+	explicit HomePane(RenderWindow *window);
+	~HomePane();
+
 	void onStart() override;
 	void onEvent(SDL_Event event) override;
-	void dispose() override;
 
 	void changeGameMode();
 	void previousGameMode();

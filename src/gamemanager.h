@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../panes/pane.h"
-#include "gamemode.h"
+#include "game/gamemode.h"
+#include "panes/pane.h"
 
 namespace GameManager
 {

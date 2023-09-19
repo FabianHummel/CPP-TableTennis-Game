@@ -1,6 +1,6 @@
 #include "index.h"
-
-#include "../../animations/animationmanager.h"
+#include "random"
+#include "../../animationmanager.h"
 
 Preset Presets::button(SDL_Renderer *renderer, const char *text, const std::function<void()> &onClick)
 {
@@ -14,9 +14,10 @@ Preset Presets::button(SDL_Renderer *renderer, const char *text, const std::func
 			hover->visible = true;
 			target->transform->mvByZ(4);
 			target->transform->mvByScaleY(-8);
+			float randomRotation = random() % 6 - 3;
 
 			AnimationManager::play([=](double t) {
-				target->animation->setRotation(t * 3);
+				target->animation->setRotation(t * randomRotation);
 				target->animation->setScaleX(t * 15);
 				target->animation->setScaleY(t * 20);
 			}, Easings::easeOutElastic, 0.5);
@@ -27,9 +28,10 @@ Preset Presets::button(SDL_Renderer *renderer, const char *text, const std::func
 			hover->visible = false;
 			target->transform->mvByZ(-4);
 			target->transform->mvByScaleY(8);
+			float initialRotation = target->animation->getRotation();
 
 			AnimationManager::play([=](double t) {
-				target->animation->setRotation((1-t) * 3);
+				target->animation->setRotation((1-t) * initialRotation);
 				target->animation->setScaleX((1-t) * 15);
 				target->animation->setScaleY((1-t) * 20);
 			}, Easings::easeOutElastic, 0.5);

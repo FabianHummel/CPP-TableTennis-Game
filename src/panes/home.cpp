@@ -1,21 +1,11 @@
 #include "home.h"
-#include "../ecs/ecsmanager.h"
+#include "../animationmanager.h"
 #include "../ecs/presets/index.h"
-#include "../game/gamemanager.h"
-#include "../render/renderindexes.h"
-#include "../animations/animationmanager.h"
+#include "../ecsmanager.h"
+#include "../gamemanager.h"
+#include "../utility/renderindexes.h"
 #include "game.h"
 #include <functional>
-
-Entity *title;
-Entity *background;
-Entity *gamemode;
-Entity *previous;
-Entity *next;
-Entity *ball;
-Entity *menuline;
-Entity *settings;
-Entity *start;
 
 HomePane::HomePane(RenderWindow *window) : Pane(window)
 {
@@ -71,6 +61,20 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {200, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 }
 
+HomePane::~HomePane()
+{
+	delete gamemodeText;
+	delete title;
+	delete background;
+	delete gamemode;
+	delete previous;
+	delete next;
+	delete ball;
+	delete menuline;
+	delete settings;
+	delete start;
+}
+
 void HomePane::onStart()
 {
 	this->gamemodeText = gamemode->getComponent<TextRenderer>();
@@ -94,19 +98,6 @@ void HomePane::onEvent(SDL_Event event)
 			break;
 		}
 	}
-}
-
-void HomePane::dispose()
-{
-	delete title;
-	delete background;
-	delete gamemode;
-	delete previous;
-	delete next;
-	delete ball;
-	delete menuline;
-	delete settings;
-	delete start;
 }
 
 void HomePane::changeGameMode()
@@ -155,7 +146,7 @@ void HomePane::startGame()
 		pane = new GamePane(window);
 		break;
 	case GameMode::MULTIPLAYER:
-		pane = new GamePane(window);
+//		pane = new GamePane(window);
 		break;
 	}
 

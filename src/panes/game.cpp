@@ -1,6 +1,6 @@
 #include "game.h"
-#include "../ecs/ecsmanager.h"
-#include "../render/renderindexes.h"
+#include "../ecsmanager.h"
+#include "../utility/renderindexes.h"
 
 GamePane::GamePane(RenderWindow *window) : Pane(window)
 {
@@ -16,9 +16,9 @@ GamePane::GamePane(RenderWindow *window) : Pane(window)
 		        {RenderWindow::SCREEN_WIDTH, 129}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Game::NET);
 
 	shadow = EcsManager::addEntity(new Entity("Shadow"))
-	  ->transform
+		->transform
 		->apply({0, 0, 0}, {40, 40}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Game::DEFAULT)
-  		->addComponent(new SpriteRenderer("res/shadow.png", window->renderer));
+		->addComponent(new SpriteRenderer("res/shadow.png", window->renderer));
 
 	ball = EcsManager::addEntity(new Entity("Ball"))
 		->transform
@@ -49,9 +49,8 @@ GamePane::GamePane(RenderWindow *window) : Pane(window)
 		->apply({0, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Game::PREDICTION);
 }
 
-void GamePane::dispose()
+GamePane::~GamePane()
 {
-	delete global;
 	delete table;
 	delete net;
 	delete ball;

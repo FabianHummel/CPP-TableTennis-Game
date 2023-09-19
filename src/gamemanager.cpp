@@ -1,5 +1,5 @@
 #include "gamemanager.h"
-#include "../ecs/ecsmanager.h"
+#include "ecsmanager.h"
 #include <cstdlib>
 
 namespace GameManager
@@ -20,11 +20,7 @@ namespace GameManager
 	void switchScene(Pane *from, Pane *to)
 	{
 
-		if (from != nullptr)
-		{
-			from->dispose();
-			delete from;
-		}
+		delete from;
 
 		if (to == nullptr)
 		{

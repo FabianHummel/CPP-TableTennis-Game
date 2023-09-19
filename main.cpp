@@ -1,11 +1,10 @@
-#include "src/ecs/ecsmanager.h"
-#include "src/game/gamemanager.h"
-#include "src/game/cursormanager.h"
-#include "src/animations/animationmanager.h"
-#include "src/render/fontmanager.h"
-#include "src/render/renderwindow.h"
-#include "src/panes/game.h"
+#include "src/animationmanager.h"
+#include "src/cursormanager.h"
+#include "src/ecsmanager.h"
+#include "src/fontmanager.h"
+#include "src/gamemanager.h"
 #include "src/panes/home.h"
+#include "src/utility/renderwindow.h"
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
@@ -80,7 +79,7 @@ int main(int argc, char **argv)
 		SDL_RenderPresent(window->renderer);
 	}
 
-	GameManager::currentPane->dispose();
+	delete GameManager::currentPane;
 	FontManager::close();
 	EcsManager::clear();
 

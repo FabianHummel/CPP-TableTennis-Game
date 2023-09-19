@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../game/tableside.h"
-#include "../../sound/soundmanager.h"
+#include "../../soundmanager.h"
 #include "../../utility/vector3.h"
 #include "../ecs.h"
 #include "spriterenderer.h"
