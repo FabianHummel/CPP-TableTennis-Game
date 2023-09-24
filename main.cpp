@@ -3,11 +3,13 @@
 #include "src/ecsmanager.h"
 #include "src/fontmanager.h"
 #include "src/gamemanager.h"
+#include "src/netmanager.h"
 #include "src/panes/home.h"
 #include "src/utility/renderwindow.h"
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
+#include <enet/enet.h>
 #include <cstdio>
 
 const SDL_Color BG = {203, 211, 235, 255};
@@ -20,21 +22,28 @@ int main(int argc, char **argv)
 {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
-		printf("SDL could not be initialized!\n SDL_Error: %s\n", SDL_GetError());
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "SDL could not be initialized!\n SDL_Error: %s\n", SDL_GetError());
+		return EXIT_FAILURE;
 	}
 
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
-		printf("SDL_mixer could not initialize!\n SDL_mixer_Error: %s\n", Mix_GetError());
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "SDL_mixer could not initialize!\n SDL_mixer_Error: %s\n", Mix_GetError());
+		return EXIT_FAILURE;
 	}
 
 	if (TTF_Init() < 0)
 	{
-		printf("SDL_ttf could not initialize!\n SDL_ttf_Error: %s\n", TTF_GetError());
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "SDL_ttf could not initialize!\n SDL_ttf_Error: %s\n", TTF_GetError());
+		return EXIT_FAILURE;
 	}
+
+	if (enet_initialize() < 0)
+	{
+		fprintf(stderr, "An error occurred while initializing ENet.\n");
+		return EXIT_FAILURE;
+	}
+
 
 	RenderWindow *window = new RenderWindow(RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT, "Table Tennis");
 	CursorManager::loadCursors();
@@ -71,6 +80,7 @@ int main(int argc, char **argv)
 		window->drawBG(BG);
 		window->clear();
 
+		NetManager::update();
 		EcsManager::update(deltaTime);
 		GameManager::currentPane->onGui(deltaTime);
 		AnimationManager::update(deltaTime);

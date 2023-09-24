@@ -5,6 +5,7 @@ namespace CursorManager
 {
 	SDL_Cursor *arrowCursor{};
 	SDL_Cursor *handCursor{};
+	SDL_Cursor *inputCursor{};
 
 	SDL_Cursor *active{};
 	std::map<SDL_Cursor*, uint> priority;
@@ -14,8 +15,11 @@ namespace CursorManager
 		arrowCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
 		priority[arrowCursor] = 0;
 
+		inputCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM);
+		priority[inputCursor] = 1;
+
 		handCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
-		priority[handCursor] = 1;
+		priority[handCursor] = 2;
 	}
 
 	void requestCursor(SDL_Cursor *cursor)

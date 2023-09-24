@@ -13,7 +13,7 @@ class Button : public Component
 	std::function<void()> onMouseExit;
 
   public:
-	bool isMouseOver;
+	bool isMouseOver{};
 
 	Button(
 		const std::function<void()> &onMouseDown = nullptr,

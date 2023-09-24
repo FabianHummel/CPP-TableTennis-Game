@@ -9,5 +9,6 @@
 #include "prediction.h"
 #include "shadowtransformer.h"
 #include "spriterenderer.h"
+#include "textinput.h"
 #include "textrenderer.h"
 #include "transform.h"

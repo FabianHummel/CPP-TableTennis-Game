@@ -6,8 +6,10 @@
 class HomePane : public Pane
 {
   private:
+	char *matchCode;
 	GameMode currentGameMode{};
 	TextRenderer *gamemodeText{};
+
 	Entity *title;
 	Entity *background;
 	Entity *gamemode;
@@ -17,6 +19,7 @@ class HomePane : public Pane
 	Entity *menuline;
 	Entity *settings;
 	Entity *start;
+	Entity *matchCodeInput;
 
   public:
 	explicit HomePane(RenderWindow *window);

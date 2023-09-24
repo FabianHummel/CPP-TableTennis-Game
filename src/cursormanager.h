@@ -5,6 +5,7 @@
 namespace CursorManager
 {
 	extern SDL_Cursor *arrowCursor;
+	extern SDL_Cursor *inputCursor;
 	extern SDL_Cursor *handCursor;
 
 	void loadCursors();
