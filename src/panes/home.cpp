@@ -51,26 +51,24 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 
 	settings = EcsManager::addEntity(new Entity("Start-Server-Button"))
 	    ->apply(false)
-	    ->usePreset(Presets::button(window->renderer, "Start server", [this] { startGame(); }))
+	    ->usePreset(Presets::button(window->renderer, "Start server", [this] { startServer(); }))
 	    ->transform
 	    ->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	start = EcsManager::addEntity(new Entity("Play-Button"))
-		->usePreset(Presets::button(window->renderer, "Play", [this] { startGame(); }))
+		->usePreset(Presets::button(window->renderer, "Play", [this] { startSinglePlayer(); }))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
-	matchCode = (char*)malloc(6);
-	matchCode[5] = '\0';
 	matchCodeInput = EcsManager::addEntity(new Entity("Match-Code-Input"))
 		->apply(false)
-		->usePreset(Presets::textinput(window->renderer, matchCode, 5))
+		->usePreset(Presets::textinput(window->renderer, matchCode, sizeof(matchCode)-1))
 	 	->getChild("Textinput.Text")
 		->transform
 	    ->apply({-120, 0, -10}, {0, 0}, {0.0f, 0.5f}, 0.0f, 0)
 		->parent
 		->addChild((new Entity("Textinput.Continue"))
-			->addComponent(new Button(nullptr, [this] { NetManager::join_match(matchCode); }))
+			->addComponent(new Button(nullptr, [this] { joinServer(); }))
 			->addComponent(new SpriteRenderer("res/menuarrow.png", window->renderer))
 			->transform
 			->apply({120, 0, -10}, {-300+40, -120+40}, {1.0f, 0.5f}, 0.0f, 0))
@@ -91,6 +89,7 @@ HomePane::~HomePane()
 	delete settings;
 	delete start;
 	delete matchCodeInput;
+	free(matchCode);
 }
 
 void HomePane::onStart()
@@ -112,7 +111,7 @@ void HomePane::onEvent(SDL_Event event)
 			nextGameMode();
 			break;
 		case SDLK_RETURN:
-			startGame();
+			startSinglePlayer();
 			break;
 		}
 	}
@@ -160,20 +159,51 @@ void HomePane::nextGameMode()
 	this->changeGameMode();
 }
 
-void HomePane::startGame()
+void HomePane::startServer()
+{
+	NetManager::on_match_found = [this](const char *match_code) {
+		strcpy(this->matchCode, match_code);
+		printf("Match found: %s\n", match_code);
+		// Play animation
+	};
+	NetManager::on_match_not_found = [this]() {
+		// Display error
+	};
+	NetManager::on_punch_fail = [this]() {
+		// Display error
+	};
+	NetManager::on_punched = [this](ENetPeer *) {
+		printf("Punched\n");
+	};
+	NetManager::on_peer_ping = [this](double rtt) {
+//		printf("Round trip time: %f\n", rtt);
+	};
+	NetManager::init_matchmaking();
+}
+
+void HomePane::joinServer()
+{
+	NetManager::on_match_not_found = [this]() {
+		// Display error
+	};
+	NetManager::on_match_full = [this]() {
+		// Display error
+	};
+	NetManager::on_punch_fail = [this]() {
+		// Display error
+	};
+	NetManager::on_punched = [this](ENetPeer *) {
+		printf("Punched\n");
+	};
+	NetManager::on_peer_ping = [this](double rtt) {
+//		printf("Round trip time: %f\n", rtt);
+	};
+	NetManager::join_match(matchCode);
+}
+
+void HomePane::startSinglePlayer()
 {
 	EcsManager::clear();
-	Pane *pane;
-	switch (currentGameMode)
-	{
-	case GameMode::SINGLEPLAYER:
-		pane = new GamePane(window);
-		break;
-	case GameMode::MULTIPLAYER:
-		NetManager::init_matchmaking();
-//		pane = new GamePane(window);
-		return;
-	}
-
+	Pane *pane = new GamePane(window);
 	GameManager::switchScene(this, pane);
 }

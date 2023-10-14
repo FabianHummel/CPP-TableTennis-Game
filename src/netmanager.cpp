@@ -4,23 +4,36 @@
 
 namespace NetManager
 {
-	std::vector<ENetPeer*> remote_peers;
-	ENetHost *client;
+	std::function<void(const char *match_code)> on_match_found{};
+	std::function<void()> on_match_not_found{};
+	std::function<void()> on_match_full{};
+	std::function<void()> on_punch_fail{};
+	std::function<void(ENetPeer *enemy)> on_punched{};
+	std::function<void(double rtt)> on_peer_ping{};
+
+	ENetPeer *enemy;
+	ENetHost *host;
+	double elapsedTime = 0;
+	bool waitForPong = false;
+	std::string match_code;
 
 	void init_matchmaking()
 	{
-		client = enet_host_create(nullptr, 1, 2, 0, 0);
-		if (client == nullptr)
+		ENetAddress hostAddress;
+		hostAddress.host = ENET_HOST_ANY;
+		hostAddress.port = ENET_PORT_ANY;
+		host = enet_host_create(&hostAddress, 100, 2, 0, 0);
+		if (host == nullptr)
 		{
-			fprintf (stderr, "An error occurred while trying to create an ENet client host.\n");
+			fprintf (stderr, "An error occurred while trying to create an ENet host host.\n");
 			return;
 		}
 
 		ENetAddress serverAddress;
 		enet_address_set_host(&serverAddress, "localhost");
 		serverAddress.port = 7788;
-		ENetPeer *peer = enet_host_connect(client, &serverAddress, 2, Request::CREATE_MATCH << 26);
-		if (peer == nullptr)
+
+		if (!enet_host_connect(host, &serverAddress, 2, Packet::CREATE_MATCH << 26))
 		{
 			fprintf(stderr, "No available peers for initiating an ENet connection.\n");
 			return;
@@ -29,10 +42,13 @@ namespace NetManager
 
 	void join_match(const char *match_code)
 	{
-		client = enet_host_create(nullptr, 1, 2, 0, 0);
-		if (client == nullptr)
+		ENetAddress hostAddress;
+		hostAddress.host = ENET_HOST_ANY;
+		hostAddress.port = ENET_PORT_ANY;
+		host = enet_host_create(&hostAddress, 100, 2, 0, 0);
+		if (host == nullptr)
 		{
-			fprintf (stderr, "An error occurred while trying to create an ENet client host.\n");
+			fprintf (stderr, "An error occurred while trying to create an ENet host host.\n");
 			return;
 		}
 
@@ -41,42 +57,88 @@ namespace NetManager
 		serverAddress.port = 7788;
 
 		unsigned int encoded = strtoul(match_code, nullptr, 36);
-		ENetPeer *peer = enet_host_connect(client, &serverAddress, 2, encoded | Request::JOIN_MATCH << 26);
-		if (peer == nullptr)
+		if (!enet_host_connect(host, &serverAddress, 2, encoded | Packet::JOIN_MATCH << 26))
 		{
 			fprintf(stderr, "No available peers for initiating an ENet connection.\n");
 			return;
 		}
+		NetManager::match_code = std::string(match_code);
 	}
 
 	void handle_response(const ENetEvent &event, Buffer &buffer)
 	{
-		switch (buffer.Read<Response>())
+		switch (buffer.Read<Packet>())
 		{
-		case Response::MATCH_FOUND: {
-			std::string match_code = buffer.Read<std::string>();
-			printf("Match found! Code: %s\n", match_code.c_str());
+		case Packet::MATCH_FOUND: {
+			NetManager::match_code = buffer.Read<std::string>();
+			NetManager::on_match_found(NetManager::match_code.c_str());
 			break;
 		}
-		case Response::MATCH_NOT_FOUND:
-			printf("Match not found!\n");
+		case Packet::MATCH_NOT_FOUND: {
+			NetManager::on_match_not_found();
 			break;
-		case MATCH_FULL:
-			printf("Match is full!\n");
+		}
+		case Packet::MATCH_FULL: {
+			NetManager::on_match_full();
 			break;
-		case PUNCH_THROUGH:
+		}
+		case Packet::PUNCH_THROUGH: {
 			ENetAddress address = buffer.Read<ENetAddress>();
-			printf("Punching through to %u:%u\n", address.host, address.port);
+			char newPeerIp[40];
+			enet_address_get_host_ip(&address, newPeerIp, 40);
+			printf("Punching through to %s:%d\n", newPeerIp, address.port);
+			enemy = enet_host_connect(host, &address, 2, 0);
+			if (enemy == nullptr)
+			{
+				fprintf(stderr, "No available peers for initiating an ENet connection.\n");
+				on_punch_fail();
+				return;
+			}
+			Buffer b;
+			b.Write(Packet::CLIENT_PUNCHED);
+			b.Write(NetManager::match_code);
+			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+			enet_peer_send(event.peer, 0, packet);
+			break;
+		}
+		case Packet::PUNCH_DONE: {
+			enet_peer_disconnect(event.peer, 0);
+			on_punched(enemy);
+		}
+		case Packet::PEER_PING: {
+			Buffer b;
+			b.Write(Packet::PEER_PONG);
+			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+			enet_peer_send(event.peer, 0, packet);
+			break;
+		}
+		case Packet::PEER_PONG: {
+			on_peer_ping(elapsedTime);
+			waitForPong = false;
+			break;
+		}
+		default:
 			break;
 		}
 	}
 
-	void update()
+	void update(double deltaTime)
 	{
-		if (client == nullptr) return;
+		if (host == nullptr) return;
+
+		elapsedTime += deltaTime;
+		if (!waitForPong && enemy != nullptr && enemy->state == ENET_PEER_STATE_CONNECTED && elapsedTime > 0.5)
+		{
+			Buffer b;
+			b.Write(Packet::PEER_PING);
+			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+			enet_peer_send(enemy, 0, packet);
+			elapsedTime = 0;
+			waitForPong = true;
+		}
 
 		ENetEvent event;
-		while (enet_host_service(client, &event, 0) > 0) {
+		if (enet_host_service(host, &event, 0) > 0) {
 			char ip[40];
 			enet_address_get_host_ip(&event.peer->address, ip, 40);
 
@@ -91,7 +153,6 @@ namespace NetManager
 				break;
 			}
 			case ENET_EVENT_TYPE_RECEIVE: {
-				printf("Data received! %d bytes from %s\n", (int)event.packet->dataLength, ip);
 				Buffer b((char*)event.packet->data, event.packet->dataLength);
 				handle_response(event, b);
 				enet_packet_destroy(event.packet);
@@ -99,8 +160,7 @@ namespace NetManager
 			}
 			case ENET_EVENT_TYPE_NONE: {
 				break;
-			}
-			}
+			} }
 		}
 	}
 }

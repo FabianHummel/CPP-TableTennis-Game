@@ -13,7 +13,7 @@ private:
 public:
   	bool isFocused{};
 
-	TextInput(char *text, size_t max_length, const std::function<void(char*text)> &onInputChanged);
+	TextInput(char *text, size_t max_length, const std::function<void(char *text)> &onInputChanged);
 
 	void onInitialize() override;
 	void onUpdate(double deltaTime) override;

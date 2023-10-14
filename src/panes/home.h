@@ -6,7 +6,7 @@
 class HomePane : public Pane
 {
   private:
-	char *matchCode;
+	char matchCode[6] = { 0 };
 	GameMode currentGameMode{};
 	TextRenderer *gamemodeText{};
 
@@ -31,5 +31,7 @@ class HomePane : public Pane
 	void changeGameMode();
 	void previousGameMode();
 	void nextGameMode();
-	void startGame();
+	void startServer();
+	void joinServer();
+	void startSinglePlayer();
 };

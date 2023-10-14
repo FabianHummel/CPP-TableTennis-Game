@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 		window->drawBG(BG);
 		window->clear();
 
-		NetManager::update();
+		NetManager::update(deltaTime);
 		EcsManager::update(deltaTime);
 		GameManager::currentPane->onGui(deltaTime);
 		AnimationManager::update(deltaTime);
