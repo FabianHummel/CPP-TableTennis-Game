@@ -50,7 +50,6 @@ int main(int argc, char **argv)
 	FontManager::init();
 	GameManager::switchScene(nullptr, new HomePane(window));
 	currentTick = SDL_GetPerformanceCounter();
-	GameManager::currentPane->onStart();
 
 	bool running = true;
 	while (running)

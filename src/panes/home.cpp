@@ -6,6 +6,7 @@
 #include "../netmanager.h"
 #include "../utility/renderindexes.h"
 #include "game.h"
+#include "lobby.h"
 #include <functional>
 
 HomePane::HomePane(RenderWindow *window) : Pane(window)
@@ -22,7 +23,7 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 		->apply({RenderWindow::SCREEN_HEIGHT, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.5f, 0.5f}, -3.8, RenderIndexes::Menu::BACKGROUND);
 
 	gamemode = EcsManager::addEntity(new Entity("Gamemode"))
-		->addComponent(new TextRenderer(window->renderer, magic_enum::enum_name(GameMode::SINGLEPLAYER).data(), {40, 40, 40}))
+		->addComponent(new TextRenderer(window->renderer, magic_enum::enum_name(GameMode::SINGLEPLAYER).data(), FontManager::DEFAULT, {40, 40, 40}))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 700}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
@@ -51,18 +52,18 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 
 	settings = EcsManager::addEntity(new Entity("Start-Server-Button"))
 	    ->apply(false)
-	    ->usePreset(Presets::button(window->renderer, "Start server", [this] { startServer(); }))
+	    ->usePreset(Presets::button(window->renderer, "Start server", FontManager::DEFAULT, [this] { startServer(); }))
 	    ->transform
 	    ->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	start = EcsManager::addEntity(new Entity("Play-Button"))
-		->usePreset(Presets::button(window->renderer, "Play", [this] { startSinglePlayer(); }))
+		->usePreset(Presets::button(window->renderer, "Play", FontManager::DEFAULT, [this] { startSinglePlayer(); }))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	matchCodeInput = EcsManager::addEntity(new Entity("Match-Code-Input"))
 		->apply(false)
-		->usePreset(Presets::textinput(window->renderer, matchCode, sizeof(matchCode)-1))
+		->usePreset(Presets::textinput(window->renderer, matchCode, FontManager::DEFAULT, sizeof(matchCode)-1))
 	 	->getChild("Textinput.Text")
 		->transform
 	    ->apply({-120, 0, -10}, {0, 0}, {0.0f, 0.5f}, 0.0f, 0)
@@ -89,7 +90,6 @@ HomePane::~HomePane()
 	delete settings;
 	delete start;
 	delete matchCodeInput;
-	free(matchCode);
 }
 
 void HomePane::onStart()
@@ -162,21 +162,13 @@ void HomePane::nextGameMode()
 void HomePane::startServer()
 {
 	NetManager::on_match_found = [this](const char *match_code) {
-		strcpy(this->matchCode, match_code);
 		printf("Match found: %s\n", match_code);
-		// Play animation
+		EcsManager::clear();
+		Pane *pane = new LobbyPane(window, match_code);
+		GameManager::switchScene(this, pane);
 	};
 	NetManager::on_match_not_found = [this]() {
-		// Display error
-	};
-	NetManager::on_punch_fail = [this]() {
-		// Display error
-	};
-	NetManager::on_punched = [this](ENetPeer *) {
-		printf("Punched\n");
-	};
-	NetManager::on_peer_ping = [this](double rtt) {
-//		printf("Round trip time: %f\n", rtt);
+		fprintf(stderr, "Match not found\n");
 	};
 	NetManager::init_matchmaking();
 }
@@ -184,16 +176,21 @@ void HomePane::startServer()
 void HomePane::joinServer()
 {
 	NetManager::on_match_not_found = [this]() {
-		// Display error
+		fprintf(stderr, "Match not found\n");
 	};
 	NetManager::on_match_full = [this]() {
-		// Display error
+		fprintf(stderr, "Match full\n");
 	};
 	NetManager::on_punch_fail = [this]() {
-		// Display error
+		fprintf(stderr, "Punch failed\n");
 	};
-	NetManager::on_punched = [this](ENetPeer *) {
-		printf("Punched\n");
+	NetManager::on_punched = [this](ENetPeer *enemy) {
+		printf("Connected to %u:%u\n", enemy->address.host, enemy->address.port);
+		EcsManager::clear();
+		char matchCode[6] = { 0 };
+		strcpy(matchCode, this->matchCode);
+		Pane *pane = new LobbyPane(window, matchCode);
+		GameManager::switchScene(this, pane);
 	};
 	NetManager::on_peer_ping = [this](double rtt) {
 //		printf("Round trip time: %f\n", rtt);

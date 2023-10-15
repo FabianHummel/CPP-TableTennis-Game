@@ -1,9 +1,9 @@
 #include "index.h"
 
-Preset Presets::textinput(SDL_Renderer *renderer, char* text, size_t max_length)
+Preset Presets::textinput(SDL_Renderer *renderer, char* text, int ptSize, size_t max_length)
 {
 	return [=](Entity *target) {
-		TextRenderer *textRenderer = new TextRenderer(renderer, text, {64, 64, 64});
+		TextRenderer *textRenderer = new TextRenderer(renderer, text, ptSize, {64, 64, 64});
 
 		target
 			->addComponent(new TextInput(text, max_length, [=](char* text) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ecs.h"
+#include "../../fontmanager.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <SDL_pixels.h>
@@ -21,8 +22,9 @@ class TextRenderer : public Component
 
   public:
 	bool visible = true;
+	int ptSize = 42;
 
-	TextRenderer(SDL_Renderer *renderer, const char *text, SDL_Color color);
+	TextRenderer(SDL_Renderer *renderer, const char *text, int ptSize, SDL_Color color);
 
 	void onInitialize() override;
 	void onUpdate(double deltaTime) override;

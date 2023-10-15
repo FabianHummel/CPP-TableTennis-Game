@@ -19,7 +19,6 @@ namespace GameManager
 
 	void switchScene(Pane *from, Pane *to)
 	{
-
 		delete from;
 
 		if (to == nullptr)
@@ -29,6 +28,7 @@ namespace GameManager
 
 		currentPane = to;
 		EcsManager::initialize();
+		GameManager::currentPane->onStart();
 		EcsManager::start();
 	}
 }

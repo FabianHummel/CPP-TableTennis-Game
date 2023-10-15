@@ -2,7 +2,7 @@
 #include "random"
 #include "../../animationmanager.h"
 
-Preset Presets::button(SDL_Renderer *renderer, const char *text, const std::function<void()> &onClick)
+Preset Presets::button(SDL_Renderer *renderer, const char *text, int ptSize, const std::function<void()> &onClick)
 {
 	return [=](Entity *target) {
 		NineSlice *normal = new NineSlice("res/button.png", { 32, 32, 48, 32 }, renderer);
@@ -42,7 +42,7 @@ Preset Presets::button(SDL_Renderer *renderer, const char *text, const std::func
 			->addComponent(normal)
 			->addComponent(hover)
 			->addChild((new Entity("Button.Text"))
-				->addComponent(new TextRenderer(renderer, text, {255, 255, 255}))
+				->addComponent(new TextRenderer(renderer, text, ptSize, {255, 255, 255}))
 				->transform
 				->apply({0, 0, -10}, {0, 0}, {0.5f, 0.5f}, 0.0f, 0));
 	};

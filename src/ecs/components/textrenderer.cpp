@@ -1,5 +1,4 @@
 #include "textrenderer.h"
-#include "../../fontmanager.h"
 #include <SDL.h>
 #include <SDL_events.h>
 #include <SDL_rect.h>
@@ -9,8 +8,9 @@
 #include <cstdlib>
 #include <string>
 
-TextRenderer::TextRenderer(SDL_Renderer *renderer, const char *text, SDL_Color color)
+TextRenderer::TextRenderer(SDL_Renderer *renderer, const char *text, int ptSize, SDL_Color color)
 {
+	this->ptSize = ptSize;
 	this->renderer = renderer;
 	this->text = text;
 	this->color = color;
@@ -28,6 +28,7 @@ void TextRenderer::onUpdate(double deltaTime)
 	if (!visible || !parent->isVisible()) return;
 
 	int w, h;
+	TTF_SetFontSize(FontManager::main, ptSize);
 	TTF_SizeText(FontManager::main, text, &w, &h);
 
 	SDL_FRect dstrect;
