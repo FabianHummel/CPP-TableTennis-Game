@@ -10,6 +10,7 @@ namespace NetManager
 	std::function<void()> on_punch_fail{};
 	std::function<void(ENetPeer *enemy)> on_punched{};
 	std::function<void(double rtt)> on_peer_ping{};
+	std::function<void()> on_enemy_data_received{};
 
 	ENetPeer *enemy;
 	ENetHost *host;
@@ -115,6 +116,10 @@ namespace NetManager
 		case Packet::PEER_PONG: {
 			on_peer_ping(elapsedTime);
 			waitForPong = false;
+			break;
+		}
+		case Packet::PEER_ENEMY_DATA: {
+			on_enemy_data_received();
 			break;
 		}
 		default:

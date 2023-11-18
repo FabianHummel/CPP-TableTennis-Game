@@ -14,6 +14,7 @@ namespace NetManager
 	extern std::function<void()> on_punch_fail;
 	extern std::function<void(ENetPeer *enemy)> on_punched;
 	extern std::function<void(double rtt)> on_peer_ping;
+	extern std::function<void()> on_enemy_data_received;
 
 	void init_matchmaking();
 	void join_match(const char *match_code);

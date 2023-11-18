@@ -17,5 +17,8 @@ class LobbyPane : public Pane
 
   public:
 	explicit LobbyPane(RenderWindow *window, const char *match_code);
+	explicit LobbyPane(RenderWindow *window, const char *match_code, ENetPeer *enemy);
 	~LobbyPane();
+
+	void onEvent(SDL_Event event) override;
 };

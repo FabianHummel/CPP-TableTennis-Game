@@ -15,6 +15,7 @@ enum Packet : enet_uint32
 //	Client -> Client
 	PEER_PING,
 	PEER_PONG,
+	PEER_ENEMY_DATA,
 
 //	Server -> Client (response)
 	MATCH_NOT_FOUND,

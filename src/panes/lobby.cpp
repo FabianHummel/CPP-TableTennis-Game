@@ -6,6 +6,11 @@
 #include "../utility/renderindexes.h"
 #include "home.h"
 
+LobbyPane::LobbyPane(RenderWindow *window, const char *match_code, ENetPeer *enemy) : LobbyPane(window, match_code)
+{
+	this->enemy = enemy; // Only for the second player to have networking context available
+}
+
 LobbyPane::LobbyPane(RenderWindow *window, const char *match_code) : Pane(window)
 {
 	NetManager::on_punch_fail = [this]() {
@@ -13,22 +18,27 @@ LobbyPane::LobbyPane(RenderWindow *window, const char *match_code) : Pane(window
 	};
 	NetManager::on_punched = [this](ENetPeer *enemy) {
 		this->enemy = enemy;
+
+		TextRenderer *pTextRenderer = versus->getChild("Versus.Opponent")->getComponent<TextRenderer>();
+		pTextRenderer->setText("Enemy");
 	};
 	NetManager::on_peer_ping = [this](double rtt) {
 		//	printf("Round trip time: %f\n", rtt);
+	};
+
+	NetManager::on_enemy_data_received = [this](/*TODO: data*/) {
+		// TODO: set text of text renderer
 	};
 
 	versus = EcsManager::addEntity(new Entity("Versus"))
 		->addComponent(new SpriteRenderer("res/versus.png", window->renderer))
 	    ->addComponent(new MenuTitle())
 		->transform
-		->apply({RenderWindow::SCREEN_CENTER_X, 0, 200}, {RenderWindow::SCREEN_WIDTH, 314}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::TITLE)
-	 	->addChild((new Entity("Versus.Player1"))
-	    	->addComponent(new TextRenderer(window->renderer, "You", FontManager::DEFAULT, {255, 255, 255}))
-			->transform->apply({-180, 0, 73}, {0, 0}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI))
-		->addChild((new Entity("Versus.Player2"))
-	        ->addComponent(new TextRenderer(window->renderer, "Enemy", FontManager::DEFAULT, {255, 255, 255}))
-			->transform->apply({180, 0, -93}, {0, 0}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI));
+		->apply({RenderWindow::SCREEN_CENTER_X, 0, 230}, {700, 348}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::TITLE)
+		->addChild((new Entity("Versus.Opponent"))
+			->addComponent(new TextRenderer(window->renderer, "Waiting...", FontManager::BIG, {64, 64, 64}))
+			->transform
+			->apply({0, 0, 30}, {0, 0}, {0.5f, 0.5f}, 0.0f, 0));
 
 	matchCodeButton = EcsManager::addEntity(new Entity("Invite-Code"))
 		->usePreset(Presets::button(window->renderer, match_code, FontManager::BIG, [match_code] { SDL_SetClipboardText(match_code); }))
@@ -63,6 +73,20 @@ LobbyPane::~LobbyPane()
 	delete matchCodeButton;
 	delete background;
 	delete backButton;
+}
+
+void LobbyPane::onEvent(SDL_Event event)
+{
+	switch (event.type)
+	{
+	case SDL_KEYDOWN:
+		switch (event.key.keysym.sym)
+		{
+		case SDLK_ESCAPE:
+			this->back();
+			break;
+		}
+	}
 }
 
 void LobbyPane::back()

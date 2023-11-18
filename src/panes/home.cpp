@@ -111,7 +111,21 @@ void HomePane::onEvent(SDL_Event event)
 			nextGameMode();
 			break;
 		case SDLK_RETURN:
-			startSinglePlayer();
+			if (this->currentGameMode == GameMode::SINGLEPLAYER)
+			{
+				startSinglePlayer();
+			}
+			else if (this->currentGameMode == GameMode::MULTIPLAYER)
+			{
+				if (this->matchCode[0] == '\0')
+				{
+					startServer();
+				}
+				else
+				{
+					joinServer();
+				}
+			}
 			break;
 		}
 	}
@@ -185,9 +199,15 @@ void HomePane::joinServer()
 		fprintf(stderr, "Punch failed\n");
 	};
 	NetManager::on_punched = [this](ENetPeer *enemy) {
+		// TODO: Send client data (name, level, etc...)
+		Buffer b;
+		b.Write(Packet::PEER_ENEMY_DATA);
+		ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+		enet_peer_send(enemy, 0, packet);
+
 		printf("Connected to %u:%u\n", enemy->address.host, enemy->address.port);
 		EcsManager::clear();
-		char matchCode[6] = { 0 };
+		char* matchCode = (char*) malloc(6);
 		strcpy(matchCode, this->matchCode);
 		Pane *pane = new LobbyPane(window, matchCode);
 		GameManager::switchScene(this, pane);
