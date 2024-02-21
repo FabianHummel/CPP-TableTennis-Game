@@ -1,7 +1,8 @@
 #ifndef ECS_H
 #define ECS_H
 
-#include <SDL_events.h>
+#define SDL_DISABLE_IMMINTRIN_H
+#include <SDL.h>
 #include <SDL_image.h>
 #include "unordered_map"
 #include "vector"
