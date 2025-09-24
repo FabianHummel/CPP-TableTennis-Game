@@ -1,6 +1,6 @@
-# C++ Table Tennis
+# Table Tennis
 
-<img height="400" alt="image" src="https://github.com/user-attachments/assets/ff4e9e26-8c80-41ae-9e46-ce2390999706" align="right" />
+<img width="42%" alt="image" src="https://github.com/user-attachments/assets/ff4e9e26-8c80-41ae-9e46-ce2390999706" align="right" />
 
 Inspired by [**Twini-Golf**](https://polymars.itch.io/twini-golf) by Polymars, this project is a work in progress Table Tennis game made in SDL2 (C++).
 This is my first C++ project ever, and I made this game to learn the basics of the programming language. (it may also contain a lot of memory leaks, but I don't know how to write leak-free cpp code)
