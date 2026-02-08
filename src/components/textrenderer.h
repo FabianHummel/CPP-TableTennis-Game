@@ -1,9 +1,6 @@
 #pragma once
 
-#include "../ecs.h"
-#include "../../fontmanager.h"
-#include <SDL.h>
-#include <SDL_events.h>
+#include "../componentsystem.h"
 #include <SDL_pixels.h>
 #include <SDL_render.h>
 #include <SDL_ttf.h>

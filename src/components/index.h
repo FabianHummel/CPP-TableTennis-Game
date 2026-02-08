@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ballmovement.h"
 #include "bubbledrawer.h"
 #include "button.h"

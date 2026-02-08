@@ -1,5 +1,5 @@
 #include "textinput.h"
-#include "../../cursormanager.h"
+#include "../cursormanager.h"
 
 TextInput::TextInput(char *text, size_t max_length, const std::function<void(char*text)> &onInputChanged)
 {

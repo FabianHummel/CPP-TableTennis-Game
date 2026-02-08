@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../ecs.h"
 #include "../components/index.h"
 
 namespace Presets

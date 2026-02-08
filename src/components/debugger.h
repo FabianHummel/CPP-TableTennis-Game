@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../ecs.h"
-#include <SDL.h>
 #include <SDL_render.h>
+
+#include "transform.h"
 
 class Debugger : public Component
 {

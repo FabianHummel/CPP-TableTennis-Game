@@ -1,5 +1,7 @@
 #include "nineslice.h"
 
+#include <SDL_image.h>
+
 NineSlice::NineSlice(const char *img, const Positions positions, SDL_Renderer *renderer)
 {
 	this->renderer = renderer;

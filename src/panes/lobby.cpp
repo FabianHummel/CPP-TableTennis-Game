@@ -1,8 +1,9 @@
 #include "lobby.h"
-#include "../ecs/presets/index.h"
+#include "../presets/index.h"
 #include "../ecsmanager.h"
 #include "../gamemanager.h"
 #include "../netmanager.h"
+#include "../fontmanager.h"
 #include "../utility/renderindexes.h"
 #include "home.h"
 

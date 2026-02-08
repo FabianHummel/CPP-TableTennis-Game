@@ -1,6 +1,6 @@
 #include "index.h"
 #include "random"
-#include "../../animationmanager.h"
+#include "../animationmanager.h"
 
 Preset Presets::button(SDL_Renderer *renderer, const char *text, int ptSize, const std::function<void()> &onClick)
 {

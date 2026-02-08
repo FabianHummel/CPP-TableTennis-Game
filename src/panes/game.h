@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pane.h"
-#include <SDL_events.h>
+#include "../componentsystem.h"
 
 class GamePane : public Pane
 {

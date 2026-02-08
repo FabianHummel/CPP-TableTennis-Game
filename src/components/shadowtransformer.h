@@ -1,8 +1,6 @@
 #pragma once
 
-#include "../ecs.h"
-#include "spriterenderer.h"
-#include <SDL_events.h>
+#include "../componentsystem.h"
 
 class ShadowTransformer : public Component
 {

@@ -1,11 +1,6 @@
 #pragma once
 
-#include "../ecs/components/index.h"
-#include "../ecs/ecs.h"
 #include "../utility/renderwindow.h"
-#include <SDL.h>
-#include <SDL_events.h>
-#include <vector>
 
 class Pane
 {

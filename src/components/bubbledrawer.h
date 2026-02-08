@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ecs.h"
+#include "../componentsystem.h"
 #include <SDL.h>
 #include <SDL_render.h>
 

@@ -1,5 +1,7 @@
 #include "spriterenderer.h"
 
+#include <SDL_image.h>
+
 SpriteRenderer::SpriteRenderer(const char *img, SDL_Renderer *renderer)
 {
 	this->renderer = renderer;

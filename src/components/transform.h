@@ -1,10 +1,9 @@
 #pragma once
 
-#include "../../utility/vector2int.h"
-#include "../../utility/vector3.h"
-#include "../ecs.h"
+#include "../utility/vector2int.h"
+#include "../utility/vector3.h"
+#include "../componentsystem.h"
 #include <SDL_rect.h>
-#include <SDL_render.h>
 
 class Transform : public Component
 {

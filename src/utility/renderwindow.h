@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "vector"
+#define SDL_DISABLE_IMMINTRIN_H
 #include <SDL2/SDL.h>
 
 class RenderWindow

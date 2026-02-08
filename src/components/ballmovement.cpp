@@ -1,10 +1,9 @@
 #include "ballmovement.h"
-#include "../../gamemanager.h"
-#include "../../utility/mathutil.h"
-#include "../../utility/renderindexes.h"
-#include "spriterenderer.h"
+#include "../gamemanager.h"
+#include "../soundmanager.h"
+#include "../utility/mathutil.h"
+#include "../utility/renderindexes.h"
 #include <algorithm>
-#include <cstdio>
 
 void BallMovement::onInitialize()
 {

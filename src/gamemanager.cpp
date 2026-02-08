@@ -2,6 +2,8 @@
 #include "ecsmanager.h"
 #include <cstdlib>
 
+#include "components/index.h"
+
 namespace GameManager
 {
 	Pane *currentPane = {};

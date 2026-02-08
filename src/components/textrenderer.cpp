@@ -1,12 +1,9 @@
+#include "../fontmanager.h"
 #include "textrenderer.h"
-#include <SDL.h>
-#include <SDL_events.h>
 #include <SDL_rect.h>
 #include <SDL_render.h>
 #include <SDL_surface.h>
 #include <SDL_ttf.h>
-#include <cstdlib>
-#include <string>
 
 TextRenderer::TextRenderer(SDL_Renderer *renderer, const char *text, int ptSize, SDL_Color color)
 {

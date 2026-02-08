@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs/ecs.h"
+#include "componentsystem.h"
 #include "functional"
 
 typedef std::function<void(double)> Animation;

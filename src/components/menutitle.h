@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ecs.h"
+#include "../componentsystem.h"
 
 class MenuTitle : public Component
 {

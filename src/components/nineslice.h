@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ecs.h"
+#include "../componentsystem.h"
 
 struct Positions
 {

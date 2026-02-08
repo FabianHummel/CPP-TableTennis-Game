@@ -1,7 +1,9 @@
 #pragma once
 
 #include "pane.h"
+#include "../componentsystem.h"
 #include "../game/gamemode.h"
+#include "../components/textrenderer.h"
 
 class HomePane : public Pane
 {

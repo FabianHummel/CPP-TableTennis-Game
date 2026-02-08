@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pane.h"
+#include "../componentsystem.h"
 #include <enet/enet.h>
 
 class LobbyPane : public Pane

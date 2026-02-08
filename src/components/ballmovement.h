@@ -1,10 +1,8 @@
 #pragma once
 
-#include "../../game/tableside.h"
-#include "../../soundmanager.h"
-#include "../../utility/vector3.h"
-#include "../ecs.h"
-#include "spriterenderer.h"
+#include "../game/tableside.h"
+#include "../utility/vector3.h"
+#include "../componentsystem.h"
 
 class BallMovement : public Component
 {

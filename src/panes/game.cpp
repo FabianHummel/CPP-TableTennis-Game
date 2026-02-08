@@ -1,6 +1,7 @@
 #include "game.h"
 #include "../ecsmanager.h"
 #include "../utility/renderindexes.h"
+#include "../components/index.h"
 
 GamePane::GamePane(RenderWindow *window) : Pane(window)
 {

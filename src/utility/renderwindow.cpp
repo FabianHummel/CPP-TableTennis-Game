@@ -2,7 +2,6 @@
 // Created by Fabian Hummel on 16.04.22.
 //
 
-#define SDL_DISABLE_IMMINTRIN_H
 #include "renderwindow.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_hints.h>

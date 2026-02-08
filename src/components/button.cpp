@@ -1,5 +1,5 @@
 #include "button.h"
-#include "../../cursormanager.h"
+#include "../cursormanager.h"
 #include <SDL_events.h>
 #include <SDL_mouse.h>
 
