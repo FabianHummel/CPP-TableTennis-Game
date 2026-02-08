@@ -1,20 +1,17 @@
-# C++ Table Tennis
+<img width="42%" alt="image" src="https://github.com/user-attachments/assets/ff4e9e26-8c80-41ae-9e46-ce2390999706" align="right" />
+
+<img width="40%" alt="image" src="https://github.com/user-attachments/assets/9c1dc719-4fc2-4a46-9f2c-b99263f83e94" />
+
 Inspired by [**Twini-Golf**](https://polymars.itch.io/twini-golf) by Polymars, this project is a work in progress Table Tennis game made in SDL2 (C++).
 This is my first C++ project ever, and I made this game to learn the basics of the programming language. (it may also contain a lot of memory leaks, but I don't know how to write leak-free cpp code)
 
-<br>
-
-## 📚 Libraries
+### 📚 Libraries
 This project takes advantage of the [**SDL2.0 (Simple DirectMedia Layer v2) Framework**](https://www.libsdl.org/) together with the extensions [**SDL_image**](http://wiki.libsdl.org/Libraries#sdl_image) and [**SDL_mixer**](http://wiki.libsdl.org/Libraries#sdl_mixer)
 
-<br>
-
-## 📦 Download
+### 📦 Download
 Program will later be released as a packaged program.
 
-<br>
-
-## 🔨 Building
+### 🔨 Building
 1. Download and install SDL2.0
 2. Download and install libraries / dependencies
    * SDL_image [(docs)](https://www.libsdl.org/projects/SDL_image/docs/index.html)
@@ -24,24 +21,17 @@ Program will later be released as a packaged program.
 4. The output will be located in `./cmake-build-default` together with the resources.
 5. Run the application with `./TableTennis`
 
-<br>
-
-## 📝 Notes
+### 📝 Notes
 * Because I'm using a retina display, the game may not be optimized for other displays. (The game calculates with only half the resolution, so on 'normal displays' the textures may only fill up a quarter of the screen).
-<br>
 
-<br>
-
-## 🎯 Coming soon
+### 🎯 Coming soon
 * Start / Options menu
 * Play against computer
 * *multiplayer maybe maybe maybe...*
 * Suitable logo
 * Music
 
-<br>
-
-## 💡 Concept
+### 💡 Concept
 The game uses a custom-made [**ECS (Entity Component System)**](https://en.wikipedia.org/wiki/Entity_component_system) which is very small in code size and does not require component signatures, multiple maps or registry. Every entity has one simple unordered map of components.
 
 ```cpp
