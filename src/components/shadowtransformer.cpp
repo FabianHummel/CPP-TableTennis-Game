@@ -17,7 +17,6 @@ void ShadowTransformer::onUpdate(double deltaTime)
 {
 	// TODO: Push new values instead of pulling them! (Prevent lag behind)
 	transform->setX(ball->getX() + ball->getY());
-	transform->setY((float)-transform->getScaleY() / 2);
 	transform->setZ(ball->getZ());
 	transform->setI(ball->getI() - 1);
 

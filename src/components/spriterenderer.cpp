@@ -24,16 +24,9 @@ void SpriteRenderer::onUpdate(double deltaTime)
 {
 	if (!visible || !parent->isVisible()) return;
 
-	SDL_FRect dstrect;
-	dstrect.x = transform->getX() - transform->getScaleX() * transform->getAnchor().x;
-	dstrect.y = -transform->getY() + transform->getZ() - transform->getScaleY() * transform->getAnchor().y;
-	dstrect.w = transform->getScaleX();
-	dstrect.h = transform->getScaleY();
-
-	SDL_FPoint anchor = {transform->getAnchor().x * transform->getScaleX(), transform->getAnchor().y * transform->getScaleY()};
-
+	SDL_FRect dstrect = transform->asRect();
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
-	SDL_RenderCopyExF(renderer, texture, srcrect, &dstrect, transform->getRotation(), &anchor, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(renderer, texture, srcrect, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
 }
 
 void SpriteRenderer::onDelete()

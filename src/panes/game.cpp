@@ -6,19 +6,18 @@
 GamePane::GamePane(RenderWindow *window) : Pane(window)
 {
 	table = EcsManager::addEntity(new Entity("Table"))
-	  ->addComponent(new SpriteRenderer("res/table.png", window->renderer))
-	  ->transform
-	  ->apply({0, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Game::TABLE);
+		->transform
+		->apply({0, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Game::TABLE)
+		->addComponent(new SpriteRenderer("res/table.png", window->renderer));
 
 	net = EcsManager::addEntity(new Entity("Net"))
-		->addComponent(new SpriteRenderer("res/net.png", window->renderer))
 		->transform
-		->apply({RenderWindow::SCREEN_CENTER_X, 0, RenderWindow::SCREEN_CENTER_Y - 100},
-		        {RenderWindow::SCREEN_WIDTH, 129}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Game::NET);
+		->apply({RenderWindow::SCREEN_CENTER_X, 0, RenderWindow::SCREEN_CENTER_Y - 100}, {RenderWindow::SCREEN_WIDTH, 129}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Game::NET)
+		->addComponent(new SpriteRenderer("res/net.png", window->renderer));
 
 	shadow = EcsManager::addEntity(new Entity("Shadow"))
 		->transform
-		->apply({0, 0, 0}, {40, 40}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Game::DEFAULT)
+		->apply({0, 0, 0}, {40, 40}, {0.5f, 0.0f}, 0.0f, RenderIndexes::Game::DEFAULT)
 		->addComponent(new SpriteRenderer("res/shadow.png", window->renderer));
 
 	ball = EcsManager::addEntity(new Entity("Ball"))
@@ -45,9 +44,9 @@ GamePane::GamePane(RenderWindow *window) : Pane(window)
 		->addComponent(new SpriteRenderer("res/powerbox.png", window->renderer));
 
 	prediction = EcsManager::addEntity(new Entity("Prediction"))
-		->addComponent(new Prediction("res/predictionsegment.png", window->renderer))
 		->transform
-		->apply({0, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Game::PREDICTION);
+		->apply({0, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Game::PREDICTION)
+		->addComponent(new Prediction("res/predictionsegment.png", window->renderer));
 }
 
 GamePane::~GamePane()

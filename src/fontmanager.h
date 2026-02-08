@@ -8,6 +8,7 @@ namespace FontManager
 	constexpr int BIG = 64;
 
 	extern TTF_Font *main;
+	extern TTF_Font *mono;
 	void init();
 	void close();
 };

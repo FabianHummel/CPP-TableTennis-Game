@@ -5,17 +5,19 @@
 namespace FontManager
 {
 	TTF_Font *main = {};
+	TTF_Font *mono = {};
 
 	void init()
 	{
-		TTF_Font *mainFont = TTF_OpenFont("res/fonts/Quicksand-Bold.ttf", 42);
+		main = TTF_OpenFont("res/fonts/Quicksand-Bold.ttf", 42);
+		mono = TTF_OpenFont("res/fonts/RobotoMono-Regular.ttf", 42);
+
 		printf("Initialized!\n%s\n", TTF_GetError());
-		TTF_SetFontStyle(mainFont, TTF_STYLE_NORMAL);
-		FontManager::main = mainFont;
+		TTF_SetFontStyle(main, TTF_STYLE_NORMAL);
 	}
 
 	void close()
 	{
-		TTF_CloseFont(FontManager::main);
+		TTF_CloseFont(main);
 	}
 }

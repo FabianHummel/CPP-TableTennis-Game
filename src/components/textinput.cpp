@@ -1,5 +1,6 @@
 #include "textinput.h"
 #include "../cursormanager.h"
+#include "../keyboardmanager.h"
 
 TextInput::TextInput(char *text, size_t max_length, const std::function<void(char*text)> &onInputChanged)
 {
@@ -23,9 +24,13 @@ void TextInput::onUpdate(double deltaTime)
 	y *= 2;
 
 	if (transform->inTransformBounds(x, y))
+	{
 		CursorManager::requestCursor(CursorManager::inputCursor);
+	}
 	else
+	{
 		CursorManager::requestCursor(CursorManager::arrowCursor);
+	}
 }
 
 void TextInput::onEvent(SDL_Event event)
@@ -40,15 +45,11 @@ void TextInput::onEvent(SDL_Event event)
 	switch (event.type)
 	{
 	case SDL_MOUSEBUTTONDOWN:
+		this->isFocused = false;
 		if (transform->inTransformBounds(x, y))
 		{
-			SDL_StartTextInput();
+			KeyboardManager::isTextInputRequested = true;
 			this->isFocused = true;
-		}
-		else
-		{
-			SDL_StopTextInput();
-			this->isFocused = false;
 		}
 		break;
 	case SDL_TEXTINPUT:

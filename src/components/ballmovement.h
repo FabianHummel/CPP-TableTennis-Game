@@ -13,8 +13,8 @@ class BallMovement : public Component
 	constexpr static double IDLE_TIME = 1;
 
   public:
-	constexpr static float GRAVITY = 0.2f;
-	constexpr static float FRICTION = 5.0f;
+	constexpr static double GRAVITY = 0.2;
+	constexpr static double FRICTION = 5.0;
 
 	bool fellOff = false;
 	bool idle = false;

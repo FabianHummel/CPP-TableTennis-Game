@@ -3,7 +3,6 @@
 #include "../soundmanager.h"
 #include "../utility/mathutil.h"
 #include "../utility/renderindexes.h"
-#include <algorithm>
 
 void BallMovement::onInitialize()
 {
@@ -105,7 +104,7 @@ void BallMovement::checkGround(double deltaTime)
 		transform->setY(0);
 		velocity.y *= -0.8f;
 
-		if (velocity.y < 0.5f)
+		if (velocity.y < 1.0f)
 		{
 			velocity.y = 0.0f;
 		}

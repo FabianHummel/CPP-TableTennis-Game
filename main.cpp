@@ -12,6 +12,8 @@
 #include <enet/enet.h>
 #include <cstdio>
 
+#include "src/keyboardmanager.h"
+
 const SDL_Color BG = {203, 211, 235, 255};
 
 uint64_t currentTick = 0;
@@ -71,8 +73,10 @@ int main(int argc, char **argv)
 			}
 
 			default:
+				KeyboardManager::preEvent(event);
 				GameManager::currentPane->onEvent(event);
 				EcsManager::event(event);
+				KeyboardManager::postEvent();
 			}
 		}
 

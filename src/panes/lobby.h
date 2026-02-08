@@ -14,11 +14,13 @@ class LobbyPane : public Pane
 
 	ENetPeer *enemy;
 
+	const char *playerName;
+
 	void back();
 
   public:
-	explicit LobbyPane(RenderWindow *window, const char *match_code);
-	explicit LobbyPane(RenderWindow *window, const char *match_code, ENetPeer *enemy);
+	explicit LobbyPane(RenderWindow *window, const char *match_code, const char *player_name);
+	explicit LobbyPane(RenderWindow *window, const char *match_code, const char *player_name, ENetPeer *enemy);
 	~LobbyPane();
 
 	void onEvent(SDL_Event event) override;

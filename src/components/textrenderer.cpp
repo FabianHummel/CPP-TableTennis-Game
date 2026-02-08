@@ -27,17 +27,11 @@ void TextRenderer::onUpdate(double deltaTime)
 	int w, h;
 	TTF_SetFontSize(FontManager::main, ptSize);
 	TTF_SizeText(FontManager::main, text, &w, &h);
+	transform->setScale({(float)w, (float)h});
 
-	SDL_FRect dstrect;
-	dstrect.x = transform->getX() - w * transform->getAnchor().x;
-	dstrect.y = transform->getZ() - h * transform->getAnchor().y;
-	dstrect.w = w;
-	dstrect.h = h;
-
-	SDL_FPoint anchor = {transform->getAnchor().x * w, transform->getAnchor().y * h};
-
+	SDL_FRect dstrect = transform->asRect();
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
-	SDL_RenderCopyExF(renderer, texture, nullptr, &dstrect, transform->getRotation(), &anchor, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(renderer, texture, nullptr, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
 }
 
 void TextRenderer::setText(const char *text)

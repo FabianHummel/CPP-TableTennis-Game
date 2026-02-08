@@ -9,7 +9,7 @@ Preset Presets::button(SDL_Renderer *renderer, const char *text, int ptSize, con
 		NineSlice *hover = new NineSlice("res/buttonhover.png", { 32, 32, 40, 32 }, renderer);
 		hover->visible = false;
 
-		std::function<void()> onMouseEnter = [=]() {
+		std::function onMouseEnter = [=] {
 			normal->visible = false;
 			hover->visible = true;
 			target->transform->mvByZ(4);
@@ -23,7 +23,7 @@ Preset Presets::button(SDL_Renderer *renderer, const char *text, int ptSize, con
 			}, Easings::easeOutElastic, 0.5);
 		};
 
-		std::function<void()> onMouseExit = [=]() {
+		std::function onMouseExit = [=] {
 			normal->visible = true;
 			hover->visible = false;
 			target->transform->mvByZ(-4);
@@ -41,7 +41,7 @@ Preset Presets::button(SDL_Renderer *renderer, const char *text, int ptSize, con
 			->addComponent(new Button(nullptr, onClick, onMouseEnter, onMouseExit))
 			->addComponent(normal)
 			->addComponent(hover)
-			->addChild((new Entity("Button.Text"))
+			->addChild((new Entity("Text"))
 				->addComponent(new TextRenderer(renderer, text, ptSize, {255, 255, 255}))
 				->transform
 				->apply({0, 0, -10}, {0, 0}, {0.5f, 0.5f}, 0.0f, 0));

@@ -75,7 +75,7 @@ void Prediction::onPredict(Vector3 &force)
 	// 	progress += segment_length;
 	// }
 
-	int amount = total_length / segment_length;
+	double amount = total_length / segment_length;
 
 	for (int i = 0; i < amount; i++)
 	{
@@ -83,25 +83,25 @@ void Prediction::onPredict(Vector3 &force)
 		rect.w = 40.0;
 		rect.h = 40.0;
 
-		double x = px / amount * i;
-		double z = pz / amount * i;
+		float x = (float)px / amount * i;
+		float z = (float)pz / amount * i;
 		if (force.x < 0.0)
 		{
-			rect.x = -x + ball->getX() - ball->getScaleX() * ball->getAnchor().x - 5;
+			rect.x = -x + ball->getX() - 20;
 		}
 		else
 		{
-			rect.x = x + ball->getX() - ball->getScaleX() * ball->getAnchor().x - 5;
+			rect.x = x + ball->getX() - 20;
 		}
 
-		double h = f(z, force.z, force.y, ball->getY());
+		float h = f(z, force.z, force.y, ball->getY());
 		if (force.z < 0.0)
 		{
-			rect.y = -z + ball->getZ() - ball->getScaleY() * ball->getAnchor().y - abs(h) - 5;
+			rect.y = -z + ball->getZ() - abs(h) - 20;
 		}
 		else
 		{
-			rect.y = z + ball->getZ() - ball->getScaleY() * ball->getAnchor().y - abs(h) - 5;
+			rect.y = z + ball->getZ() - abs(h) - 20;
 		}
 
 		// double angleX = atan(v(x, force.x, force.y)) * 180.0 / 3.1415;

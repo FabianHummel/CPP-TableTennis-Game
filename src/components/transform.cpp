@@ -1,8 +1,8 @@
 #include "transform.h"
 #include <SDL_rect.h>
 
-Transform::Transform(const Vector3 &position, const Vector2Int &scale, const SDL_FPoint &anchor, float angle,
-                     int zIndex)
+Transform::Transform(const Vector3 &position, const Vector2 &scale, const SDL_FPoint &anchor, const float angle,
+                     const int zIndex)
 	: position(position), scale(scale), anchor(anchor), rotation(angle), zIndex(zIndex)
 {
 }
@@ -26,17 +26,17 @@ Vector3 Transform::getPosition() const
 	return position;
 }
 
-void Transform::setX(float nX)
+void Transform::setX(const float nX)
 {
 	this->position.x = nX;
 }
 
-void Transform::setY(float nY)
+void Transform::setY(const float nY)
 {
 	this->position.y = nY;
 }
 
-void Transform::setZ(float nZ)
+void Transform::setZ(const float nZ)
 {
 	this->position.z = nZ;
 }
@@ -71,17 +71,17 @@ float Transform::getZ() const
 	return z;
 }
 
-void Transform::mvByX(float v)
+void Transform::mvByX(const float v)
 {
 	position.x += v;
 }
 
-void Transform::mvByY(float v)
+void Transform::mvByY(const float v)
 {
 	position.y += v;
 }
 
-void Transform::mvByZ(float v)
+void Transform::mvByZ(const float v)
 {
 	position.z += v;
 }
@@ -91,67 +91,61 @@ void Transform::printPosition() const
 	printf("%s: Position: %f, %f, %f\n", parent->name, position.x, position.y, position.z);
 }
 
-void Transform::setScale(const Vector2Int &v)
+void Transform::setScale(const Vector2 &v)
 {
 	this->scale = v;
 }
 
-Vector2Int Transform::getScale() const
+Vector2 Transform::getScale() const
 {
-	Vector2Int scale = this->scale;
-	if (parent && parent->parent)
-		scale += parent->parent->transform->getScale();
+	Vector2 scale = this->scale;
 	if (animation)
 		scale += animation->getScale();
 	return scale;
 }
 
-void Transform::setScaleX(int nX)
+void Transform::setScaleX(const float nX)
 {
 	this->scale.x = nX;
 }
 
-void Transform::setScaleY(int nY)
+void Transform::setScaleY(const float nY)
 {
 	this->scale.y = nY;
 }
 
-int Transform::getScaleX() const
+float Transform::getScaleX() const
 {
-	int x = scale.x;
-	if (parent && parent->parent)
-		x += parent->parent->transform->getScaleX();
+	float x = scale.x;
 	if (animation)
 		x += animation->getScaleX();
 	return x;
 }
 
-int Transform::getScaleY() const
+float Transform::getScaleY() const
 {
-	int y = scale.y;
-	if (parent && parent->parent)
-		y += parent->parent->transform->getScaleY();
+	float y = scale.y;
 	if (animation)
 		y += animation->getScaleY();
 	return y;
 }
 
-void Transform::mvByScaleX(int v)
+void Transform::mvByScaleX(const float v)
 {
 	scale.x += v;
 }
 
-void Transform::mvByScaleY(int v)
+void Transform::mvByScaleY(const float v)
 {
 	scale.y += v;
 }
 
 void Transform::printScale() const
 {
-	printf("%s: Scale: %d, %d\n", parent->name, scale.x, scale.y);
+	printf("%s: Scale: %f, %f\n", parent->name, scale.x, scale.y);
 }
 
-void Transform::setRotation(float v)
+void Transform::setRotation(const float v)
 {
 	this->rotation = v;
 }
@@ -171,7 +165,7 @@ void Transform::printRotation() const
 	printf("%s: Rotation: %f\n", parent->name, rotation);
 }
 
-void Transform::setI(int v)
+void Transform::setI(const int v)
 {
 	this->zIndex = v;
 }
@@ -191,7 +185,7 @@ void Transform::printI() const
 	printf("%s: Z-Index: %d\n", parent->name, zIndex);
 }
 
-Entity *Transform::apply(const Vector3 &pos, const Vector2Int &scl, const SDL_FPoint &anchor, float rot, int zIndex)
+Entity *Transform::apply(const Vector3 &pos, const Vector2 &scl, const SDL_FPoint &anchor, const float rot, const int zIndex)
 {
 	setPosition(pos);
 	setScale(scl);
@@ -216,17 +210,17 @@ bool Transform::inTableBounds() const
 	return getX() > 35 && getX() < 665 && getZ() > 72 && getZ() < 938;
 }
 
-bool Transform::inTransformBounds(int x, int y) const
+bool Transform::inTransformBounds(const float x, const float y) const
 {
-	return x >= getX() - getScaleX() * getAnchor().x && x <= getX() + getScaleX() - getScaleX() * getAnchor().x &&
-	       y >= getZ() - getScaleY() * getAnchor().y && y <= getZ() + getScaleY() - getScaleY() * getAnchor().y;
+	const SDL_FRect rect = asRect();
+	return x >= rect.x && x <= rect.x + rect.w && y >= rect.y && y <= rect.y + rect.h;
 }
 
-SDL_Rect Transform::asRect() const
+SDL_FRect Transform::asRect() const
 {
-	SDL_Rect ret;
-	ret.x = getX();
-	ret.y = getZ();
+	SDL_FRect ret;
+	ret.x = getX() - getScaleX() * anchor.x;
+	ret.y = getZ() - getScaleY() * anchor.y - getY();
 	ret.w = getScaleX();
 	ret.h = getScaleY();
 	return ret;

@@ -10,7 +10,7 @@ namespace NetManager
 	std::function<void()> on_punch_fail{};
 	std::function<void(ENetPeer *enemy)> on_punched{};
 	std::function<void(double rtt)> on_peer_ping{};
-	std::function<void()> on_enemy_data_received{};
+	std::function<void(const char *enemyName)> on_enemy_data_received{};
 
 	ENetPeer *enemy;
 	ENetHost *host;
@@ -34,7 +34,7 @@ namespace NetManager
 		enet_address_set_host(&serverAddress, "localhost");
 		serverAddress.port = 7788;
 
-		if (!enet_host_connect(host, &serverAddress, 2, Packet::CREATE_MATCH << 26))
+		if (!enet_host_connect(host, &serverAddress, 2, CREATE_MATCH << 26))
 		{
 			fprintf(stderr, "No available peers for initiating an ENet connection.\n");
 			return;
@@ -58,7 +58,7 @@ namespace NetManager
 		serverAddress.port = 7788;
 
 		unsigned int encoded = strtoul(match_code, nullptr, 36);
-		if (!enet_host_connect(host, &serverAddress, 2, encoded | Packet::JOIN_MATCH << 26))
+		if (!enet_host_connect(host, &serverAddress, 2, encoded | JOIN_MATCH << 26))
 		{
 			fprintf(stderr, "No available peers for initiating an ENet connection.\n");
 			return;
@@ -70,21 +70,21 @@ namespace NetManager
 	{
 		switch (buffer.Read<Packet>())
 		{
-		case Packet::MATCH_FOUND: {
-			NetManager::match_code = buffer.Read<std::string>();
-			NetManager::on_match_found(NetManager::match_code.c_str());
+		case MATCH_FOUND: {
+			match_code = buffer.Read<std::string>();
+			on_match_found(match_code.c_str());
 			break;
 		}
-		case Packet::MATCH_NOT_FOUND: {
-			NetManager::on_match_not_found();
+		case MATCH_NOT_FOUND: {
+			on_match_not_found();
 			break;
 		}
-		case Packet::MATCH_FULL: {
-			NetManager::on_match_full();
+		case MATCH_FULL: {
+			on_match_full();
 			break;
 		}
-		case Packet::PUNCH_THROUGH: {
-			ENetAddress address = buffer.Read<ENetAddress>();
+		case PUNCH_THROUGH: {
+			const auto address = buffer.Read<ENetAddress>();
 			char newPeerIp[40];
 			enet_address_get_host_ip(&address, newPeerIp, 40);
 			printf("Punching through to %s:%d\n", newPeerIp, address.port);
@@ -96,30 +96,31 @@ namespace NetManager
 				return;
 			}
 			Buffer b;
-			b.Write(Packet::CLIENT_PUNCHED);
-			b.Write(NetManager::match_code);
+			b.Write(CLIENT_PUNCHED);
+			b.Write(match_code);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(event.peer, 0, packet);
 			break;
 		}
-		case Packet::PUNCH_DONE: {
+		case PUNCH_DONE: {
 			enet_peer_disconnect(event.peer, 0);
 			on_punched(enemy);
 		}
-		case Packet::PEER_PING: {
+		case PEER_PING: {
 			Buffer b;
-			b.Write(Packet::PEER_PONG);
+			b.Write(PEER_PONG);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(event.peer, 0, packet);
 			break;
 		}
-		case Packet::PEER_PONG: {
+		case PEER_PONG: {
 			on_peer_ping(elapsedTime);
 			waitForPong = false;
 			break;
 		}
-		case Packet::PEER_ENEMY_DATA: {
-			on_enemy_data_received();
+		case PEER_ENEMY_DATA: {
+			const char *enemyName = buffer.Read(6);
+			on_enemy_data_received(enemyName);
 			break;
 		}
 		default:
@@ -135,7 +136,7 @@ namespace NetManager
 		if (!waitForPong && enemy != nullptr && enemy->state == ENET_PEER_STATE_CONNECTED && elapsedTime > 0.5)
 		{
 			Buffer b;
-			b.Write(Packet::PEER_PING);
+			b.Write(PEER_PING);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(enemy, 0, packet);
 			elapsedTime = 0;

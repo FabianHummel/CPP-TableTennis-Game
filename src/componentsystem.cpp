@@ -5,7 +5,7 @@ Entity::Entity(const char *name)
 {
 	this->name = name;
 
-	Transform *transform = new Transform();
+	const auto transform = new Transform();
 	this->addComponent(transform);
 	transform->animation = new Transform();
 

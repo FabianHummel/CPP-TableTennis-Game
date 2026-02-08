@@ -8,7 +8,8 @@
 class HomePane : public Pane
 {
   private:
-	char matchCode[6] = { 0 };
+	char matchCode[6] = {};
+	char playerName[6] = {};
 	GameMode currentGameMode{};
 	TextRenderer *gamemodeText{};
 
@@ -19,9 +20,9 @@ class HomePane : public Pane
 	Entity *next;
 	Entity *ball;
 	Entity *menuline;
-	Entity *settings;
 	Entity *start;
 	Entity *matchCodeInput;
+	Entity *playerNameInput;
 
   public:
 	explicit HomePane(RenderWindow *window);
@@ -36,4 +37,5 @@ class HomePane : public Pane
 	void startServer();
 	void joinServer();
 	void startSinglePlayer();
+	void startOrJoinServer();
 };
