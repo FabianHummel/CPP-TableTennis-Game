@@ -31,7 +31,7 @@ void handle_request(const ENetEvent &event, Packet request)
 {
 	switch (request >> 26)
 	{
-	case Packet::CREATE_MATCH: {
+	case CREATE_MATCH: {
 		std::string match_code(5, '\0');
 		do {
 			static std::random_device rd;
@@ -45,22 +45,22 @@ void handle_request(const ENetEvent &event, Packet request)
 			Client { false, event.peer },
 			Client { false, nullptr });
 
-		Buffer b;
-		b.Write(Packet::MATCH_FOUND);
+		Buffer b(128);
+		b.Write(MATCH_FOUND);
 		b.Write(match_code);
 		ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 		enet_peer_send(event.peer, 0, packet);
 		break;
 	}
 
-	case Packet::JOIN_MATCH: {
+	case JOIN_MATCH: {
 		std::string match_code(5, '\0');
 		utoa(request & 0x03FFFFFF, &match_code[5], 36);
 
 		if (matches.find(match_code) == matches.end())
 		{
-			Buffer b;
-			b.Write(Packet::MATCH_NOT_FOUND);
+			Buffer b(sizeof(Packet));
+			b.Write(MATCH_NOT_FOUND);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(event.peer, 0, packet);
 			enet_peer_disconnect(event.peer, 0);
@@ -69,8 +69,8 @@ void handle_request(const ENetEvent &event, Packet request)
 		std::pair<Client, Client> &match = matches.at(match_code);
 		if (match.second.peer != nullptr && match.second.peer->state == ENET_PEER_STATE_CONNECTED)
 		{
-			Buffer b;
-			b.Write(Packet::MATCH_FULL);
+			Buffer b(sizeof(Packet));
+			b.Write(MATCH_FULL);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(event.peer, 0, packet);
 			enet_peer_disconnect(event.peer, 0);
@@ -80,14 +80,14 @@ void handle_request(const ENetEvent &event, Packet request)
 		{
 			match.second.peer = event.peer;
 
-			Buffer b1;
-			b1.Write(Packet::PUNCH_THROUGH);
+			Buffer b1(sizeof(Packet) + sizeof(ENetAddress));
+			b1.Write(PUNCH_THROUGH);
 			b1.Write(match.first.peer->address);
 			ENetPacket *packet1 = enet_packet_create(b1.GetBuffer(), b1.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(match.second.peer, 0, packet1);
 
-			Buffer b2;
-			b2.Write(Packet::PUNCH_THROUGH);
+			Buffer b2(sizeof(Packet) + sizeof(ENetAddress));
+			b2.Write(PUNCH_THROUGH);
 			b2.Write(match.second.peer->address);
 			ENetPacket *packet2 = enet_packet_create(b2.GetBuffer(), b2.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(match.first.peer, 0, packet2);
@@ -101,7 +101,7 @@ void handle_command(const ENetEvent &event, Buffer &buffer)
 {
 	switch (buffer.Read<Packet>())
 	{
-	case Packet::CANCEL_MATCH: {
+	case CANCEL_MATCH: {
 		std::string match_code = buffer.Read<std::string>();
 		if (matches.count(match_code) && matches[match_code].first.peer == event.peer)
 		{
@@ -112,7 +112,7 @@ void handle_command(const ENetEvent &event, Buffer &buffer)
 		}
 		break;
 	}
-	case Packet::CLIENT_PUNCHED: {
+	case CLIENT_PUNCHED: {
 		std::string match_code = buffer.Read<std::string>();
 		if (matches.count(match_code))
 		{
@@ -124,8 +124,8 @@ void handle_command(const ENetEvent &event, Buffer &buffer)
 				peers.second.punched = true;
 			}
 			if (peers.first.punched && peers.second.punched) {
-				Buffer b;
-				b.Write(Packet::PUNCH_DONE);
+				Buffer b(sizeof(Packet));
+				b.Write(PUNCH_DONE);
 				ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 				enet_peer_send(peers.first.peer, 0, packet);
 				enet_peer_send(peers.second.peer, 0, packet);

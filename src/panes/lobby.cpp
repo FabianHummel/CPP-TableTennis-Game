@@ -1,42 +1,45 @@
 #include "lobby.h"
+
 #include "../presets/index.h"
 #include "../ecsmanager.h"
 #include "../gamemanager.h"
 #include "../netmanager.h"
 #include "../fontmanager.h"
 #include "../utility/renderindexes.h"
+#include "../shared/packets.h"
 #include "home.h"
 
-LobbyPane::LobbyPane(RenderWindow *window, const char *match_code, const char *player_name, ENetPeer *enemy) : LobbyPane(window, match_code, player_name) {
-	this->enemy = enemy;
-
-	Buffer b;
-	b.Write(PEER_ENEMY_DATA);
-	b.Write(player_name);
-	ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
-	enet_peer_send(enemy, 0, packet);
-}
-
-LobbyPane::LobbyPane(RenderWindow *window, const char *match_code, const char *player_name) : Pane(window)
+LobbyPane::LobbyPane(RenderWindow *window, const std::string &match_code, const std::string &player_name) : Pane(window)
 {
+	this->matchCode = match_code;
 	this->playerName = player_name;
 
 	NetManager::on_punch_fail = [] {
 		// Display error
 	};
+
 	NetManager::on_punched = [this](ENetPeer *enemy) {
 		this->enemy = enemy;
 
 		TextRenderer *pTextRenderer = versus->getChild("Opponent")->getComponent<TextRenderer>();
 		pTextRenderer->setText("Enemy");
-	};
-	NetManager::on_peer_ping = [](double rtt) {
-		//	printf("Round trip time: %f\n", rtt);
+
+		Buffer b(128);
+		b.Write(PEER_ENEMY_DATA);
+		b.Write(playerName);
+		ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+		enet_peer_send(enemy, 0, packet);
 	};
 
-	NetManager::on_enemy_data_received = [this](const char *enemyName) {
+	NetManager::on_peer_ping = [](const double rtt) {
+		printf("\rRound trip time: %f", rtt);
+		fflush(stdout);
+	};
+
+	NetManager::on_enemy_data_received = [this](const std::string &enemyName) {
+		this->enemyName = enemyName;
 		TextRenderer *pTextRenderer = versus->getChild("Opponent")->getComponent<TextRenderer>();
-		pTextRenderer->setText(enemyName);
+		pTextRenderer->setText(this->enemyName.c_str());
 	};
 
 	versus = EcsManager::addEntity(new Entity("Versus"))
@@ -45,12 +48,14 @@ LobbyPane::LobbyPane(RenderWindow *window, const char *match_code, const char *p
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 230}, {700, 348}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::TITLE)
 		->addChild((new Entity("Opponent"))
-			->addComponent(new TextRenderer(window->renderer, "Waiting...", FontManager::BIG, {64, 64, 64}))
 			->transform
-			->apply({0, 0, 30}, {0, 0}, {0.5f, 0.5f}, 0.0f, 0));
+			->apply({-120, 0, 0}, {0, 0}, {0.0f, 0.0f}, 0.0f, 0)
+			->addComponent(new TextRenderer(window->renderer, "Waiting...", FontManager::BIG, {64, 64, 64})));
 
 	matchCodeButton = EcsManager::addEntity(new Entity("Invite-Code"))
-		->usePreset(Presets::button(window->renderer, match_code, FontManager::BIG, [match_code] { SDL_SetClipboardText(match_code); }))
+		->usePreset(Presets::button(window->renderer, matchCode.c_str(), FontManager::BIG, [this] {
+			SDL_SetClipboardText(this->matchCode.c_str());
+		}))
 	    ->addComponent(new Button(nullptr, nullptr, [this] {
 				matchCodeButton->getChild("Hint")->visible = true;
 			}, [this] {

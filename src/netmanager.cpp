@@ -1,6 +1,6 @@
 #include "netmanager.h"
+#include "shared/packets.h"
 #include <cstdio>
-#include <vector>
 
 namespace NetManager
 {
@@ -10,7 +10,7 @@ namespace NetManager
 	std::function<void()> on_punch_fail{};
 	std::function<void(ENetPeer *enemy)> on_punched{};
 	std::function<void(double rtt)> on_peer_ping{};
-	std::function<void(const char *enemyName)> on_enemy_data_received{};
+	std::function<void(const std::string &enemyName)> on_enemy_data_received{};
 
 	ENetPeer *enemy;
 	ENetHost *host;
@@ -95,7 +95,7 @@ namespace NetManager
 				on_punch_fail();
 				return;
 			}
-			Buffer b;
+			Buffer b(128);
 			b.Write(CLIENT_PUNCHED);
 			b.Write(match_code);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
@@ -107,7 +107,7 @@ namespace NetManager
 			on_punched(enemy);
 		}
 		case PEER_PING: {
-			Buffer b;
+			Buffer b(sizeof(Packet));
 			b.Write(PEER_PONG);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(event.peer, 0, packet);
@@ -119,7 +119,7 @@ namespace NetManager
 			break;
 		}
 		case PEER_ENEMY_DATA: {
-			const char *enemyName = buffer.Read(6);
+			const auto enemyName = buffer.Read<std::string>();
 			on_enemy_data_received(enemyName);
 			break;
 		}
@@ -135,7 +135,7 @@ namespace NetManager
 		elapsedTime += deltaTime;
 		if (!waitForPong && enemy != nullptr && enemy->state == ENET_PEER_STATE_CONNECTED && elapsedTime > 0.5)
 		{
-			Buffer b;
+			Buffer b(sizeof(Packet));
 			b.Write(PEER_PING);
 			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 			enet_peer_send(enemy, 0, packet);

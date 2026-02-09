@@ -10,8 +10,19 @@ class Buffer {
 	size_t m_cursor;
 
   public:
-	Buffer();
-	Buffer(char* buffer, size_t size);
+	explicit Buffer(size_t size)
+	{
+		m_buffer = (char*)malloc(size);
+		m_size = size;
+		m_cursor = 0;
+	}
+
+	explicit Buffer(char* data, size_t size)
+	{
+		m_buffer = data;
+		m_size = size;
+		m_cursor = 0;
+	}
 
 	char* Read(size_t size)
 	{

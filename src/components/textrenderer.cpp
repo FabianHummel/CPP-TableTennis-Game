@@ -49,6 +49,7 @@ void TextRenderer::setColor(SDL_Color color)
 void TextRenderer::updateTexture()
 {
 	SDL_DestroyTexture(texture);
+	TTF_SetFontSize(FontManager::main, ptSize);
 	SDL_Surface *surface = TTF_RenderText_Blended(font, text, color);
 	this->texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);

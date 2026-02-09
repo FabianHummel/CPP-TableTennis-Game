@@ -4,7 +4,6 @@
 #include <thread>
 #include <functional>
 #include "shared/buffer.h"
-#include "shared/packets.h"
 
 namespace NetManager
 {
@@ -14,7 +13,7 @@ namespace NetManager
 	extern std::function<void()> on_punch_fail;
 	extern std::function<void(ENetPeer *enemy)> on_punched;
 	extern std::function<void(double rtt)> on_peer_ping;
-	extern std::function<void(const char *enemyName)> on_enemy_data_received;
+	extern std::function<void(const std::string &enemyName)> on_enemy_data_received;
 
 	void init_matchmaking();
 	void join_match(const char *match_code);

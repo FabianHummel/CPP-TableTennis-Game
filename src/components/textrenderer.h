@@ -14,12 +14,12 @@ class TextRenderer : public Component
 	const char *text;
 	SDL_Color color{};
 	TTF_Font *font;
+	int ptSize;
 
 	void updateTexture();
 
   public:
 	bool visible = true;
-	int ptSize = 42;
 
 	TextRenderer(SDL_Renderer *renderer, const char *text, int ptSize, SDL_Color color);
 

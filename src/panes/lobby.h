@@ -6,7 +6,7 @@
 
 class LobbyPane : public Pane
 {
-  private:
+  protected:
 	Entity *versus;
 	Entity *background;
 	Entity *backButton;
@@ -14,13 +14,14 @@ class LobbyPane : public Pane
 
 	ENetPeer *enemy;
 
-	const char *playerName;
+	std::string matchCode;
+	std::string playerName;
+	std::string enemyName;
 
 	void back();
 
   public:
-	explicit LobbyPane(RenderWindow *window, const char *match_code, const char *player_name);
-	explicit LobbyPane(RenderWindow *window, const char *match_code, const char *player_name, ENetPeer *enemy);
+	explicit LobbyPane(RenderWindow *window, const std::string &match_code, const std::string &player_name);
 	~LobbyPane();
 
 	void onEvent(SDL_Event event) override;

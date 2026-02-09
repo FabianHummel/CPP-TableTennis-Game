@@ -179,27 +179,10 @@ void HomePane::startServer()
 
 void HomePane::joinServer()
 {
-	NetManager::on_match_not_found = [] {
-		fprintf(stderr, "Match not found\n");
-	};
-	NetManager::on_match_full = [] {
-		fprintf(stderr, "Match full\n");
-	};
-	NetManager::on_punch_fail = [] {
-		fprintf(stderr, "Punch failed\n");
-	};
-	NetManager::on_punched = [this](ENetPeer *enemy) {
-		printf("Connected to %u:%u\n", enemy->address.host, enemy->address.port);
-		EcsManager::clear();
-		const auto matchCode = static_cast<char*>(malloc(6));
-		strcpy(matchCode, this->matchCode);
-		Pane *lobby = new LobbyPane(window, matchCode, playerName, enemy);
-		GameManager::switchScene(this, lobby);
-	};
-	NetManager::on_peer_ping = [this](double rtt) {
-//		printf("Round trip time: %f\n", rtt);
-	};
-	NetManager::join_match(matchCode);
+	EcsManager::clear();
+	Pane *lobby = new LobbyPane(window, this->matchCode, this->playerName);
+	NetManager::join_match(this->matchCode);
+	GameManager::switchScene(this, lobby);
 }
 
 void HomePane::startSinglePlayer()
