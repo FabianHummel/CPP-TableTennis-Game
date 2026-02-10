@@ -1,6 +1,6 @@
 #pragma once
 
-#include <enet/enet.h>
+#include "enet.h"
 #include <cstring>
 
 class Buffer {

@@ -24,10 +24,10 @@ void Cursor::onUpdate(const double deltaTime) {
 
     int w;
     TTF_SetFontSize(FontManager::main, ptSize);
-    TTF_SizeText(FontManager::main, this->textInput->text, &w, nullptr);
+    TTF_GetStringSize(FontManager::main, this->textInput->text, 0, &w, nullptr);
     transform->setX(w - parent->parent->transform->getScaleX() / 2.0 + 35);
 }
 
-void Cursor::onEvent(SDL_Event event) {
+void Cursor::onEvent(const SDL_Event *event) {
 
 }

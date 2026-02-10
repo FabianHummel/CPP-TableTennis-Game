@@ -1,6 +1,6 @@
 #include "debugger.h"
-#include <SDL_render.h>
-#include <SDL_ttf.h>
+#include <SDL3/SDL_render.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include "../fontmanager.h"
 
@@ -20,13 +20,13 @@ void Debugger::onInitialize()
 	this->transform = parent->transform;
 }
 
-void renderString(Transform *transform, const char* paramName, float value, int pos, SDL_Renderer *renderer)
+void renderString(Transform *transform, const char* paramName, float value, float pos, SDL_Renderer *renderer)
 {
 	char *str; asprintf(&str, "%s: %f", paramName, value);
-	SDL_Surface *surface = TTF_RenderText_Blended(FontManager::mono, str, {0,0,0,255});
+	SDL_Surface *surface = TTF_RenderText_Blended(FontManager::mono, str, 0, {0,0,0,255});
 	const auto texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_Rect dstRect = SDL_Rect {0, pos * FontManager::DEFAULT, surface->w, surface->h};
-	SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
+	SDL_FRect dstRect = SDL_FRect {0.0, pos * FontManager::DEFAULT, (float)surface->w, (float)surface->h};
+	SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
 }
 
 void Debugger::onUpdate(double deltaTime)
@@ -35,7 +35,7 @@ void Debugger::onUpdate(double deltaTime)
 
 	SDL_FRect rec = transform->asRect();
 
-	SDL_Rect pos;
+	SDL_FRect pos;
 	pos.x = rec.x - 5;
 	pos.y = rec.y - 5;
 	pos.w = 10;
@@ -43,7 +43,7 @@ void Debugger::onUpdate(double deltaTime)
 	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 	SDL_RenderFillRect(renderer, &pos);
 
-	SDL_Rect area;
+	SDL_FRect area;
 	area.x = rec.x;
 	area.y = rec.y;
 	area.w = rec.w;
@@ -51,7 +51,7 @@ void Debugger::onUpdate(double deltaTime)
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 100);
 	SDL_RenderFillRect(renderer, &area);
 
-	SDL_Rect anchor;
+	SDL_FRect anchor;
 	anchor.x = rec.x + rec.w * transform->getAnchor().x - 5;
 	anchor.y = rec.y + rec.h * transform->getAnchor().y - 5;
 	anchor.w = 10;
@@ -66,6 +66,6 @@ void Debugger::onUpdate(double deltaTime)
 	renderString(transform, "Z", transform->getZ(), 2, renderer);
 }
 
-void Debugger::onEvent(SDL_Event event)
+void Debugger::onEvent(const SDL_Event *event)
 {
 }

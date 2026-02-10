@@ -4,17 +4,19 @@
 
 #include "keyboardmanager.h"
 
-#include <SDL_keyboard.h>
+#include <SDL3/SDL_keyboard.h>
+
+#include "utility/renderwindow.h"
 
 namespace KeyboardManager
 {
     bool isTextInputRequested = false;
 
-    void preEvent(const SDL_Event &event)
+    void preEvent(const SDL_Event *event)
     {
-        switch (event.type)
+        switch (event->type)
         {
-            case SDL_MOUSEBUTTONDOWN:
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
                 isTextInputRequested = false;
                 break;
             default: ;
@@ -25,11 +27,11 @@ namespace KeyboardManager
     {
         if (isTextInputRequested)
         {
-            SDL_StartTextInput();
+            SDL_StartTextInput(nullptr);
         }
         else
         {
-            SDL_StopTextInput();
+            SDL_StopTextInput(nullptr);
         }
     }
 }

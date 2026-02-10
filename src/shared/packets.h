@@ -1,4 +1,6 @@
-#include <enet/enet.h>
+#pragma once
+
+#include "enet.h"
 
 enum Packet : enet_uint32
 {

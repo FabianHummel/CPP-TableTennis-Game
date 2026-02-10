@@ -2,7 +2,7 @@
 
 #include "pane.h"
 #include "../componentsystem.h"
-#include <enet/enet.h>
+#include "../shared/enet.h"
 
 class LobbyPane : public Pane
 {
@@ -21,8 +21,8 @@ class LobbyPane : public Pane
 	void back();
 
   public:
-	explicit LobbyPane(RenderWindow *window, const std::string &match_code, const std::string &player_name);
+	explicit LobbyPane(SDL_Renderer *renderer, const std::string &match_code, const std::string &player_name);
 	~LobbyPane();
 
-	void onEvent(SDL_Event event) override;
+	void onEvent(const SDL_Event *event) override;
 };

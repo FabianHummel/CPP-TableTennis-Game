@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../componentsystem.h"
-#include <SDL_pixels.h>
-#include <SDL_render.h>
-#include <SDL_ttf.h>
+#include <SDL3/SDL_pixels.h>
+#include <SDL3/SDL_render.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 class TextRenderer : public Component
 {

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <enet/enet.h>
 #include <thread>
 #include <functional>
 #include "shared/buffer.h"
+#include "shared/enet.h"
 
 namespace NetManager
 {

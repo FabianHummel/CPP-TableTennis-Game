@@ -12,13 +12,13 @@ namespace CursorManager
 
 	void loadCursors()
 	{
-		arrowCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
+		arrowCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_DEFAULT);
 		priority[arrowCursor] = 0;
 
-		inputCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM);
+		inputCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_TEXT);
 		priority[inputCursor] = 1;
 
-		handCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+		handCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_POINTER);
 		priority[handCursor] = 2;
 	}
 

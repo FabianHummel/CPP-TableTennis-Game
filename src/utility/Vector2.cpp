@@ -2,7 +2,7 @@
 // Created by Fabian Hummel on 13.06.22.
 //
 
-#include "Vector2.h"
+#include "vector2.h"
 #include <cmath>
 
 Vector2::Vector2(const float x, const float y) : x(x), y(y){};

@@ -10,49 +10,51 @@
 #include "lobby.h"
 #include <functional>
 
-HomePane::HomePane(RenderWindow *window) : Pane(window)
+#include "../utility/renderwindow.h"
+
+HomePane::HomePane(SDL_Renderer *renderer) : Pane(renderer)
 {
 	title = EcsManager::addEntity(new Entity("Title"))
-		->addComponent(new SpriteRenderer("res/title.png", window->renderer))
+		->addComponent(new SpriteRenderer("res/title.png", renderer))
 		->addComponent(new MenuTitle())
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 0}, {RenderWindow::SCREEN_WIDTH, 425}, {0.5f, 0.0f}, 0.0f, RenderIndexes::Menu::TITLE);
 
 	background = EcsManager::addEntity(new Entity("Background"))
-		->addComponent(new BubbleDrawer(window->renderer))
+		->addComponent(new BubbleDrawer(renderer))
 		->transform
 		->apply({RenderWindow::SCREEN_HEIGHT, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.5f, 0.5f}, -3.8, RenderIndexes::Menu::BACKGROUND);
 
 	gamemode = EcsManager::addEntity(new Entity("Gamemode"))
-		->addComponent(new TextRenderer(window->renderer, magic_enum::enum_name(GameMode::SINGLEPLAYER).data(), FontManager::DEFAULT, {40, 40, 40}))
+		->addComponent(new TextRenderer(renderer, magic_enum::enum_name(GameMode::SINGLEPLAYER).data(), FontManager::DEFAULT, {40, 40, 40}))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 700}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	previous = EcsManager::addEntity(new Entity("Previous"))
 		->addComponent(new Button(nullptr, [this] { previousGameMode(); }))
-		->addComponent(new SpriteRenderer("res/menuarrow.png", window->renderer))
+		->addComponent(new SpriteRenderer("res/menuarrow.png", renderer))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X - 200, 0, 700}, {40, 40}, {0.5f, 0.5f}, 180.0f, RenderIndexes::Menu::UI);
 
 	next = EcsManager::addEntity(new Entity("Next"))
 		->addComponent(new Button(nullptr, [this] { nextGameMode(); }))
-		->addComponent(new SpriteRenderer("res/menuarrow.png", window->renderer))
+		->addComponent(new SpriteRenderer("res/menuarrow.png", renderer))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X + 200, 0, 700}, {40, 40}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	ball = EcsManager::addEntity(new Entity("Ball"))
-		->addComponent(new SpriteRenderer("res/ball.png", window->renderer))
+		->addComponent(new SpriteRenderer("res/ball.png", renderer))
 		->addComponent(new MenuBallBehaviour())
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 220}, {40, 40}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::BALL);
 
 	menuline = EcsManager::addEntity(new Entity("Menuline"))
-		->addComponent(new SpriteRenderer("res/menuline.png", window->renderer))
+		->addComponent(new SpriteRenderer("res/menuline.png", renderer))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 650}, {300, 6}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
 	start = EcsManager::addEntity(new Entity("Play-Button"))
-		->usePreset(Presets::button(window->renderer, "Play", FontManager::DEFAULT, [this] { startSinglePlayer(); }))
+		->usePreset(Presets::button(renderer, "Play", FontManager::DEFAULT, [this] { startSinglePlayer(); }))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI);
 
@@ -60,16 +62,16 @@ HomePane::HomePane(RenderWindow *window) : Pane(window)
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 870}, {300, 120}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
 		->apply(false)
-		->usePreset(Presets::textinput(window->renderer, playerName, FontManager::DEFAULT, sizeof(playerName)-1));
+		->usePreset(Presets::textinput(renderer, playerName, FontManager::DEFAULT, sizeof(playerName)-1));
 
 	matchCodeInput = EcsManager::addEntity(new Entity("Match-Code-Input"))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 120}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
 		->apply(false)
-		->usePreset(Presets::textinput(window->renderer, matchCode, FontManager::DEFAULT, sizeof(matchCode)-1))
+		->usePreset(Presets::textinput(renderer, matchCode, FontManager::DEFAULT, sizeof(matchCode)-1))
 		->addChild((new Entity("Continue"))
 			->addComponent(new Button(nullptr, [this] { startOrJoinServer(); }))
-			->addComponent(new SpriteRenderer("res/menuarrow.png", window->renderer))
+			->addComponent(new SpriteRenderer("res/menuarrow.png", renderer))
 			->transform
 			->apply({110, 0, -10}, {40, 40}, {0.5f, 0.5f}, 0.0f, 0));
 }
@@ -94,12 +96,12 @@ void HomePane::onStart()
 	this->gamemodeText = gamemode->getComponent<TextRenderer>();
 }
 
-void HomePane::onEvent(SDL_Event event)
+void HomePane::onEvent(const SDL_Event *event)
 {
-	switch (event.type)
+	switch (event->type)
 	{
-	case SDL_KEYDOWN:
-		switch (event.key.keysym.sym)
+	case SDL_EVENT_KEY_DOWN:
+		switch (event->key.key)
 		{
 		case SDLK_LEFT:
 			previousGameMode();
@@ -168,7 +170,7 @@ void HomePane::startServer()
 	NetManager::on_match_found = [this](const char *matchCode) {
 		printf("Match found: %s\n", matchCode);
 		EcsManager::clear();
-		Pane *lobby = new LobbyPane(window, matchCode, playerName);
+		Pane *lobby = new LobbyPane(renderer, matchCode, playerName);
 		GameManager::switchScene(this, lobby);
 	};
 	NetManager::on_match_not_found = [] {
@@ -180,7 +182,7 @@ void HomePane::startServer()
 void HomePane::joinServer()
 {
 	EcsManager::clear();
-	Pane *lobby = new LobbyPane(window, this->matchCode, this->playerName);
+	Pane *lobby = new LobbyPane(renderer, this->matchCode, this->playerName);
 	NetManager::join_match(this->matchCode);
 	GameManager::switchScene(this, lobby);
 }
@@ -188,7 +190,7 @@ void HomePane::joinServer()
 void HomePane::startSinglePlayer()
 {
 	EcsManager::clear();
-	Pane *pane = new GamePane(window);
+	Pane *pane = new GamePane(renderer);
 	GameManager::switchScene(this, pane);
 }
 

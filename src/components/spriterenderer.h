@@ -9,7 +9,7 @@ class SpriteRenderer : public Component
 	SDL_Renderer *renderer;
 	Transform *transform{};
 	const char *img;
-	SDL_Rect *srcrect = nullptr;
+	SDL_FRect *srcrect = nullptr;
 
   public:
 	bool visible = true;
@@ -21,6 +21,6 @@ class SpriteRenderer : public Component
 	void onUpdate(double deltaTime) override;
 	void onDelete() override;
 
-	void setSrcrect(SDL_Rect rect);
+	void setSrcrect(SDL_FRect rect);
 	void setImage(const char *img);
 };

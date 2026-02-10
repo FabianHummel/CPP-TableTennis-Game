@@ -1,8 +1,8 @@
 #include "pane.h"
 
-Pane::Pane(RenderWindow *window)
+Pane::Pane(SDL_Renderer *renderer)
 {
-	this->window = window;
+	this->renderer = renderer;
 }
 
 Pane::~Pane()

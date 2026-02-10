@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL_render.h>
+#include <SDL3/SDL_render.h>
 
 #include "transform.h"
 
@@ -16,5 +16,5 @@ class Debugger : public Component
 	explicit Debugger(SDL_Renderer *renderer, bool extendedDebugInfo);
 	void onInitialize() override;
 	void onUpdate(double deltaTime) override;
-	void onEvent(SDL_Event event) override;
+	void onEvent(const SDL_Event *event) override;
 };

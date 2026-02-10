@@ -1,35 +1,35 @@
 #include "soundmanager.h"
-#include <SDL_mixer.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 namespace SoundManager
 {
-	std::unordered_map<const char *, Mix_Chunk *> sounds = {};
+	SDL_AudioSpec spec = { .format = SDL_AUDIO_S16, .channels = 2, .freq = 44100 };
+	MIX_Mixer *mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec);
+	std::unordered_map<const char *, MIX_Audio *> sounds = {};
 
 	void addSound(const char *path, const char *name)
 	{
 		printf("Loading Sound %s\n", path);
-		Mix_Chunk *sound = Mix_LoadWAV(path);
+		MIX_Audio *sound = MIX_LoadAudio(nullptr, path, false);
 		if (!sound)
 		{
-			printf("Error loading sound!\n"
-			       "SDL_mixer_Error: %s\n",
-			       Mix_GetError());
+			printf("Error loading sound!\nSDL Error: %s\n", SDL_GetError());
 			exit(EXIT_FAILURE);
 		}
 
 		sounds[name] = sound;
 	}
 
-	void playSound(const char *name, int volume)
+	void playSound(const char *name, float volume)
 	{
 		auto sound = sounds[name];
-		sound->volume = volume / 128.0f * 100.0f;
-		Mix_PlayChannel(-1, sound, 0);
+		MIX_SetMixerGain(mixer, volume);
+		MIX_PlayAudio(mixer, sound);
 	}
 
 	void playSound(const char *name)
 	{
-		playSound(name, MIX_MAX_VOLUME);
+		playSound(name, 1.0f);
 	}
 
 	void playSounds(const std::vector<const char *> &names, int volume)
@@ -42,7 +42,7 @@ namespace SoundManager
 
 	void playSounds(const std::vector<const char *> &names)
 	{
-		playSounds(names, MIX_MAX_VOLUME);
+		playSounds(names, 1.0);
 	}
 
 	void playRndSound(const std::vector<const char *> &names, int volume)
@@ -53,6 +53,6 @@ namespace SoundManager
 
 	void playRndSound(const std::vector<const char *> &names)
 	{
-		playRndSound(names, MIX_MAX_VOLUME);
+		playRndSound(names, 1.0);
 	}
 }

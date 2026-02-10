@@ -8,10 +8,10 @@
 class Powerbar : public Component
 {
   private:
-	int size;
+	float size;
 	bool isDragging;
-	int startX, startY;
-	int deltaX, deltaY;
+	float startX, startY;
+	float deltaX, deltaY;
 	float strength;
 
 	BallMovement *ball;
@@ -23,9 +23,9 @@ class Powerbar : public Component
 	SpriteRenderer *powerbarSprite;
 	Prediction *prediction;
 
-	void onClick(int x, int y);
+	void onClick(float x, float y);
 	void onRelease();
-	void onDrag(int x, int y);
+	void onDrag(float x, float y);
 	void setProgress(float v, float y);
 	Vector3 calcForce();
 
@@ -33,5 +33,5 @@ class Powerbar : public Component
 	void onInitialize() override;
 	void onStart() override;
 	void onUpdate(double deltaTime) override;
-	void onEvent(SDL_Event event) override;
+	void onEvent(const SDL_Event *event) override;
 };

@@ -25,24 +25,24 @@ void Powerbar::onInitialize()
 	prediction = predictionEntity->getComponent<Prediction>();
 }
 
-void Powerbar::onEvent(SDL_Event event)
+void Powerbar::onEvent(const SDL_Event *event)
 {
-	switch (event.type)
+	switch (event->type)
 	{
-	case SDL_MOUSEBUTTONDOWN: {
-		int x, y;
+	case SDL_EVENT_MOUSE_BUTTON_DOWN: {
+		float x, y;
 		SDL_GetMouseState(&x, &y);
 		onClick(x * 2, y * 2);
 		break;
 	}
 
-	case SDL_MOUSEBUTTONUP: {
+	case SDL_EVENT_MOUSE_BUTTON_UP: {
 		onRelease();
 		break;
 	}
 
-	case SDL_MOUSEMOTION: {
-		int x, y;
+	case SDL_EVENT_MOUSE_MOTION: {
+		float x, y;
 		SDL_GetMouseState(&x, &y);
 		onDrag(x * 2, y * 2);
 		break;
@@ -54,8 +54,8 @@ void Powerbar::setProgress(float v, float y)
 {
 	this->size = v;
 
-	int progress = size / 100.0f * 250;
-	powerbarSprite->setSrcrect({0, 250 - progress, 250, progress});
+	float progress = size / 100.0f * 250;
+	powerbarSprite->setSrcrect({0, 250.0f - progress, 250, progress});
 
 	powerbar->setScaleY(size / 100.0f * 70);
 }
@@ -84,16 +84,16 @@ Vector3 Powerbar::calcForce()
 	return {(float)forceX, 8.f, (float)forceY};
 }
 
-void Powerbar::onClick(int x, int y)
+void Powerbar::onClick(float x, float y)
 {
 	isDragging = true;
 	startX = x;
 	startY = y;
 	// printf("began mouse drag at: %d, %d\n", startX, startY);
 
-	indicator->setPosition({(float)startX, 0.0f, (float)startY});
-	powerbox->setPosition({startX - 100.0f, 0.0f, (float)startY});
-	powerbar->setPosition({startX - 100.0f, 0.0f, (float)startY + powerbox->getScaleY() / 2.0f});
+	indicator->setPosition({startX, 0.0f, startY});
+	powerbox->setPosition({startX - 100.0f, 0.0f, startY});
+	powerbar->setPosition({startX - 100.0f, 0.0f, startY + powerbox->getScaleY() / 2.0f});
 }
 
 void Powerbar::onRelease()
@@ -118,7 +118,7 @@ void Powerbar::onRelease()
 	strength = 0.0f;
 }
 
-void Powerbar::onDrag(int x, int y)
+void Powerbar::onDrag(float x, float y)
 {
 	if (isDragging)
 	{
@@ -126,8 +126,8 @@ void Powerbar::onDrag(int x, int y)
 		powerboxSprite->visible = true;
 		powerbarSprite->visible = true;
 
-		int currentX = x;
-		int currentY = y;
+		float currentX = x;
+		float currentY = y;
 
 		deltaX = currentX - startX;
 		deltaY = currentY - startY;
@@ -135,7 +135,7 @@ void Powerbar::onDrag(int x, int y)
 		float angle = 180.0f - atan2(deltaX, deltaY) * 180 / M_PI;
 		indicator->setRotation(angle);
 
-		strength = std::clamp((float)sqrt(deltaX * deltaX + deltaY * deltaY) / 200.0f, 0.0f, 1.0f);
+		strength = std::clamp(sqrt(deltaX * deltaX + deltaY * deltaY) / 200.0f, 0.0f, 1.0f);
 		setProgress(strength * 100.0f, startY);
 	}
 }

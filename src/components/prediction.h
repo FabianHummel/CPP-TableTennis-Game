@@ -2,7 +2,7 @@
 
 #include "../componentsystem.h"
 #include "ballmovement.h"
-#include <SDL_render.h>
+#include <SDL3/SDL_render.h>
 
 class Prediction : public Component
 {

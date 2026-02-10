@@ -1,7 +1,7 @@
 #include "button.h"
 #include "../cursormanager.h"
-#include <SDL_events.h>
-#include <SDL_mouse.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_mouse.h>
 
 Button::Button(
 	const std::function<void()> &onMouseDown,
@@ -24,7 +24,7 @@ void Button::onUpdate(double deltaTime)
 {
 	if (!parent->isVisible()) return;
 
-	int x, y;
+	float x, y;
 	SDL_GetMouseState(&x, &y);
 	x *= 2;
 	y *= 2;
@@ -35,18 +35,18 @@ void Button::onUpdate(double deltaTime)
 		CursorManager::requestCursor(CursorManager::arrowCursor);
 }
 
-void Button::onEvent(SDL_Event event)
+void Button::onEvent(const SDL_Event *event)
 {
 	if (!parent->isVisible()) return;
 
-	int x, y;
+	float x, y;
 	SDL_GetMouseState(&x, &y);
 	x *= 2;
 	y *= 2;
 
-	switch (event.type)
+	switch (event->type)
 	{
-	case SDL_MOUSEMOTION:
+	case SDL_EVENT_MOUSE_MOTION:
 		if (transform->inTransformBounds(x, y) && !isMouseOver)
 		{
 			isMouseOver = true;
@@ -60,12 +60,12 @@ void Button::onEvent(SDL_Event event)
 				onMouseExit();
 		}
 		break;
-	case SDL_MOUSEBUTTONDOWN:
+	case SDL_EVENT_MOUSE_BUTTON_DOWN:
 		if (onMouseDown && transform->inTransformBounds(x, y))
 			onMouseDown();
 		break;
 
-	case SDL_MOUSEBUTTONUP:
+	case SDL_EVENT_MOUSE_BUTTON_UP:
 		if (onMouseUp && transform->inTransformBounds(x, y))
 			onMouseUp();
 		break;

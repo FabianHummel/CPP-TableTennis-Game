@@ -1,8 +1,8 @@
 #include "bubbledrawer.h"
 #include "../utility/renderwindow.h"
-#include <SDL_image.h>
-#include <SDL_rect.h>
-#include <SDL_render.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_render.h>
 #include <cmath>
 
 BubbleDrawer::BubbleDrawer(SDL_Renderer *renderer)
@@ -29,5 +29,5 @@ void BubbleDrawer::onUpdate(double deltaTime)
 	dstrect.w = RenderWindow::SCREEN_WIDTH + 200.0;
 	dstrect.h = RenderWindow::SCREEN_WIDTH + 200.0;
 
-	SDL_RenderCopyExF(renderer, texture, nullptr, &dstrect, 3.5, nullptr, SDL_FLIP_NONE);
+	SDL_RenderTextureRotated(renderer, texture, nullptr, &dstrect, 3.5, nullptr, SDL_FLIP_NONE);
 }

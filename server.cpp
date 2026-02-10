@@ -1,10 +1,12 @@
+#define ENET_IMPLEMENTATION
+
 #include "src/shared/buffer.h"
 #include "src/shared/packets.h"
+#include "src/shared/enet.h"
 #include <cstdio>
 #include <stdlib.h>
 #include <random>
 #include <string>
-#include <enet/enet.h>
 #include <unordered_map>
 #include <vector>
 
@@ -191,6 +193,9 @@ int main(int argc, char **argv)
 				break;
 			}
 			case ENET_EVENT_TYPE_NONE: {
+				break;
+			}
+			case ENET_EVENT_TYPE_DISCONNECT_TIMEOUT: {
 				break;
 			}
 			}

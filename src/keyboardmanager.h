@@ -4,14 +4,14 @@
 
 #ifndef TABLETENNIS_KEYBOARDMANAGER_H
 #define TABLETENNIS_KEYBOARDMANAGER_H
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 
 
 namespace KeyboardManager {
 
     extern bool isTextInputRequested;
 
-    void preEvent(const SDL_Event &event);
+    void preEvent(const SDL_Event *event);
     void postEvent();
 };
 

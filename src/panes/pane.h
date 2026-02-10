@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../utility/renderwindow.h"
+#include "SDL3/SDL_render.h"
 
 class Pane
 {
   protected:
-	RenderWindow *window;
+	SDL_Renderer *renderer;
 
   public:
-	explicit Pane(RenderWindow *window);
+	explicit Pane(SDL_Renderer *renderer);
 	~Pane();
 
 	/**
@@ -24,5 +24,5 @@ class Pane
 	/**
 	 * @brief Called when an event fires.
 	 */
-	virtual void onEvent(SDL_Event event){};
+	virtual void onEvent(const SDL_Event *event){};
 };

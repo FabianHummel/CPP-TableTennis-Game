@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 #include "components/index.h"
+#include "utility/renderwindow.h"
 
 namespace GameManager
 {

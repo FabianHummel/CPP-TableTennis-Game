@@ -18,5 +18,5 @@ public:
 
 	void onInitialize() override;
 	void onUpdate(double deltaTime) override;
-	void onEvent(SDL_Event event) override;
+	void onEvent(const SDL_Event *event) override;
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "game/gamemode.h"
 #include "panes/pane.h"
 
 namespace GameManager

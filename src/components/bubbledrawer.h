@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../componentsystem.h"
-#include <SDL.h>
-#include <SDL_render.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_render.h>
 
 class BubbleDrawer : public Component
 {

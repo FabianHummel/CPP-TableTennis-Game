@@ -1,104 +1,114 @@
+#define ENET_IMPLEMENTATION
+#define SDL_MAIN_USE_CALLBACKS 1
+
 #include "src/animationmanager.h"
 #include "src/cursormanager.h"
+#include "src/keyboardmanager.h"
 #include "src/ecsmanager.h"
 #include "src/fontmanager.h"
 #include "src/gamemanager.h"
 #include "src/netmanager.h"
 #include "src/panes/home.h"
 #include "src/utility/renderwindow.h"
-#include <SDL.h>
-#include <SDL_mixer.h>
-#include <SDL_ttf.h>
-#include <enet/enet.h>
+#include "src/shared/enet.h"
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <cstdio>
 
-#include "src/keyboardmanager.h"
-
-const SDL_Color BG = {203, 211, 235, 255};
-
-uint64_t currentTick = 0;
+SDL_Window *window;
+SDL_Renderer *renderer;
+bool running = true;
+uint64_t currentTick = SDL_GetPerformanceCounter();
 uint64_t lastTick = 0;
-double deltaTime = 0;
 
-int main(int argc, char **argv)
+SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	if (!SDL_CreateWindowAndRenderer("Table Tennis", RenderWindow::SCREEN_WIDTH / 2, RenderWindow::SCREEN_HEIGHT / 2,
+		SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL | SDL_WINDOWPOS_CENTERED, &window, &renderer))
 	{
-		fprintf(stderr, "SDL could not be initialized!\n SDL_Error: %s\n", SDL_GetError());
-		return EXIT_FAILURE;
+		SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Couldn't create window and renderer: %s\n", SDL_GetError());
+		return SDL_APP_FAILURE;
 	}
 
-	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
-		fprintf(stderr, "SDL_mixer could not initialize!\n SDL_mixer_Error: %s\n", Mix_GetError());
-		return EXIT_FAILURE;
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s\n", SDL_GetError());
+		return SDL_APP_FAILURE;
 	}
 
-	if (TTF_Init() < 0)
+	if (!MIX_Init())
 	{
-		fprintf(stderr, "SDL_ttf could not initialize!\n SDL_ttf_Error: %s\n", TTF_GetError());
-		return EXIT_FAILURE;
+		SDL_LogError(SDL_LOG_CATEGORY_AUDIO, "Couldn't initialize Mixer: %s\n", SDL_GetError());
+		return SDL_APP_FAILURE;
+	}
+
+	if (!TTF_Init())
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Couldn't initialize TTF: %s\n", SDL_GetError());
+		return SDL_APP_FAILURE;
 	}
 
 	if (enet_initialize() < 0)
 	{
-		fprintf(stderr, "An error occurred while initializing ENet.\n");
-		return EXIT_FAILURE;
+		fprintf(stderr, "Couldn't initialize ENet.\n");
+		exit(EXIT_FAILURE);
 	}
 
-
-	RenderWindow *window = new RenderWindow(RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT, "Table Tennis");
 	CursorManager::loadCursors();
 	FontManager::init();
-	GameManager::switchScene(nullptr, new HomePane(window));
-	currentTick = SDL_GetPerformanceCounter();
+	GameManager::switchScene(nullptr, new HomePane(renderer));
 
-	bool running = true;
-	while (running)
+	return SDL_APP_CONTINUE;
+}
+
+SDL_AppResult SDL_AppEvent(void *appstate, const SDL_Event *event)
+{
+	switch (event->type)
 	{
-		lastTick = currentTick;
-		currentTick = SDL_GetPerformanceCounter();
-		deltaTime = (currentTick - lastTick) / (double)SDL_GetPerformanceFrequency();
-
-		EcsManager::sort();
-		CursorManager::forceSetCursor(CursorManager::arrowCursor);
-
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			switch (event.type)
-			{
-			case SDL_QUIT: {
-				running = false;
-			}
-
-			default:
-				KeyboardManager::preEvent(event);
-				GameManager::currentPane->onEvent(event);
-				EcsManager::event(event);
-				KeyboardManager::postEvent();
-			}
+		case SDL_EVENT_QUIT: {
+			return SDL_APP_SUCCESS;
 		}
 
-		window->drawBG(BG);
-		window->clear();
-
-		NetManager::update(deltaTime);
-		EcsManager::update(deltaTime);
-		GameManager::currentPane->onGui(deltaTime);
-		AnimationManager::update(deltaTime);
-		CursorManager::update();
-
-		SDL_RenderPresent(window->renderer);
+		default:
+			KeyboardManager::preEvent(event);
+			GameManager::currentPane->onEvent(event);
+			EcsManager::event(event);
+			KeyboardManager::postEvent();
 	}
 
-	delete GameManager::currentPane;
+	return SDL_APP_CONTINUE;
+}
+
+SDL_AppResult SDL_AppIterate(void *appstate)
+{
+	lastTick = currentTick;
+	currentTick = SDL_GetPerformanceCounter();
+	double deltaTime = (double)(currentTick - lastTick) / (double)SDL_GetPerformanceFrequency();
+
+	EcsManager::sort();
+	CursorManager::forceSetCursor(CursorManager::arrowCursor);
+
+	SDL_SetRenderDrawColor(renderer, 203, 211, 235, 255);
+	SDL_RenderClear(renderer);
+
+	NetManager::update(deltaTime);
+	EcsManager::update(deltaTime);
+	GameManager::currentPane->onGui(deltaTime);
+	AnimationManager::update(deltaTime);
+	CursorManager::update();
+
+	SDL_RenderPresent(renderer);
+
+	return SDL_APP_CONTINUE;
+}
+
+void SDL_AppQuit(void *appstate, SDL_AppResult result)
+{
 	FontManager::close();
-	EcsManager::clear();
 
 	SDL_Quit();
-	Mix_Quit();
+	MIX_Quit();
 	TTF_Quit();
-
-	return 0;
+	enet_deinitialize();
 }

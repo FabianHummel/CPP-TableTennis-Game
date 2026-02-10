@@ -14,29 +14,40 @@ add_executable(TableTennis main.cpp ${SrcFiles} ${SharedFiles})
 file(COPY res DESTINATION ${CMAKE_BINARY_DIR})
 
 # Add libraries
-find_package(PkgConfig REQUIRED)
 include(FetchContent)
 
-pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET sdl2)
-pkg_check_modules(SDL2_IMAGE REQUIRED IMPORTED_TARGET SDL2_image)
-pkg_check_modules(SDL2_TTF REQUIRED IMPORTED_TARGET SDL2_ttf)
-pkg_check_modules(SDL2_MIXER REQUIRED IMPORTED_TARGET SDL2_mixer)
-pkg_check_modules(SDL2_NET REQUIRED IMPORTED_TARGET SDL2_net)
-pkg_check_modules(SDL2_GFX REQUIRED IMPORTED_TARGET SDL2_gfx)
-pkg_check_modules(LIBENET REQUIRED IMPORTED_TARGET libenet)
+FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY git@github.com:libsdl-org/SDL.git
+        GIT_TAG        release-3.4.0
+)
+
+FetchContent_Declare(
+        SDL3_IMAGE
+        GIT_REPOSITORY git@github.com:libsdl-org/SDL_image.git
+        GIT_TAG        release-3.4.0
+)
+
+FetchContent_Declare(
+        SDL3_TTF
+        GIT_REPOSITORY git@github.com:libsdl-org/SDL_ttf.git
+        GIT_TAG        release-3.2.2
+)
+
+FetchContent_Declare(
+        SDL3_MIXER
+        GIT_REPOSITORY git@github.com:libsdl-org/SDL_mixer.git
+        GIT_TAG        prerelease-3.1.2
+)
+FetchContent_MakeAvailable(SDL3 SDL3_IMAGE SDL3_TTF SDL3_MIXER)
 
 target_link_libraries(TableTennis PUBLIC
-    PkgConfig::SDL2
-    PkgConfig::SDL2_IMAGE
-    PkgConfig::SDL2_TTF
-    PkgConfig::SDL2_MIXER
-    PkgConfig::SDL2_NET
-    PkgConfig::SDL2_GFX
-    PkgConfig::LIBENET
+        SDL3::SDL3
+        SDL3_image::SDL3_image
+        SDL3_ttf::SDL3_ttf
+        SDL3_mixer::SDL3_mixer
 )
 
 # Server code
 add_executable(Server server.cpp ${SharedFiles})
-target_link_libraries(Server PUBLIC
-    PkgConfig::LIBENET
-)
+target_link_libraries(Server PUBLIC)

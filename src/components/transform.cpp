@@ -1,5 +1,5 @@
 #include "transform.h"
-#include <SDL_rect.h>
+#include <SDL3/SDL_rect.h>
 
 Transform::Transform(const Vector3 &position, const Vector2 &scale, const SDL_FPoint &anchor, const float angle,
                      const int zIndex)

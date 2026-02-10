@@ -8,8 +8,9 @@
 #include "../utility/renderindexes.h"
 #include "../shared/packets.h"
 #include "home.h"
+#include "../utility/renderwindow.h"
 
-LobbyPane::LobbyPane(RenderWindow *window, const std::string &match_code, const std::string &player_name) : Pane(window)
+LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, const std::string &player_name) : Pane(renderer)
 {
 	this->matchCode = match_code;
 	this->playerName = player_name;
@@ -43,17 +44,17 @@ LobbyPane::LobbyPane(RenderWindow *window, const std::string &match_code, const 
 	};
 
 	versus = EcsManager::addEntity(new Entity("Versus"))
-		->addComponent(new SpriteRenderer("res/versus.png", window->renderer))
+		->addComponent(new SpriteRenderer("res/versus.png", renderer))
 	    ->addComponent(new MenuTitle())
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 230}, {700, 348}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::TITLE)
 		->addChild((new Entity("Opponent"))
 			->transform
 			->apply({-120, 0, 0}, {0, 0}, {0.0f, 0.0f}, 0.0f, 0)
-			->addComponent(new TextRenderer(window->renderer, "Waiting...", FontManager::BIG, {64, 64, 64})));
+			->addComponent(new TextRenderer(renderer, "Waiting...", FontManager::BIG, {64, 64, 64})));
 
 	matchCodeButton = EcsManager::addEntity(new Entity("Invite-Code"))
-		->usePreset(Presets::button(window->renderer, matchCode.c_str(), FontManager::BIG, [this] {
+		->usePreset(Presets::button(renderer, matchCode.c_str(), FontManager::BIG, [this] {
 			SDL_SetClipboardText(this->matchCode.c_str());
 		}))
 	    ->addComponent(new Button(nullptr, nullptr, [this] {
@@ -64,18 +65,18 @@ LobbyPane::LobbyPane(RenderWindow *window, const std::string &match_code, const 
 		->transform
 	    ->apply({RenderWindow::SCREEN_CENTER_X, 0, 550}, { 370, 150 }, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
 		->addChild((new Entity("Hint"))
-			->addComponent(new SpriteRenderer("res/copyarrow.png", window->renderer))
+			->addComponent(new SpriteRenderer("res/copyarrow.png", renderer))
 			->transform
 	        ->apply({-150, 0, 80}, {300, 105}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Menu::UI)
 	        ->apply(false));
 
 	background = EcsManager::addEntity(new Entity("Background"))
-		->addComponent(new BubbleDrawer(window->renderer))
+		->addComponent(new BubbleDrawer(renderer))
 		->transform
 		->apply({RenderWindow::SCREEN_HEIGHT, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.5f, 0.5f}, -3.8, RenderIndexes::Menu::BACKGROUND);
 
 	backButton = EcsManager::addEntity(new Entity("Back-Button"))
-		->addComponent(new SpriteRenderer("res/menuarrow.png", window->renderer))
+		->addComponent(new SpriteRenderer("res/menuarrow.png", renderer))
 		->addComponent(new Button(nullptr, [this] { this->back(); }))
 		->transform
 		->apply({40, 0, 40}, {50, 50}, {0.5f, 0.5f}, 180.0f, RenderIndexes::Menu::UI);
@@ -89,12 +90,12 @@ LobbyPane::~LobbyPane()
 	delete backButton;
 }
 
-void LobbyPane::onEvent(SDL_Event event)
+void LobbyPane::onEvent(const SDL_Event *event)
 {
-	switch (event.type)
+	switch (event->type)
 	{
-	case SDL_KEYDOWN:
-		switch (event.key.keysym.sym)
+	case SDL_EVENT_KEY_DOWN:
+		switch (event->key.key)
 		{
 		case SDLK_ESCAPE:
 			this->back();
@@ -106,6 +107,6 @@ void LobbyPane::onEvent(SDL_Event event)
 void LobbyPane::back()
 {
 	EcsManager::clear();
-	Pane *pane = new HomePane(window);
+	Pane *pane = new HomePane(renderer);
 	GameManager::switchScene(this, pane);
 }

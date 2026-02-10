@@ -1,5 +1,5 @@
 #include "fontmanager.h"
-#include <SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <cstdio>
 
 namespace FontManager
@@ -12,12 +12,12 @@ namespace FontManager
 		main = TTF_OpenFont("res/fonts/Quicksand-Bold.ttf", 42);
 		mono = TTF_OpenFont("res/fonts/RobotoMono-Regular.ttf", 42);
 
-		printf("Initialized!\n%s\n", TTF_GetError());
 		TTF_SetFontStyle(main, TTF_STYLE_NORMAL);
 	}
 
 	void close()
 	{
 		TTF_CloseFont(main);
+		TTF_CloseFont(mono);
 	}
 }

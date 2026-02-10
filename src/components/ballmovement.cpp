@@ -3,6 +3,7 @@
 #include "../soundmanager.h"
 #include "../utility/mathutil.h"
 #include "../utility/renderindexes.h"
+#include "../utility/renderwindow.h"
 
 void BallMovement::onInitialize()
 {

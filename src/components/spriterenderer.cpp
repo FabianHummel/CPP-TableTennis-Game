@@ -1,6 +1,6 @@
 #include "spriterenderer.h"
 
-#include <SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 
 SpriteRenderer::SpriteRenderer(const char *img, SDL_Renderer *renderer)
 {
@@ -26,7 +26,7 @@ void SpriteRenderer::onUpdate(double deltaTime)
 
 	SDL_FRect dstrect = transform->asRect();
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
-	SDL_RenderCopyExF(renderer, texture, srcrect, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
+	SDL_RenderTextureRotated(renderer, texture, srcrect, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
 }
 
 void SpriteRenderer::onDelete()
@@ -35,9 +35,9 @@ void SpriteRenderer::onDelete()
 	SDL_DestroyTexture(this->texture);
 }
 
-void SpriteRenderer::setSrcrect(SDL_Rect rect)
+void SpriteRenderer::setSrcrect(SDL_FRect rect)
 {
-	this->srcrect = new SDL_Rect(rect);
+	this->srcrect = new SDL_FRect(rect);
 }
 
 void SpriteRenderer::setImage(const char *v)

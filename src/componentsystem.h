@@ -2,7 +2,7 @@
 #define ECS_H
 
 #define SDL_DISABLE_IMMINTRIN_H
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "unordered_map"
 #include "vector"
 #include "functional"
@@ -17,7 +17,7 @@ class Component
 	virtual void onInitialize(){};
 	virtual void onStart(){};
 	virtual void onUpdate(double deltaTime){};
-	virtual void onEvent(SDL_Event event){};
+	virtual void onEvent(const SDL_Event *event){};
 	virtual void onDelete(){};
 };
 

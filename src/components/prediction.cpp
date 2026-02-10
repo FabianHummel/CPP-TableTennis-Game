@@ -1,10 +1,9 @@
 #include "prediction.h"
 #include "../ecsmanager.h"
-#include <SDL_image.h>
-#include <SDL_rect.h>
-#include <SDL_render.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_render.h>
 #include <cmath>
-#include <cstdio>
 
 Prediction::Prediction(const char *img, SDL_Renderer *renderer)
 {
@@ -111,7 +110,7 @@ void Prediction::onPredict(Vector3 &force)
 		// 	angle *= -1.0;
 
 		SDL_SetTextureAlphaMod(texture, 255);
-		SDL_RenderCopyExF(renderer, texture, nullptr, &rect, 0.0, nullptr, SDL_RendererFlip::SDL_FLIP_NONE);
+		SDL_RenderTextureRotated(renderer, texture, nullptr, &rect, 0.0, nullptr, SDL_FLIP_NONE);
 	}
 }
 

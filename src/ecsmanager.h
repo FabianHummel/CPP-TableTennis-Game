@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 #include <functional>
 #include <vector>
 
@@ -18,7 +18,7 @@ namespace EcsManager
 	void initialize();
 	void start();
 	void update(double deltaTime);
-	void event(SDL_Event event);
+	void event(const SDL_Event *event);
 	void sort();
 	void clear();
 };

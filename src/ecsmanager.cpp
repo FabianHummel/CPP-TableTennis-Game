@@ -1,7 +1,7 @@
 #include "ecsmanager.h"
 #include "components/transform.h"
 #include "componentsystem.h"
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 
 namespace EcsManager
 {
@@ -57,7 +57,7 @@ namespace EcsManager
 		callOnEachEntity([deltaTime](Component *component) { component->onUpdate(deltaTime); });
 	}
 
-	void event(SDL_Event event)
+	void event(const SDL_Event *event)
 	{
 		callOnEachEntity([event](Component *component) { component->onEvent(event); });
 	}

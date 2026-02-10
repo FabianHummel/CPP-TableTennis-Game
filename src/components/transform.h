@@ -3,7 +3,7 @@
 #include "../utility/vector2.h"
 #include "../utility/vector3.h"
 #include "../componentsystem.h"
-#include <SDL_rect.h>
+#include <SDL3/SDL_rect.h>
 
 class Transform : public Component
 {

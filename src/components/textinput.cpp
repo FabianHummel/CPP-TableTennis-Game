@@ -18,7 +18,7 @@ void TextInput::onUpdate(double deltaTime)
 {
 	if (!parent->isVisible()) return;
 
-	int x, y;
+	float x, y;
 	SDL_GetMouseState(&x, &y);
 	x *= 2;
 	y *= 2;
@@ -33,18 +33,18 @@ void TextInput::onUpdate(double deltaTime)
 	}
 }
 
-void TextInput::onEvent(SDL_Event event)
+void TextInput::onEvent(const SDL_Event *event)
 {
 	if (!parent->isVisible()) return;
 
-	int x, y;
+	float x, y;
 	SDL_GetMouseState(&x, &y);
 	x *= 2;
 	y *= 2;
 
-	switch (event.type)
+	switch (event->type)
 	{
-	case SDL_MOUSEBUTTONDOWN:
+	case SDL_EVENT_MOUSE_BUTTON_DOWN:
 		this->isFocused = false;
 		if (transform->inTransformBounds(x, y))
 		{
@@ -52,13 +52,13 @@ void TextInput::onEvent(SDL_Event event)
 			this->isFocused = true;
 		}
 		break;
-	case SDL_TEXTINPUT:
+	case SDL_EVENT_TEXT_INPUT:
 		if (this->isFocused && strlen(this->text) < this->max_length)
 		{
 			static const char* alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 			int i = 0;
-			while(event.text.text[i]) {
-				char ch = (char)toupper(event.text.text[i]);
+			while(event->text.text[i]) {
+				char ch = (char)toupper(event->text.text[i]);
 				if (strchr(alphanum, ch)) {
 					strcat(this->text, &ch);
 				}
@@ -68,8 +68,8 @@ void TextInput::onEvent(SDL_Event event)
 			this->onInputChanged(this->text);
 		}
 		break;
-	case SDL_KEYDOWN:
-		if (event.key.keysym.sym == SDLK_BACKSPACE)
+	case SDL_EVENT_KEY_DOWN:
+		if (event->key.key == SDLK_BACKSPACE)
 		{
 			if (this->isFocused && strlen(this->text) > 0)
 			{

@@ -25,11 +25,11 @@ class HomePane : public Pane
 	Entity *playerNameInput;
 
   public:
-	explicit HomePane(RenderWindow *window);
+	explicit HomePane(SDL_Renderer *renderer);
 	~HomePane();
 
 	void onStart() override;
-	void onEvent(SDL_Event event) override;
+	void onEvent(const SDL_Event *event) override;
 
 	void changeGameMode();
 	void previousGameMode();

@@ -4,13 +4,14 @@
 
 #pragma once
 
-#include <SDL_mixer.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <unordered_map>
 #include <vector>
 
 namespace SoundManager
 {
-	extern std::unordered_map<const char *, Mix_Chunk *> sounds;
+	extern MIX_Mixer *mixer;
+	extern std::unordered_map<const char *, MIX_Audio *> sounds;
 
 	void addSound(const char *path, const char *name);
 	void playSound(const char *name, int volume);

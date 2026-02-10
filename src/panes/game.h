@@ -15,7 +15,11 @@ class GamePane : public Pane
 	Entity *powerbox;
 	Entity *prediction;
 
+	void back();
+
   public:
-	explicit GamePane(RenderWindow *window);
+	explicit GamePane(SDL_Renderer *renderer);
 	~GamePane();
+
+	void onEvent(const SDL_Event *event) override;
 };
