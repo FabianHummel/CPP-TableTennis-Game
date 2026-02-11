@@ -1,5 +1,5 @@
 #define ENET_IMPLEMENTATION
-#define SDL_MAIN_USE_CALLBACKS 1
+#define SDL_MAIN_USE_CALLBACKS
 
 #include "src/animationmanager.h"
 #include "src/cursormanager.h"
@@ -11,31 +11,39 @@
 #include "src/panes/home.h"
 #include "src/utility/renderwindow.h"
 #include "src/shared/enet.h"
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3/SDL_init.h>
 #include <SDL3_mixer/SDL_mixer.h>
-#include <SDL3_ttf/SDL_ttf.h>
 #include <cstdio>
 
-SDL_Window *window;
-SDL_Renderer *renderer;
-bool running = true;
-uint64_t currentTick = SDL_GetPerformanceCounter();
-uint64_t lastTick = 0;
-
-SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
+struct AppState
 {
-	if (!SDL_CreateWindowAndRenderer("Table Tennis", RenderWindow::SCREEN_WIDTH / 2, RenderWindow::SCREEN_HEIGHT / 2,
-		SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL | SDL_WINDOWPOS_CENTERED, &window, &renderer))
-	{
-		SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Couldn't create window and renderer: %s\n", SDL_GetError());
-		return SDL_APP_FAILURE;
-	}
+	SDL_Window *window{nullptr};
+	SDL_Renderer *renderer{nullptr};
+	bool running{true};
+	uint64_t currentTick{0};
+	uint64_t lastTick{0};
+};
+
+SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
+{
+	*appstate = new AppState;
+	AppState& state = *static_cast<AppState*>(*appstate);
 
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s\n", SDL_GetError());
 		return SDL_APP_FAILURE;
 	}
+
+	if (!SDL_CreateWindowAndRenderer("Table Tennis", RenderWindow::SCREEN_WIDTH / 2, RenderWindow::SCREEN_HEIGHT / 2,
+		SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL, &state.window, &state.renderer))
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Couldn't create window and renderer: %s\n", SDL_GetError());
+		return SDL_APP_FAILURE;
+	}
+
+	SDL_SetWindowPosition(state.window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
 	if (!MIX_Init())
 	{
@@ -57,12 +65,14 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
 	CursorManager::loadCursors();
 	FontManager::init();
-	GameManager::switchScene(nullptr, new HomePane(renderer));
+	GameManager::switchScene(nullptr, new HomePane(state.renderer));
+
+	state.currentTick = SDL_GetPerformanceCounter();
 
 	return SDL_APP_CONTINUE;
 }
 
-SDL_AppResult SDL_AppEvent(void *appstate, const SDL_Event *event)
+SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
 	switch (event->type)
 	{
@@ -82,15 +92,17 @@ SDL_AppResult SDL_AppEvent(void *appstate, const SDL_Event *event)
 
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
-	lastTick = currentTick;
-	currentTick = SDL_GetPerformanceCounter();
-	double deltaTime = (double)(currentTick - lastTick) / (double)SDL_GetPerformanceFrequency();
+	AppState& state = *static_cast<AppState*>(appstate);
+
+	state.lastTick = state.currentTick;
+	state.currentTick = SDL_GetPerformanceCounter();
+	double deltaTime = (double)(state.currentTick - state.lastTick) / (double)SDL_GetPerformanceFrequency();
 
 	EcsManager::sort();
 	CursorManager::forceSetCursor(CursorManager::arrowCursor);
 
-	SDL_SetRenderDrawColor(renderer, 203, 211, 235, 255);
-	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(state.renderer, 203, 211, 235, 255);
+	SDL_RenderClear(state.renderer);
 
 	NetManager::update(deltaTime);
 	EcsManager::update(deltaTime);
@@ -98,13 +110,16 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 	AnimationManager::update(deltaTime);
 	CursorManager::update();
 
-	SDL_RenderPresent(renderer);
+	SDL_RenderPresent(state.renderer);
 
 	return SDL_APP_CONTINUE;
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
+	AppState* state = static_cast<AppState*>(appstate);
+	delete state;
+
 	FontManager::close();
 
 	SDL_Quit();

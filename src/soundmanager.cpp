@@ -32,7 +32,7 @@ namespace SoundManager
 		playSound(name, 1.0f);
 	}
 
-	void playSounds(const std::vector<const char *> &names, int volume)
+	void playSounds(const std::vector<const char *> &names, float volume)
 	{
 		for (auto name : names)
 		{
@@ -42,10 +42,10 @@ namespace SoundManager
 
 	void playSounds(const std::vector<const char *> &names)
 	{
-		playSounds(names, 1.0);
+		playSounds(names, 1.0f);
 	}
 
-	void playRndSound(const std::vector<const char *> &names, int volume)
+	void playRndSound(const std::vector<const char *> &names, float volume)
 	{
 		int rnd = rand() % names.size();
 		playSound(names[rnd], volume);
@@ -53,6 +53,6 @@ namespace SoundManager
 
 	void playRndSound(const std::vector<const char *> &names)
 	{
-		playRndSound(names, 1.0);
+		playRndSound(names, 1.0f);
 	}
 }
