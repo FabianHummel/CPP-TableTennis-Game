@@ -7,6 +7,7 @@
 
 BubbleDrawer::BubbleDrawer(SDL_Renderer *renderer)
 {
+	this->name = "Bubble Drawer";
 	this->renderer = renderer;
 	this->texture = IMG_LoadTexture(renderer, "res/background.png");
 	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
@@ -20,8 +21,8 @@ void BubbleDrawer::onInitialize()
 void BubbleDrawer::onUpdate(double deltaTime)
 {
 	time += deltaTime;
-	double xOff = fmod(time * BubbleDrawer::SPEED, 80.0);
-	double yOff = fmod(time * BubbleDrawer::SPEED, 80.0) * 0.05;
+	double xOff = fmod(time * SPEED, 80.0);
+	double yOff = fmod(time * SPEED, 80.0) * 0.05;
 
 	SDL_FRect dstrect;
 	dstrect.x = -100.0 + xOff;

@@ -1,13 +1,16 @@
 #include "lobby.h"
-
+#include "home.h"
 #include "../presets/index.h"
 #include "../ecsmanager.h"
 #include "../gamemanager.h"
 #include "../netmanager.h"
 #include "../fontmanager.h"
+#include "../components/bubbledrawer.h"
+#include "../components/button.h"
+#include "../components/menutitle.h"
+#include "../components/spriterenderer.h"
 #include "../utility/renderindexes.h"
 #include "../shared/packets.h"
-#include "home.h"
 #include "../utility/renderwindow.h"
 
 LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, const std::string &player_name) : Pane(renderer)
@@ -33,7 +36,7 @@ LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, cons
 	};
 
 	NetManager::on_peer_ping = [](const double rtt) {
-		printf("\rRound trip time: %f", rtt);
+		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "\rRound trip time: %f", rtt);
 		fflush(stdout);
 	};
 

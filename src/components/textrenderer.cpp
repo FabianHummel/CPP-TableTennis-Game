@@ -7,6 +7,7 @@
 
 TextRenderer::TextRenderer(SDL_Renderer *renderer, const char *text, int ptSize, SDL_Color color)
 {
+	this->name = "Text Renderer";
 	this->ptSize = ptSize;
 	this->renderer = renderer;
 	this->text = text;
@@ -25,13 +26,13 @@ void TextRenderer::onUpdate(double deltaTime)
 	if (!visible || !parent->isVisible()) return;
 
 	int w, h;
-	TTF_SetFontSize(FontManager::main, ptSize);
+	TTF_SetFontSize(FontManager::main, (float)ptSize);
 	TTF_GetStringSize(FontManager::main, text, 0, &w, &h);
-	transform->setScale({(float)w, (float)h});
+	transform->scale = {(double)w, (double)h};
 
-	SDL_FRect dstrect = transform->asRect();
+	SDL_FRect dstrect = transform->getCalculatedRect();
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
-	SDL_RenderTextureRotated(renderer, texture, nullptr, &dstrect, transform->getRotation(), nullptr, SDL_FLIP_NONE);
+	SDL_RenderTextureRotated(renderer, texture, nullptr, &dstrect, transform->getCalculatedRotation(), nullptr, SDL_FLIP_NONE);
 }
 
 void TextRenderer::setText(const char *text)
@@ -49,7 +50,7 @@ void TextRenderer::setColor(SDL_Color color)
 void TextRenderer::updateTexture()
 {
 	SDL_DestroyTexture(texture);
-	TTF_SetFontSize(FontManager::main, ptSize);
+	TTF_SetFontSize(FontManager::main, (float)ptSize);
 	SDL_Surface *surface = TTF_RenderText_Blended(font, text, 0, color);
 	this->texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_DestroySurface(surface);

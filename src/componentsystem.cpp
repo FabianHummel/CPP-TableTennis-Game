@@ -52,19 +52,20 @@ void Entity::update(const std::function<void(Component *)> &callback)
 		callback(component);
 	}
 
-	std::sort(children.begin(), children.end(), [](Entity *a, Entity *b) {
-		Transform *trfA = a->transform;
-		Transform *trfB = b->transform;
-
-		if (trfA->getI() == trfB->getI())
+	std::sort(children.begin(), children.end(), [](const Entity *a, const Entity *b)
 		{
-			return trfA->getZ() < trfB->getZ();
+		const Transform *trfA = a->transform;
+		const Transform *trfB = b->transform;
+
+		if (trfA->zIndex == trfB->zIndex)
+		{
+			return trfA->position.z < trfB->position.z;
 		}
 
-		return trfA->getI() < trfB->getI();
+		return trfA->zIndex < trfB->zIndex;
 	});
 
-	for (auto &child : this->children)
+	for (const auto &child : this->children)
 	{
 		child->update(callback);
 	}
@@ -77,7 +78,7 @@ Entity* Entity::addChild(Entity *child)
 	return this;
 }
 
-Entity* Entity::getChild(const char *name)
+Entity* Entity::getChild(const char *name) const
 {
 	for (Entity *child : children)
 	{

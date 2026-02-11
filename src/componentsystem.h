@@ -12,6 +12,8 @@ class Entity;
 class Component
 {
   public:
+	const char *name{"Component"};
+
 	Entity *parent{};
 
 	virtual void onInitialize(){};
@@ -45,7 +47,7 @@ class Entity
 	void update(const std::function<void(Component*)> &callback);
 
 	Entity* addChild(Entity *child);
-	Entity* getChild(const char *name);
+	Entity* getChild(const char *name) const;
 	Entity* removeChild(Entity *child);
 	Entity* usePreset(const Preset &function);
 	Entity* apply(bool visible = true, int opacity = 255);

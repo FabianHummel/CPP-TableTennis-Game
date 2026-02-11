@@ -7,9 +7,9 @@
 struct Vector3
 {
   public:
-	float x, y, z;
+	double x, y, z;
 
-	Vector3(float x, float y, float z);
+	Vector3(double x, double y, double z);
 	~Vector3();
 
 	Vector3 operator+(const Vector3 &other) const;
@@ -17,24 +17,24 @@ struct Vector3
 	Vector3 operator*(const Vector3 &other) const;
 	Vector3 operator/(const Vector3 &other) const;
 
-	Vector3 operator+(const float &other) const;
-	Vector3 operator-(const float &other) const;
-	Vector3 operator*(const float &other) const;
-	Vector3 operator/(const float &other) const;
+	Vector3 operator+(const double &other) const;
+	Vector3 operator-(const double &other) const;
+	Vector3 operator*(const double &other) const;
+	Vector3 operator/(const double &other) const;
 
 	Vector3 &operator+=(const Vector3 &other);
 	Vector3 &operator-=(const Vector3 &other);
 	Vector3 &operator*=(const Vector3 &other);
 	Vector3 &operator/=(const Vector3 &other);
 
-	Vector3 &operator+=(const float &other);
-	Vector3 &operator-=(const float &other);
-	Vector3 &operator*=(const float &other);
-	Vector3 &operator/=(const float &other);
+	Vector3 &operator+=(const double &other);
+	Vector3 &operator-=(const double &other);
+	Vector3 &operator*=(const double &other);
+	Vector3 &operator/=(const double &other);
 
 	bool operator==(const Vector3 &other) const;
 	bool operator!=(const Vector3 &other) const;
 
-	float magnitude() const;
+	double magnitude() const;
 	Vector3 normalized() const;
 };

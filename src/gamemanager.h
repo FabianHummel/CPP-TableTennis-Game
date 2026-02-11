@@ -6,5 +6,5 @@ namespace GameManager
 {
 	extern Pane *currentPane;
 	void nextRound();
-	void switchScene(Pane *from, Pane *to);
+	void switchScene(const Pane *from, Pane *to);
 };

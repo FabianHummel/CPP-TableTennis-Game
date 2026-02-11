@@ -14,12 +14,7 @@ namespace SoundManager
 	extern std::unordered_map<const char *, MIX_Audio *> sounds;
 
 	void addSound(const char *path, const char *name);
-	void playSound(const char *name, float volume);
-	void playSound(const char *name);
-
-	void playSounds(const std::vector<const char *> &names, float volume);
-	void playSounds(const std::vector<const char *> &names);
-
-	void playRndSound(const std::vector<const char *> &names, float volume);
-	void playRndSound(const std::vector<const char *> &names);
-};
+	void playSound(MIX_Track *track, const char *name, float gain);
+	void playSounds(MIX_Track *track, const std::vector<const char *> &names, float gain);
+	void playRndSound(MIX_Track *track, const std::vector<const char *> &names, float gain);
+}

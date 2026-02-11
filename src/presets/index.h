@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../components/index.h"
+#include <functional>
+#include "../componentsystem.h"
+#include "SDL3/SDL_render.h"
 
 namespace Presets
 {

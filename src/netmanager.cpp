@@ -1,6 +1,6 @@
 #include "netmanager.h"
 #include "shared/packets.h"
-#include <cstdio>
+#include <SDL3/SDL_log.h>
 
 namespace NetManager
 {
@@ -18,7 +18,7 @@ namespace NetManager
 	bool waitForPong = false;
 	std::string match_code;
 
-	void init_matchmaking()
+	bool init_matchmaking()
 	{
 		ENetAddress hostAddress;
 		hostAddress.host = ENET_HOST_ANY;
@@ -26,8 +26,8 @@ namespace NetManager
 		host = enet_host_create(&hostAddress, 100, 2, 0, 0);
 		if (host == nullptr)
 		{
-			fprintf (stderr, "An error occurred while trying to create an ENet host host.\n");
-			return;
+			SDL_LogError(SDL_LOG_CATEGORY_ERROR, "An error occurred while trying to create an ENet host host.\n");
+			return false;
 		}
 
 		ENetAddress serverAddress;
@@ -36,12 +36,14 @@ namespace NetManager
 
 		if (!enet_host_connect(host, &serverAddress, 2, CREATE_MATCH << 26))
 		{
-			fprintf(stderr, "No available peers for initiating an ENet connection.\n");
-			return;
+			SDL_LogError(SDL_LOG_CATEGORY_ERROR, "No available peers for initiating an ENet connection.\n");
+			return false;
 		}
+
+		return true;
 	}
 
-	void join_match(const char *match_code)
+	bool join_match(const char *match_code)
 	{
 		ENetAddress hostAddress;
 		hostAddress.host = ENET_HOST_ANY;
@@ -49,8 +51,8 @@ namespace NetManager
 		host = enet_host_create(&hostAddress, 100, 2, 0, 0);
 		if (host == nullptr)
 		{
-			fprintf (stderr, "An error occurred while trying to create an ENet host host.\n");
-			return;
+			SDL_LogError(SDL_LOG_CATEGORY_ERROR, "An error occurred while trying to create an ENet host host.\n");
+			return false;
 		}
 
 		ENetAddress serverAddress;
@@ -60,10 +62,12 @@ namespace NetManager
 		unsigned int encoded = strtoul(match_code, nullptr, 36);
 		if (!enet_host_connect(host, &serverAddress, 2, encoded | JOIN_MATCH << 26))
 		{
-			fprintf(stderr, "No available peers for initiating an ENet connection.\n");
-			return;
+			SDL_LogError(SDL_LOG_CATEGORY_ERROR, "No available peers for initiating an ENet connection.\n");
+			return false;
 		}
 		NetManager::match_code = std::string(match_code);
+
+		return true;
 	}
 
 	void handle_response(const ENetEvent &event, Buffer &buffer)
@@ -87,11 +91,11 @@ namespace NetManager
 			const auto address = buffer.Read<ENetAddress>();
 			char newPeerIp[40];
 			enet_address_get_host_ip(&address, newPeerIp, 40);
-			printf("Punching through to %s:%d\n", newPeerIp, address.port);
+			SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Punching through to %s:%d\n", newPeerIp, address.port);
 			enemy = enet_host_connect(host, &address, 2, 0);
 			if (enemy == nullptr)
 			{
-				fprintf(stderr, "No available peers for initiating an ENet connection.\n");
+				SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "No available peers for initiating an ENet connection.\n");
 				on_punch_fail();
 				return;
 			}
@@ -151,11 +155,11 @@ namespace NetManager
 			switch (event.type)
 			{
 			case ENET_EVENT_TYPE_CONNECT: {
-				printf("Connected to %s:%d\n", ip, (int)event.peer->address.port);
+				SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Connected to %s:%d\n", ip, (int)event.peer->address.port);
 				break;
 			}
 			case ENET_EVENT_TYPE_DISCONNECT: {
-				printf("Disconnected from %s:%d\n", ip, (int)event.peer->address.port);
+				SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Disconnected from %s:%d\n", ip, (int)event.peer->address.port);
 				break;
 			}
 			case ENET_EVENT_TYPE_RECEIVE: {

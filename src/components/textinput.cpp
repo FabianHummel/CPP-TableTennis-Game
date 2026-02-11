@@ -4,6 +4,7 @@
 
 TextInput::TextInput(char *text, size_t max_length, const std::function<void(char*text)> &onInputChanged)
 {
+	this->name = "Text Input";
 	this->text = text;
 	this->max_length = max_length;
 	this->onInputChanged = onInputChanged;

@@ -1,6 +1,7 @@
 #include "index.h"
 #include "../fontmanager.h"
 #include "../components/cursor.h"
+#include "../components/nineslice.h"
 
 Preset Presets::textinput(SDL_Renderer *renderer, char* text, int ptSize, size_t max_length)
 {

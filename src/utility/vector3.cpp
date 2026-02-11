@@ -5,7 +5,7 @@
 #include "vector3.h"
 #include <cmath>
 
-Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z){};
+Vector3::Vector3(double x, double y, double z) : x(x), y(y), z(z){};
 
 Vector3::~Vector3() = default;
 
@@ -29,22 +29,22 @@ Vector3 Vector3::operator/(const Vector3 &other) const
 	return {this->x / other.x, this->y / other.y, this->z / other.z};
 }
 
-Vector3 Vector3::operator+(const float &other) const
+Vector3 Vector3::operator+(const double &other) const
 {
 	return {this->x + other, this->y + other, this->z + other};
 }
 
-Vector3 Vector3::operator-(const float &other) const
+Vector3 Vector3::operator-(const double &other) const
 {
 	return {this->x - other, this->y - other, this->z - other};
 }
 
-Vector3 Vector3::operator*(const float &other) const
+Vector3 Vector3::operator*(const double &other) const
 {
 	return {this->x * other, this->y * other, this->z * other};
 }
 
-Vector3 Vector3::operator/(const float &other) const
+Vector3 Vector3::operator/(const double &other) const
 {
 	return {this->x / other, this->y / other, this->z / other};
 }
@@ -81,7 +81,7 @@ Vector3 &Vector3::operator/=(const Vector3 &other)
 	return *this;
 }
 
-Vector3 &Vector3::operator+=(const float &other)
+Vector3 &Vector3::operator+=(const double &other)
 {
 	this->x += other;
 	this->y += other;
@@ -89,7 +89,7 @@ Vector3 &Vector3::operator+=(const float &other)
 	return *this;
 }
 
-Vector3 &Vector3::operator-=(const float &other)
+Vector3 &Vector3::operator-=(const double &other)
 {
 	this->x -= other;
 	this->y -= other;
@@ -97,7 +97,7 @@ Vector3 &Vector3::operator-=(const float &other)
 	return *this;
 }
 
-Vector3 &Vector3::operator*=(const float &other)
+Vector3 &Vector3::operator*=(const double &other)
 {
 	this->x *= other;
 	this->y *= other;
@@ -105,7 +105,7 @@ Vector3 &Vector3::operator*=(const float &other)
 	return *this;
 }
 
-Vector3 &Vector3::operator/=(const float &other)
+Vector3 &Vector3::operator/=(const double &other)
 {
 	this->x /= other;
 	this->y /= other;
@@ -123,13 +123,13 @@ bool Vector3::operator!=(const Vector3 &other) const
 	return !(*this == other);
 }
 
-float Vector3::magnitude() const
+double Vector3::magnitude() const
 {
 	return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
 Vector3 Vector3::normalized() const
 {
-	auto magnitude = this->magnitude();
+	const double magnitude = this->magnitude();
 	return {this->x / magnitude, this->y / magnitude, this->z / magnitude};
 }

@@ -3,8 +3,11 @@
 #include "home.h"
 #include "../ecsmanager.h"
 #include "../gamemanager.h"
+#include "../components/ballmovement.h"
+#include "../components/powerbar.h"
+#include "../components/shadowtransformer.h"
+#include "../components/spriterenderer.h"
 #include "../utility/renderindexes.h"
-#include "../components/index.h"
 #include "../utility/renderwindow.h"
 
 GamePane::GamePane(SDL_Renderer *renderer) : Pane(renderer)
@@ -36,11 +39,11 @@ GamePane::GamePane(SDL_Renderer *renderer) : Pane(renderer)
 		->apply({0, 0, 0}, {112, 112}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Game::UI + 1)
 		->addComponent(new SpriteRenderer("res/indicator.png", renderer));
 
-	powerbar = EcsManager::addEntity(new Entity("Powerbar"))
+	powerbar = EcsManager::addEntity(new Entity("PowerBar"))
 		->transform
 		->apply({0, 0, 0}, {70, 70}, {0.5f, 1.0f}, 0.0f, RenderIndexes::Game::UI + 0)
 		->addComponent(new SpriteRenderer("res/powerbar.png", renderer))
-		->addComponent(new Powerbar());
+		->addComponent(new PowerBar());
 
 	powerbox = EcsManager::addEntity(new Entity("Powerbox"))
 		->transform

@@ -5,10 +5,13 @@
 #include "spriterenderer.h"
 #include <cstdio>
 
-void Powerbar::onInitialize()
+PowerBar::PowerBar()
 {
-	printf("Initializing Powerbar Behavior on %s\n", parent->name);
+	this->name = "Power Bar";
+}
 
+void PowerBar::onInitialize()
+{
 	indicator = EcsManager::findEntity("Indicator")->getComponent<Transform>();
 	indicatorSprite = EcsManager::findEntity("Indicator")->getComponent<SpriteRenderer>();
 	ball = EcsManager::findEntity("Ball")->getComponent<BallMovement>();
@@ -17,7 +20,7 @@ void Powerbar::onInitialize()
 	powerbox = powerboxEntity->getComponent<Transform>();
 	powerboxSprite = powerboxEntity->getComponent<SpriteRenderer>();
 
-	Entity *powerbarEntity = EcsManager::findEntity("Powerbar");
+	Entity *powerbarEntity = EcsManager::findEntity("PowerBar");
 	powerbar = powerbarEntity->getComponent<Transform>();
 	powerbarSprite = powerbarEntity->getComponent<SpriteRenderer>();
 
@@ -25,7 +28,7 @@ void Powerbar::onInitialize()
 	prediction = predictionEntity->getComponent<Prediction>();
 }
 
-void Powerbar::onEvent(const SDL_Event *event)
+void PowerBar::onEvent(const SDL_Event *event)
 {
 	switch (event->type)
 	{
@@ -50,53 +53,53 @@ void Powerbar::onEvent(const SDL_Event *event)
 	}
 }
 
-void Powerbar::setProgress(float v, float y)
+void PowerBar::setProgress(float v, float y)
 {
 	this->size = v;
 
-	float progress = size / 100.0f * 250;
+	const float progress = size / 100.0f * 250;
 	powerbarSprite->setSrcrect({0, 250.0f - progress, 250, progress});
 
-	powerbar->setScaleY(size / 100.0f * 70);
+	powerbar->scale.y = size / 100.0f * 70;
 }
 
-void Powerbar::onStart()
+void PowerBar::onStart()
 {
 	indicatorSprite->visible = false;
 	powerboxSprite->visible = false;
 	powerbarSprite->visible = false;
 }
 
-void Powerbar::onUpdate(double deltaTime)
+void PowerBar::onUpdate(double deltaTime)
 {
 	if (isDragging)
 	{
-		Vector3 force = calcForce();
+		const Vector3 force = calcForce();
 		prediction->onPredict(force);
 	}
 }
 
-Vector3 Powerbar::calcForce()
+Vector3 PowerBar::calcForce() const
 {
-	double length = sqrt(deltaX * deltaX + deltaY * deltaY);
-	double forceX = -(double)deltaX / length * strength * 7.0;
-	double forceY = -(double)deltaY / length * strength * 7.0;
+	const double length = sqrt(deltaX * deltaX + deltaY * deltaY);
+	const double forceX = -(double)deltaX / length * strength * 7.0;
+	const double forceY = -(double)deltaY / length * strength * 7.0;
 	return {(float)forceX, 8.f, (float)forceY};
 }
 
-void Powerbar::onClick(float x, float y)
+void PowerBar::onClick(float x, float y)
 {
 	isDragging = true;
 	startX = x;
 	startY = y;
 	// printf("began mouse drag at: %d, %d\n", startX, startY);
 
-	indicator->setPosition({startX, 0.0f, startY});
-	powerbox->setPosition({startX - 100.0f, 0.0f, startY});
-	powerbar->setPosition({startX - 100.0f, 0.0f, startY + powerbox->getScaleY() / 2.0f});
+	indicator->position = {startX, 0.0f, startY};
+	powerbox->position = {startX - 100.0f, 0.0f, startY};
+	powerbar->position = {startX - 100.0f, 0.0f, startY + powerbox->scale.y / 2.0f};
 }
 
-void Powerbar::onRelease()
+void PowerBar::onRelease()
 {
 	indicatorSprite->visible = false;
 	powerboxSprite->visible = false;
@@ -107,18 +110,18 @@ void Powerbar::onRelease()
 	// printf("with a delta of: %d, %d ", deltaX, deltaY);
 	// printf("and an angle of: %d°\n", angle);
 
-	if (strength > 0.1f && ball->parent->transform->getY() > -10.0f)
+	if (strength > 0.1f && ball->parent->transform->scale.y > -10.0f)
 	{
 		ball->idle = false;
 
-		Vector3 force = calcForce();
-		ball->setForce(force);
+		const Vector3 force = calcForce();
+		ball->velocity = force;
 	}
 
 	strength = 0.0f;
 }
 
-void Powerbar::onDrag(float x, float y)
+void PowerBar::onDrag(float x, float y)
 {
 	if (isDragging)
 	{
@@ -126,14 +129,14 @@ void Powerbar::onDrag(float x, float y)
 		powerboxSprite->visible = true;
 		powerbarSprite->visible = true;
 
-		float currentX = x;
-		float currentY = y;
+		const float currentX = x;
+		const float currentY = y;
 
 		deltaX = currentX - startX;
 		deltaY = currentY - startY;
 
-		float angle = 180.0f - atan2(deltaX, deltaY) * 180 / M_PI;
-		indicator->setRotation(angle);
+		const float angle = 180.0f - atan2(deltaX, deltaY) * 180.0f / (float)M_PI;
+		indicator->rotation = angle;
 
 		strength = std::clamp(sqrt(deltaX * deltaX + deltaY * deltaY) / 200.0f, 0.0f, 1.0f);
 		setProgress(strength * 100.0f, startY);

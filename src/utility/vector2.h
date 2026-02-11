@@ -7,9 +7,9 @@
 struct Vector2
 {
   public:
-	float x, y;
+	double x, y;
 
-	Vector2(float x, float y);
+	Vector2(double x, double y);
 	~Vector2();
 
 	Vector2 operator+(const Vector2 &other) const;
@@ -17,24 +17,24 @@ struct Vector2
 	Vector2 operator*(const Vector2 &other) const;
 	Vector2 operator/(const Vector2 &other) const;
 
-	Vector2 operator+(const float &other) const;
-	Vector2 operator-(const float &other) const;
-	Vector2 operator*(const float &other) const;
-	Vector2 operator/(const float &other) const;
+	Vector2 operator+(const double &other) const;
+	Vector2 operator-(const double &other) const;
+	Vector2 operator*(const double &other) const;
+	Vector2 operator/(const double &other) const;
 
 	Vector2 &operator+=(const Vector2 &other);
 	Vector2 &operator-=(const Vector2 &other);
 	Vector2 &operator*=(const Vector2 &other);
 	Vector2 &operator/=(const Vector2 &other);
 
-	Vector2 &operator+=(const float &other);
-	Vector2 &operator-=(const float &other);
-	Vector2 &operator*=(const float &other);
-	Vector2 &operator/=(const float &other);
+	Vector2 &operator+=(const double &other);
+	Vector2 &operator-=(const double &other);
+	Vector2 &operator*=(const double &other);
+	Vector2 &operator/=(const double &other);
 
 	bool operator==(const Vector2 &other) const;
 	bool operator!=(const Vector2 &other) const;
 
-	float magnitude() const;
+	double magnitude() const;
 	Vector2 normalized() const;
 };

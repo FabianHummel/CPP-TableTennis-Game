@@ -7,6 +7,7 @@
 
 Prediction::Prediction(const char *img, SDL_Renderer *renderer)
 {
+	this->name = "Prediction";
 	this->img = img;
 	this->renderer = renderer;
 }
@@ -34,16 +35,16 @@ void Prediction::onInitialize()
 
 void Prediction::onStart()
 {
-	printf("Loading Texture %s\n", img);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Loading Texture %s\n", img);
 	this->texture = IMG_LoadTexture(renderer, img);
 }
 
-void Prediction::onPredict(Vector3 &force)
+void Prediction::onPredict(const Vector3 &force) const
 {
-	double px = pos_zero_crossing_f(force.x, force.y, ball->getY());
-	double pz = pos_zero_crossing_f(force.z, force.y, ball->getY());
+	const double px = pos_zero_crossing_f(force.x, force.y, ball->position.y);
+	const double pz = pos_zero_crossing_f(force.z, force.y, ball->position.y);
 
-	double total_length = length_f(px, force.x, force.y);
+	const double total_length = length_f(px, force.x, force.y);
 	constexpr double segment_length = 45.0;
 
 	// double progress = 0.0;
@@ -74,7 +75,7 @@ void Prediction::onPredict(Vector3 &force)
 	// 	progress += segment_length;
 	// }
 
-	double amount = total_length / segment_length;
+	const double amount = total_length / segment_length;
 
 	for (int i = 0; i < amount; i++)
 	{
@@ -82,25 +83,25 @@ void Prediction::onPredict(Vector3 &force)
 		rect.w = 40.0;
 		rect.h = 40.0;
 
-		float x = (float)px / amount * i;
-		float z = (float)pz / amount * i;
+		const double x = px / amount * i;
+		const double z = pz / amount * i;
 		if (force.x < 0.0)
 		{
-			rect.x = -x + ball->getX() - 20;
+			rect.x = (float)(-x + ball->position.x - 20);
 		}
 		else
 		{
-			rect.x = x + ball->getX() - 20;
+			rect.x = (float)(x + ball->position.x - 20);
 		}
 
-		float h = f(z, force.z, force.y, ball->getY());
+		const double h = f(z, force.z, force.y, ball->position.y);
 		if (force.z < 0.0)
 		{
-			rect.y = -z + ball->getZ() - abs(h) - 20;
+			rect.y = (float)(-z + ball->position.z - abs(h) - 20);
 		}
 		else
 		{
-			rect.y = z + ball->getZ() - abs(h) - 20;
+			rect.y = (float)(z + ball->position.z - abs(h) - 20);
 		}
 
 		// double angleX = atan(v(x, force.x, force.y)) * 180.0 / 3.1415;
@@ -116,29 +117,29 @@ void Prediction::onPredict(Vector3 &force)
 
 // v(t) = (vy-gt/vx)/vx
 // Keep in mind that the velocity function depends on vx (velocity x-axis)
-double Prediction::v(double t, double vx, double vy)
+double Prediction::v(double t, double vx, double vy) const
 {
 	return (vy - g * t / abs(vx)) / abs(vx);
 }
 
 // zero crossing of v(t)
-double Prediction::zero_crossing_v(double vx, double vy)
+double Prediction::zero_crossing_v(double vx, double vy) const
 {
 	return abs(vx) * vy / g;
 }
 
 // f(t) = ∫v(t)dt = (vyt-gt^2/2vx)/vx+c
-double Prediction::f(double t, double vx, double vy, double c)
+double Prediction::f(double t, double vx, double vy, double c) const
 {
 	return (-g * t * t / (2 * abs(vx)) + vy * t) / abs(vx) + c;
 }
 
 // positive zero crossing of f(t)
-double Prediction::pos_zero_crossing_f(double vx, double vy, double py)
+double Prediction::pos_zero_crossing_f(double vx, double vy, double py) const
 {
-	double a = -g / (2 * vx * vx);
-	double b = vy / abs(vx);
-	double c = py;
+	const double a = -g / (2 * vx * vx);
+	const double b = vy / abs(vx);
+	const double c = py;
 	return pos_zero_crossing(a, b, c);
 }
 
@@ -153,19 +154,19 @@ double Prediction::pos_zero_crossing(double a, double b, double c)
 // length of quadratic function's arc
 double Prediction::length(double x, double a, double b)
 {
-	double tmp1 = a * x + b;
-	double tmp2 = sqrt(1 + tmp1 * tmp1);
-	double tmp3 = sqrt(1 + b * b);
+	const double tmp1 = a * x + b;
+	const double tmp2 = sqrt(1 + tmp1 * tmp1);
+	const double tmp3 = sqrt(1 + b * b);
 
 	// double [...] = a * 0 + b; // we can just use 'b' because the lower bound is always 0
 	return ((log(abs(tmp2 + tmp1)) + tmp1 * tmp2) - (log(abs(tmp3 + b)) + b * tmp3)) / (2 * a);
 }
 
 // l = ∫[0,pzcf](√(1+v(t)^2))
-double Prediction::length_f(double x, double vx, double vy)
+double Prediction::length_f(double x, double vx, double vy) const
 {
-	double a = -g / (vx * vx);
-	double b = vy / abs(vx);
+	const double a = -g / (vx * vx);
+	const double b = vy / abs(vx);
 	return length(x, a, b);
 }
 
@@ -174,11 +175,11 @@ double Prediction::length_f(double x, double vx, double vy)
 double Prediction::x_from_length_f(double l, double vx, double vy, double py)
 {
 	constexpr int ITERATIONS = 10;
-	double zc = pos_zero_crossing_f(vx, vy, py);
+	const double zc = pos_zero_crossing_f(vx, vy, py);
 	double x = zc / 2.0;
 	for (int iter = 1; iter <= ITERATIONS; iter++)
 	{
-		double approx = length_f(x, vx, vy);
+		const double approx = length_f(x, vx, vy);
 		if (approx < l)
 		{
 			x += zc / (4 * iter);

@@ -7,10 +7,10 @@
 class BubbleDrawer : public Component
 {
   private:
+	Transform *transform{nullptr};
 	SDL_Renderer *renderer;
-	Transform *transform;
 	SDL_Texture *texture;
-	double time;
+	double time{0};
 
 	SDL_Color fromColor = {181, 193, 255, 255};
 	SDL_Color toColor = {203, 211, 235, 255};

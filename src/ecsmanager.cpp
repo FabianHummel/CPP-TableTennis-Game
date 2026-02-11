@@ -6,79 +6,95 @@
 namespace EcsManager
 {
 	std::vector<Entity*> entities;
+}
 
-	/// Returns the newly added entity
-	Entity* addEntity(Entity *entity)
-	{
-		entities.push_back(entity);
-		return entity;
-	}
+/// Returns the newly added entity
+Entity* EcsManager::addEntity(Entity *entity)
+{
+	entities.push_back(entity);
+	return entity;
+}
 
-	/// Returns the removed entity
-	Entity* removeEntity(Entity *entity)
-	{
-		entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
-		return entity;
-	}
+/// Returns the removed entity
+Entity* EcsManager::removeEntity(Entity *entity)
+{
+	std::erase(entities, entity);
+	return entity;
+}
 
-	/// Finds an entity in the most outer scope
-	Entity* findEntity(const char *name)
+/// Finds an entity in the most outer scope
+Entity* EcsManager::findEntity(const char *name)
+{
+	for (const auto &entity : entities)
 	{
-		for (auto &entity : entities)
+		if (strcmp(entity->name, name) == 0)
 		{
-			if (strcmp(entity->name, name) == 0)
-			{
-				return entity;
-			}
-		}
-		return nullptr;
-	}
-
-	void callOnEachEntity(const std::function<void(Component *)> &callback)
-	{
-		for (auto &entity : entities)
-		{
-			entity->update(callback);
+			return entity;
 		}
 	}
+	return nullptr;
+}
 
-	void initialize()
+void callOnEachEntity(const std::function<void(Component *)> &callback)
+{
+	for (const auto &entity : EcsManager::entities)
 	{
-		callOnEachEntity([](Component *component) { component->onInitialize(); });
+		entity->update(callback);
 	}
+}
 
-	void start()
+void EcsManager::initialize()
+{
+	callOnEachEntity([](Component *component)
 	{
-		callOnEachEntity([](Component *component) { component->onStart(); });
-	}
+		SDL_LogTrace(SDL_LOG_CATEGORY_APPLICATION, "Initializing %s on %s\n", component->name, component->parent->name);
 
-	void update(double deltaTime)
+		component->onInitialize();
+	});
+}
+
+void EcsManager::start()
+{
+	callOnEachEntity([](Component *component)
 	{
-		callOnEachEntity([deltaTime](Component *component) { component->onUpdate(deltaTime); });
-	}
+		SDL_LogTrace(SDL_LOG_CATEGORY_APPLICATION, "Starting %s on %s\n", component->name, component->parent->name);
 
-	void event(const SDL_Event *event)
+		component->onStart();
+	});
+}
+
+void EcsManager::update(double deltaTime)
+{
+	callOnEachEntity([deltaTime](Component *component)
 	{
-		callOnEachEntity([event](Component *component) { component->onEvent(event); });
-	}
+		component->onUpdate(deltaTime);
+	});
+}
 
-	void sort()
+void EcsManager::event(const SDL_Event *event)
+{
+	callOnEachEntity([event](Component *component)
 	{
-		std::sort(entities.begin(), entities.end(), [](Entity *a, Entity *b) {
-			Transform *trfA = a->transform;
-			Transform *trfB = b->transform;
+		component->onEvent(event);
+	});
+}
 
-			if (trfA->getI() == trfB->getI())
-			{
-				return trfA->getZ() < trfB->getZ();
-			}
+void EcsManager::sort()
+{
+	std::ranges::sort(entities, [](const Entity *a, const Entity *b) {
+		const Transform *trfA = a->transform;
+		const Transform *trfB = b->transform;
 
-			return trfA->getI() < trfB->getI();
-		});
-	}
+		if (trfA->zIndex == trfB->zIndex)
+		{
+			return trfA->position.z < trfB->position.z;
+		}
 
-	void clear()
-	{
-		entities.clear();
-	}
+		return trfA->zIndex < trfB->zIndex;
+	});
+}
+
+void EcsManager::clear()
+{
+	entities.clear();
 }

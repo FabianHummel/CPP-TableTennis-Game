@@ -6,7 +6,7 @@
 class Button : public Component
 {
   private:
-	Transform *transform{};
+	Transform *transform{nullptr};
 	std::function<void()> onMouseDown;
 	std::function<void()> onMouseUp;
 	std::function<void()> onMouseOver;

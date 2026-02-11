@@ -4,6 +4,7 @@
 
 NineSlice::NineSlice(const char *img, const Positions positions, SDL_Renderer *renderer)
 {
+	this->name = "Nine Slice";
 	this->renderer = renderer;
 	this->img = img;
 	this->positions = positions;
@@ -11,23 +12,20 @@ NineSlice::NineSlice(const char *img, const Positions positions, SDL_Renderer *r
 
 void NineSlice::onInitialize()
 {
-	printf("Initializing 9-Slice on %s\n", parent->name);
 	this->transform = parent->transform;
 }
 
 void NineSlice::onStart()
 {
-	printf("Loading 9-Slice %s\n", img);
-
 	SDL_Texture *oldRenderTarget = SDL_GetRenderTarget(renderer);
 
-	float top = positions.top;
-	float right = positions.right;
-	float bottom = positions.bottom;
-	float left = positions.left;
+	float top = (float) positions.top;
+	float right = (float) positions.right;
+	float bottom = (float) positions.bottom;
+	float left = (float) positions.left;
 
-	float w = transform->getScaleX();
-	float h = transform->getScaleY();
+	float w = (float) transform->scale.x;
+	float h = (float) transform->scale.y;
 
 	SDL_FPoint size;
 	SDL_Texture *source = IMG_LoadTexture(renderer, img);
@@ -97,21 +95,20 @@ void NineSlice::onUpdate(double deltaTime)
 {
 	if (!visible || !parent->isVisible()) return;
 
-	SDL_FRect dst;
-	dst.x = transform->getX() - transform->getScaleX() * transform->getAnchor().x;
-	dst.y = -transform->getY() + transform->getZ() - transform->getScaleY() * transform->getAnchor().y;
-	dst.w = transform->getScaleX();
-	dst.h = transform->getScaleY();
+	const Vector2 scale = transform->getCalculatedScale();
+	const SDL_FRect dst = transform->getCalculatedRect();
 
-	SDL_FPoint anchor = {transform->getAnchor().x * transform->getScaleX(), transform->getAnchor().y * transform->getScaleY()};
+	const SDL_FPoint anchor = {
+		.x = (float)(transform->anchor.x * scale.x),
+		.y = (float)(transform->anchor.y * scale.y)
+	};
 
 	SDL_SetTextureAlphaMod(texture, parent->getOpacity());
-	SDL_RenderTextureRotated(renderer, this->texture, nullptr, &dst, transform->getRotation(), &anchor, SDL_FLIP_NONE);
+	SDL_RenderTextureRotated(renderer, this->texture, nullptr, &dst, transform->getCalculatedRotation(), &anchor, SDL_FLIP_NONE);
 }
 
 void NineSlice::onDelete()
 {
-	printf("Unloading 9-Slice %s\n", img);
 	SDL_DestroyTexture(this->texture);
 }
 

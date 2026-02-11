@@ -1,8 +1,7 @@
 #include "gamemanager.h"
 #include "ecsmanager.h"
-#include <cstdlib>
-
-#include "components/index.h"
+#include "components/ballmovement.h"
+#include "components/transform.h"
 #include "utility/renderwindow.h"
 
 namespace GameManager
@@ -13,25 +12,20 @@ namespace GameManager
 	{
 		Entity *ball = EcsManager::findEntity("Ball");
 		Transform *transform = ball->getComponent<Transform>();
-		transform->setPosition({RenderWindow::SCREEN_CENTER_X, 10, 650});
+		transform->position = {RenderWindow::SCREEN_CENTER_X, 10, 650};
 
 		BallMovement *ballMovement = ball->getComponent<BallMovement>();
 		ballMovement->idle = true;
-		ballMovement->setForce({0, 8, 0});
+		ballMovement->velocity = {0, 8, 0};
 	}
 
-	void switchScene(Pane *from, Pane *to)
+	void switchScene(const Pane *from, Pane *to)
 	{
 		delete from;
 
-		if (to == nullptr)
-		{
-			exit(EXIT_FAILURE);
-		}
-
 		currentPane = to;
 		EcsManager::initialize();
-		GameManager::currentPane->onStart();
+		currentPane->onStart();
 		EcsManager::start();
 	}
 }

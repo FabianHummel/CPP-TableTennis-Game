@@ -10,6 +10,11 @@
 #include "lobby.h"
 #include <functional>
 
+#include "../components/bubbledrawer.h"
+#include "../components/button.h"
+#include "../components/menuballbehaviour.h"
+#include "../components/menutitle.h"
+#include "../components/spriterenderer.h"
 #include "../utility/renderwindow.h"
 
 HomePane::HomePane(SDL_Renderer *renderer) : Pane(renderer)
@@ -168,13 +173,13 @@ void HomePane::nextGameMode()
 void HomePane::startServer()
 {
 	NetManager::on_match_found = [this](const char *matchCode) {
-		printf("Match found: %s\n", matchCode);
+		SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Match found: %s\n", matchCode);
 		EcsManager::clear();
 		Pane *lobby = new LobbyPane(renderer, matchCode, playerName);
 		GameManager::switchScene(this, lobby);
 	};
 	NetManager::on_match_not_found = [] {
-		fprintf(stderr, "Match not found\n");
+		SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Match not found\n");
 	};
 	NetManager::init_matchmaking();
 }

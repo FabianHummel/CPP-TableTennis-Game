@@ -8,11 +8,10 @@
 
 namespace MathUtil
 {
-	float sign(float x);
-
-	void moveTowards(float &current, float target, float maxDelta);
-	void moveTowardsZero(float &current, float maxDelta);
-	void moveTowards(Vector3 &current, const Vector3 &target, float maxDelta);
-	void moveTowardsZero(Vector3 &current, float maxDelta);
-	bool closeToPoint(float value, float threshold);
+	double sign(double x);
+	void moveTowards(double &current, double target, double maxDelta);
+	void moveTowardsZero(double &current, double maxDelta);
+	void moveTowards(Vector3 &current, const Vector3 &target, double maxDelta);
+	void moveTowardsZero(Vector3 &current, double maxDelta);
+	bool closeToPoint(double value, double threshold);
 };

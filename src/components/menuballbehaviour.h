@@ -10,7 +10,9 @@ class MenuBallBehaviour : public Component
 	Transform *transform{};
 	double time{};
 
-  protected:
+  public:
+	MenuBallBehaviour();
+
 	void onInitialize() override;
 	void onUpdate(double deltaTime) override;
 };

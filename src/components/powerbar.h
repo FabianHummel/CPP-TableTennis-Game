@@ -5,31 +5,33 @@
 #include "prediction.h"
 #include "spriterenderer.h"
 
-class Powerbar : public Component
+class PowerBar : public Component
 {
   private:
-	float size;
-	bool isDragging;
-	float startX, startY;
-	float deltaX, deltaY;
-	float strength;
+	float size{0};
+	bool isDragging{0};
+	float startX{0}, startY{0};
+	float deltaX{0}, deltaY{0};
+	float strength{0};
 
-	BallMovement *ball;
-	Transform *indicator;
-	SpriteRenderer *indicatorSprite;
-	Transform *powerbox;
-	SpriteRenderer *powerboxSprite;
-	Transform *powerbar;
-	SpriteRenderer *powerbarSprite;
-	Prediction *prediction;
+	BallMovement *ball{nullptr};
+	Transform *indicator{nullptr};
+	SpriteRenderer *indicatorSprite{nullptr};
+	Transform *powerbox{nullptr};
+	SpriteRenderer *powerboxSprite{nullptr};
+	Transform *powerbar{nullptr};
+	SpriteRenderer *powerbarSprite{nullptr};
+	Prediction *prediction{nullptr};
 
 	void onClick(float x, float y);
 	void onRelease();
 	void onDrag(float x, float y);
 	void setProgress(float v, float y);
-	Vector3 calcForce();
+	Vector3 calcForce() const;
 
   public:
+	PowerBar();
+
 	void onInitialize() override;
 	void onStart() override;
 	void onUpdate(double deltaTime) override;

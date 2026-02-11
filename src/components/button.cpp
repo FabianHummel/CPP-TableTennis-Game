@@ -9,6 +9,7 @@ Button::Button(
 	const std::function<void()> &onMouseOver,
 	const std::function<void()> &onMouseExit)
 {
+	this->name = "Button";
 	this->onMouseDown = onMouseDown;
 	this->onMouseUp = onMouseUp;
 	this->onMouseOver = onMouseOver;
@@ -29,10 +30,9 @@ void Button::onUpdate(double deltaTime)
 	x *= 2;
 	y *= 2;
 
-	if (transform->inTransformBounds(x, y))
-		CursorManager::requestCursor(CursorManager::handCursor);
-	else
-		CursorManager::requestCursor(CursorManager::arrowCursor);
+	CursorManager::requestCursor(transform->inTransformBounds(x, y)
+		? CursorManager::handCursor
+		: CursorManager::arrowCursor);
 }
 
 void Button::onEvent(const SDL_Event *event)

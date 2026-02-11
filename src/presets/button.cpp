@@ -1,39 +1,41 @@
 #include "index.h"
-#include "random"
+#include "../components/button.h"
 #include "../animationmanager.h"
+#include "../components/nineslice.h"
+#include "../components/textrenderer.h"
 
-Preset Presets::button(SDL_Renderer *renderer, const char *text, int ptSize, const std::function<void()> &onClick)
+Preset Presets::button(SDL_Renderer *renderer, const char *text, const int ptSize, const std::function<void()> &onClick)
 {
 	return [=](Entity *target) {
-		NineSlice *normal = new NineSlice("res/button.png", { 32, 32, 48, 32 }, renderer);
-		NineSlice *hover = new NineSlice("res/buttonhover.png", { 32, 32, 40, 32 }, renderer);
+		const auto normal = new NineSlice("res/button.png", { 32, 32, 48, 32 }, renderer);
+		const auto hover = new NineSlice("res/buttonhover.png", { 32, 32, 40, 32 }, renderer);
 		hover->visible = false;
 
-		std::function onMouseEnter = [=] {
+		const std::function onMouseEnter = [=] {
 			normal->visible = false;
 			hover->visible = true;
-			target->transform->mvByZ(4);
-			target->transform->mvByScaleY(-8);
-			float randomRotation = random() % 6 - 3;
+			target->transform->position.z += 4;
+			target->transform->scale.y += -8;
+			const float randomRotation = SDL_randf() * 6 - 3;
 
 			AnimationManager::play([=](double t) {
-				target->animation->setRotation(t * randomRotation);
-				target->animation->setScaleX(t * 15);
-				target->animation->setScaleY(t * 20);
+				target->animation->rotation = (float)(t * randomRotation);
+				target->animation->scale.x = t * 15;
+				target->animation->scale.y = t * 20;
 			}, Easings::easeOutElastic, 0.5);
 		};
 
-		std::function onMouseExit = [=] {
+		const std::function onMouseExit = [=] {
 			normal->visible = true;
 			hover->visible = false;
-			target->transform->mvByZ(-4);
-			target->transform->mvByScaleY(8);
-			float initialRotation = target->animation->getRotation();
+			target->transform->position.z += -4;
+			target->transform->scale.y += 8;
+			const float initialRotation = target->animation->rotation;
 
 			AnimationManager::play([=](double t) {
-				target->animation->setRotation((1-t) * initialRotation);
-				target->animation->setScaleX((1-t) * 15);
-				target->animation->setScaleY((1-t) * 20);
+				target->animation->rotation = (float)((1-t) * initialRotation);
+				target->animation->scale.x = (1-t) * 15;
+				target->animation->scale.y = (1-t) * 20;
 			}, Easings::easeOutElastic, 0.5);
 		};
 
