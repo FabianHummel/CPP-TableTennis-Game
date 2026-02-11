@@ -74,6 +74,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
+	AppState& state = *static_cast<AppState*>(appstate);
+
 	switch (event->type)
 	{
 		case SDL_EVENT_QUIT: {
@@ -84,7 +86,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 			KeyboardManager::preEvent(event);
 			GameManager::currentPane->onEvent(event);
 			EcsManager::event(event);
-			KeyboardManager::postEvent();
+			KeyboardManager::postEvent(state.window);
 	}
 
 	return SDL_APP_CONTINUE;

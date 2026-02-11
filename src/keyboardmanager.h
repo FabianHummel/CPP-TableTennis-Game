@@ -12,7 +12,7 @@ namespace KeyboardManager {
     extern bool isTextInputRequested;
 
     void preEvent(const SDL_Event *event);
-    void postEvent();
+    void postEvent(SDL_Window *window);
 };
 
 

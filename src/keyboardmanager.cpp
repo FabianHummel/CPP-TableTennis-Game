@@ -23,15 +23,15 @@ namespace KeyboardManager
         }
     }
 
-    void postEvent()
+    void postEvent(SDL_Window *window)
     {
         if (isTextInputRequested)
         {
-            SDL_StartTextInput(nullptr);
+            SDL_StartTextInput(window);
         }
         else
         {
-            SDL_StopTextInput(nullptr);
+            SDL_StopTextInput(window);
         }
     }
 }
