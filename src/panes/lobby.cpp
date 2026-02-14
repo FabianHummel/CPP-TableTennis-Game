@@ -17,12 +17,16 @@ LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, cons
 {
 	this->matchCode = match_code;
 	this->playerName = player_name;
+	this->isReady = false;
+	this->isEnemyReady = false;
 
-	NetManager::on_punch_fail = [] {
+	NetManager::on_punch_fail = []
+	{
 		// Display error
 	};
 
-	NetManager::on_punched = [this](ENetPeer *enemy) {
+	NetManager::on_punched = [this](ENetPeer *enemy)
+	{
 		this->enemy = enemy;
 
 		TextRenderer *pTextRenderer = versus->getChild("Opponent")->getComponent<TextRenderer>();
@@ -31,19 +35,29 @@ LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, cons
 		Buffer b(128);
 		b.Write(PEER_ENEMY_DATA);
 		b.Write(playerName);
+		b.Write(isReady);
 		ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
 		enet_peer_send(enemy, 0, packet);
 	};
 
-	NetManager::on_peer_ping = [](const double rtt) {
+	NetManager::on_peer_ping = [](const double rtt)
+	{
 		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "\rRound trip time: %f", rtt);
 		fflush(stdout);
 	};
 
-	NetManager::on_enemy_data_received = [this](const std::string &enemyName) {
+	NetManager::on_enemy_data_received = [this](const std::string &enemyName, const bool readyStatus)
+	{
 		this->enemyName = enemyName;
+		this->isEnemyReady = readyStatus;
 		TextRenderer *pTextRenderer = versus->getChild("Opponent")->getComponent<TextRenderer>();
 		pTextRenderer->setText(this->enemyName.c_str());
+	};
+
+	NetManager::on_enemy_ready_status_received = [this](const bool readyStatus)
+	{
+		this->isEnemyReady = readyStatus;
+		SDL_Log("is enemy ready?: %s\n", this->isEnemyReady ? "true" : "false");
 	};
 
 	versus = EcsManager::addEntity(new Entity("Versus"))
@@ -83,6 +97,27 @@ LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, cons
 		->addComponent(new Button(nullptr, [this] { this->back(); }))
 		->transform
 		->apply({40, 0, 40}, {50, 50}, {0.5f, 0.5f}, 180.0f, RenderIndexes::Menu::UI);
+
+	readyButton = EcsManager::addEntity(new Entity("Ready-Button"))
+		->usePreset(Presets::button(renderer, NOT_READY_TEXT, FontManager::DEFAULT, [this]
+		{
+			this->isReady = !this->isReady;
+			readyButton->getChild("Text")->getComponent<TextRenderer>()->setText(this->isReady ? READY_TEXT : NOT_READY_TEXT);
+			readyButton->getChild("Ready-Image")->getComponent<SpriteRenderer>()->visible = this->isReady;
+
+			if (enemy == nullptr) return;
+			Buffer b(128);
+			b.Write(PEER_ENEMY_READY_STATUS);
+			b.Write(this->isReady);
+			ENetPacket *packet = enet_packet_create(b.GetBuffer(), b.GetSize(), ENET_PACKET_FLAG_RELIABLE);
+			enet_peer_send(enemy, 0, packet);
+		}))
+		->transform
+		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, { 300, 100 }, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
+		->addChild((new Entity("Ready-Image"))
+			->addComponent(new SpriteRenderer("res/ready.svg", renderer))
+			->transform
+			->apply({ 90, 0, -10 }, { 42, 42 }, { 0.5f, 0.5f }, 0.0f, RenderIndexes::Menu::UI));
 }
 
 LobbyPane::~LobbyPane()
@@ -91,6 +126,12 @@ LobbyPane::~LobbyPane()
 	delete matchCodeButton;
 	delete background;
 	delete backButton;
+	delete readyButton;
+}
+
+void LobbyPane::onStart()
+{
+	readyButton->getChild("Ready-Image")->getComponent<SpriteRenderer>()->visible = false;
 }
 
 void LobbyPane::onEvent(const SDL_Event *event)
@@ -103,11 +144,15 @@ void LobbyPane::onEvent(const SDL_Event *event)
 		case SDLK_ESCAPE:
 			this->back();
 			break;
+		default:
+			break;
 		}
+	default:
+		break;
 	}
 }
 
-void LobbyPane::back()
+void LobbyPane::back() const
 {
 	EcsManager::clear();
 	Pane *pane = new HomePane(renderer);

@@ -9,6 +9,15 @@ SpriteRenderer::SpriteRenderer(const char *img, SDL_Renderer *renderer)
 	this->img = img;
 }
 
+// SpriteRenderer::SpriteRenderer(const char *svgImg, SDL_Renderer *renderer, int width, int height)
+// {
+// 	this->name = "Sprite Renderer";
+// 	this->renderer = renderer;
+// 	this->svgImg = svgImg;
+// 	this->width = width;
+// 	this->height = height;
+// }
+
 void SpriteRenderer::onInitialize()
 {
 	this->transform = parent->transform;
@@ -17,7 +26,12 @@ void SpriteRenderer::onInitialize()
 void SpriteRenderer::onStart()
 {
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Loading Texture %s\n", img);
+
 	this->texture = IMG_LoadTexture(renderer, img);
+
+	if (this->texture == nullptr) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load Texture %s: %s\n", img, SDL_GetError());
+	}
 }
 
 void SpriteRenderer::onUpdate(double deltaTime)

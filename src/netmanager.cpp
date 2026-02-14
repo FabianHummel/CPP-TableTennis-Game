@@ -10,7 +10,8 @@ namespace NetManager
 	std::function<void()> on_punch_fail{};
 	std::function<void(ENetPeer *enemy)> on_punched{};
 	std::function<void(double rtt)> on_peer_ping{};
-	std::function<void(const std::string &enemyName)> on_enemy_data_received{};
+	std::function<void(const std::string &enemyName, bool readyStatus)> on_enemy_data_received{};
+	std::function<void(bool readyStatus)> on_enemy_ready_status_received{};
 
 	ENetPeer *enemy;
 	ENetHost *host;
@@ -124,7 +125,13 @@ namespace NetManager
 		}
 		case PEER_ENEMY_DATA: {
 			const auto enemyName = buffer.Read<std::string>();
-			on_enemy_data_received(enemyName);
+			const bool readyStatus = buffer.Read<bool>();
+			on_enemy_data_received(enemyName, readyStatus);
+			break;
+		}
+		case PEER_ENEMY_READY_STATUS: {
+			const bool readyStatus = buffer.Read<bool>();
+			on_enemy_ready_status_received(readyStatus);
 			break;
 		}
 		default:
@@ -168,9 +175,10 @@ namespace NetManager
 				enet_packet_destroy(event.packet);
 				break;
 			}
-			case ENET_EVENT_TYPE_NONE: {
+			case ENET_EVENT_TYPE_NONE:
+			case ENET_EVENT_TYPE_DISCONNECT_TIMEOUT:
 				break;
-			} }
+			}
 		}
 	}
 }

@@ -6,23 +6,31 @@
 
 class LobbyPane : public Pane
 {
+  private:
+	const char READY_TEXT[12] = "Ready!     ";
+	const char NOT_READY_TEXT[10] = "Not ready";
+
   protected:
 	Entity *versus;
 	Entity *background;
 	Entity *backButton;
 	Entity *matchCodeButton;
+	Entity *readyButton;
 
 	ENetPeer *enemy;
 
 	std::string matchCode;
 	std::string playerName;
 	std::string enemyName;
+	bool isReady;
+	bool isEnemyReady;
 
-	void back();
+	void back() const;
 
   public:
 	explicit LobbyPane(SDL_Renderer *renderer, const std::string &match_code, const std::string &player_name);
 	~LobbyPane();
 
+	void onStart() override;
 	void onEvent(const SDL_Event *event) override;
 };

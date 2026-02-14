@@ -15,6 +15,7 @@ class SpriteRenderer : public Component
 	bool visible = true;
 
 	SpriteRenderer(const char *img, SDL_Renderer *renderer);
+	//SpriteRenderer(const char *svgImg, SDL_Renderer *renderer, int width, int height);
 
 	void onInitialize() override;
 	void onStart() override;
