@@ -11,7 +11,8 @@ class LobbyPane : public Pane
 	const char NOT_READY_TEXT[10] = "Not ready";
 
   protected:
-	Entity *versus;
+	Entity *versusTitle;
+	Entity *versusEnemyName;
 	Entity *background;
 	Entity *backButton;
 	Entity *matchCodeButton;
@@ -33,4 +34,5 @@ class LobbyPane : public Pane
 
 	void onStart() override;
 	void onEvent(const SDL_Event *event) override;
+	void onGui(double deltaTime) override;
 };

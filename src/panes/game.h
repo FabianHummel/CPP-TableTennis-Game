@@ -14,8 +14,9 @@ class GamePane : public Pane
 	Entity *powerbar;
 	Entity *powerbox;
 	Entity *prediction;
+	Entity *backButton;
 
-	void back();
+	void back() const;
 
   public:
 	explicit GamePane(SDL_Renderer *renderer);

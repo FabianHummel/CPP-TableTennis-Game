@@ -4,8 +4,9 @@
 
 namespace FontManager
 {
-	constexpr int DEFAULT = 42;
 	constexpr int BIG = 64;
+	constexpr int DEFAULT = 42;
+	constexpr int SMALL = 32;
 
 	extern TTF_Font *main;
 	extern TTF_Font *mono;

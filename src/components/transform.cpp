@@ -23,10 +23,10 @@ Vector3 Transform::getCalculatedPos() const
 
 Vector2 Transform::getCalculatedScale() const
 {
-	Vector2 scale = this->scale;
+	Vector2 scl = scale;
 	if (animation)
-		scale += animation->getCalculatedScale();
-	return scale;
+		scl += animation->getCalculatedScale();
+	return scl;
 }
 
 float Transform::getCalculatedRotation() const

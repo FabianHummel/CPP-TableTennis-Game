@@ -12,6 +12,7 @@ class MenuTitle : public Component
 
   public:
 	MenuTitle();
+	MenuTitle(double timeOffset);
 
 	void onInitialize() override;
 	void onUpdate(double deltaTime) override;

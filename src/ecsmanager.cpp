@@ -1,6 +1,5 @@
 #include "ecsmanager.h"
 #include "components/transform.h"
-#include "componentsystem.h"
 #include <SDL3/SDL_events.h>
 
 namespace EcsManager
@@ -35,48 +34,36 @@ Entity* EcsManager::findEntity(const char *name)
 	return nullptr;
 }
 
-void callOnEachEntity(const std::function<void(Component *)> &callback)
-{
-	for (const auto &entity : EcsManager::entities)
-	{
-		entity->update(callback);
-	}
-}
-
 void EcsManager::initialize()
 {
-	callOnEachEntity([](Component *component)
+	for (const auto &entity : entities)
 	{
-		SDL_LogTrace(SDL_LOG_CATEGORY_APPLICATION, "Initializing %s on %s\n", component->name, component->parent->name);
-
-		component->onInitialize();
-	});
+		entity->initialize();
+	}
 }
 
 void EcsManager::start()
 {
-	callOnEachEntity([](Component *component)
+	for (const auto &entity : entities)
 	{
-		SDL_LogTrace(SDL_LOG_CATEGORY_APPLICATION, "Starting %s on %s\n", component->name, component->parent->name);
-
-		component->onStart();
-	});
+		entity->start();
+	}
 }
 
-void EcsManager::update(double deltaTime)
+void EcsManager::update(const double deltaTime)
 {
-	callOnEachEntity([deltaTime](Component *component)
+	for (const auto &entity : entities)
 	{
-		component->onUpdate(deltaTime);
-	});
+		entity->update(deltaTime);
+	}
 }
 
 void EcsManager::event(const SDL_Event *event)
 {
-	callOnEachEntity([event](Component *component)
+	for (const auto &entity : entities)
 	{
-		component->onEvent(event);
-	});
+		entity->event(event);
+	}
 }
 
 void EcsManager::sort()

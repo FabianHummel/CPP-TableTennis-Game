@@ -1,8 +1,13 @@
 #include "menutitle.h"
 
-MenuTitle::MenuTitle()
+MenuTitle::MenuTitle() : MenuTitle(0.0)
+{
+}
+
+MenuTitle::MenuTitle(const double timeOffset)
 {
 	this->name = "Menu Title";
+	this->time = timeOffset;
 }
 
 void MenuTitle::onInitialize()

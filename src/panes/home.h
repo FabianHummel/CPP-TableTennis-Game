@@ -8,8 +8,8 @@
 class HomePane : public Pane
 {
   private:
-	char matchCode[6] = {};
-	char playerName[6] = {};
+	char matchCode[6] = {""};
+	char playerName[6] = {""};
 	GameMode currentGameMode{};
 	TextRenderer *gamemodeText{};
 
@@ -30,6 +30,7 @@ class HomePane : public Pane
 
 	void onStart() override;
 	void onEvent(const SDL_Event *event) override;
+	void onGui(double deltaTime) override;
 
 	void changeGameMode();
 	void previousGameMode();

@@ -16,11 +16,12 @@ class Component
 
 	Entity *parent{};
 
-	virtual void onInitialize(){};
-	virtual void onStart(){};
-	virtual void onUpdate(double deltaTime){};
-	virtual void onEvent(const SDL_Event *event){};
-	virtual void onDelete(){};
+	virtual ~Component() = default;
+	virtual void onInitialize(){}
+	virtual void onStart(){}
+	virtual void onUpdate(double deltaTime){}
+	virtual void onEvent(const SDL_Event *event){}
+	virtual void onDelete(){}
 };
 
 class Transform;
@@ -44,7 +45,11 @@ class Entity
 
 	int getOpacity() const;
 	bool isVisible() const;
-	void update(const std::function<void(Component*)> &callback);
+	void initialize();
+	void start();
+	void update(double deltaTime);
+	void event(const SDL_Event *event);
+	void runOnComponents(const std::function<void(Component*)> &callback);
 
 	Entity* addChild(Entity *child);
 	Entity* getChild(const char *name) const;

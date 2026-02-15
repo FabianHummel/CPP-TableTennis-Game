@@ -7,5 +7,7 @@
 namespace Presets
 {
 	extern Preset button(SDL_Renderer *renderer, const char *text, int ptSize, const std::function<void()> &onClick);
-	extern Preset textinput(SDL_Renderer *renderer, char* text, int ptSize, size_t max_length);
+	extern Preset textinput(SDL_Renderer *renderer, char* text, size_t max_length, const char* placeholder, int ptSize);
+	extern Preset readonlyTextinput(SDL_Renderer *renderer, const char* text, int ptSize);
+	extern Preset error(SDL_Renderer *renderer, const char* text, int ptSize);
 }

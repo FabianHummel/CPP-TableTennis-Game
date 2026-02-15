@@ -2,6 +2,7 @@
 #include "home.h"
 #include "../presets/index.h"
 #include "../ecsmanager.h"
+#include "../errormanager.h"
 #include "../gamemanager.h"
 #include "../netmanager.h"
 #include "../fontmanager.h"
@@ -29,7 +30,7 @@ LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, cons
 	{
 		this->enemy = enemy;
 
-		TextRenderer *pTextRenderer = versus->getChild("Opponent")->getComponent<TextRenderer>();
+		TextRenderer *pTextRenderer = versusEnemyName->getChild("Text")->getComponent<TextRenderer>();
 		pTextRenderer->setText("Enemy");
 
 		Buffer b(128);
@@ -50,25 +51,32 @@ LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, cons
 	{
 		this->enemyName = enemyName;
 		this->isEnemyReady = readyStatus;
-		TextRenderer *pTextRenderer = versus->getChild("Opponent")->getComponent<TextRenderer>();
+		TextRenderer *pTextRenderer = versusEnemyName->getChild("Text")->getComponent<TextRenderer>();
 		pTextRenderer->setText(this->enemyName.c_str());
+		versusEnemyName->getChild("Ready-Image")->getComponent<SpriteRenderer>()->visible = this->isEnemyReady;
 	};
 
 	NetManager::on_enemy_ready_status_received = [this](const bool readyStatus)
 	{
 		this->isEnemyReady = readyStatus;
-		SDL_Log("is enemy ready?: %s\n", this->isEnemyReady ? "true" : "false");
+		versusEnemyName->getChild("Ready-Image")->getComponent<SpriteRenderer>()->visible = this->isEnemyReady;
 	};
 
-	versus = EcsManager::addEntity(new Entity("Versus"))
+	versusTitle = EcsManager::addEntity(new Entity("Versus-Title"))
 		->addComponent(new SpriteRenderer("res/versus.png", renderer))
-	    ->addComponent(new MenuTitle())
+		->addComponent(new MenuTitle())
 		->transform
-		->apply({RenderWindow::SCREEN_CENTER_X, 0, 230}, {700, 348}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::TITLE)
-		->addChild((new Entity("Opponent"))
+		->apply({RenderWindow::SCREEN_CENTER_X, 0, 160}, {500, 138}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::TITLE);
+
+	versusEnemyName = EcsManager::addEntity(new Entity("Versus-Enemy-Name"))
+		->usePreset(Presets::readonlyTextinput(renderer, "Waiting...", FontManager::DEFAULT))
+	    ->addComponent(new MenuTitle(0.5))
+		->transform
+		->apply({RenderWindow::SCREEN_CENTER_X + 100, 0, 300}, {300, 100}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
+		->addChild((new Entity("Ready-Image"))
+			->addComponent(new SpriteRenderer("res/ready.png", renderer))
 			->transform
-			->apply({-120, 0, 0}, {0, 0}, {0.0f, 0.0f}, 0.0f, 0)
-			->addComponent(new TextRenderer(renderer, "Waiting...", FontManager::BIG, {64, 64, 64})));
+			->apply({ 90, 0, -10 }, { 42, 42 }, { 0.5f, 0.5f }, 0.0f, RenderIndexes::Menu::UI));
 
 	matchCodeButton = EcsManager::addEntity(new Entity("Invite-Code"))
 		->usePreset(Presets::button(renderer, matchCode.c_str(), FontManager::BIG, [this] {
@@ -115,14 +123,15 @@ LobbyPane::LobbyPane(SDL_Renderer *renderer, const std::string &match_code, cons
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, { 300, 100 }, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
 		->addChild((new Entity("Ready-Image"))
-			->addComponent(new SpriteRenderer("res/ready.svg", renderer))
+			->addComponent(new SpriteRenderer("res/ready.png", renderer))
 			->transform
 			->apply({ 90, 0, -10 }, { 42, 42 }, { 0.5f, 0.5f }, 0.0f, RenderIndexes::Menu::UI));
 }
 
 LobbyPane::~LobbyPane()
 {
-	delete versus;
+	delete versusTitle;
+	delete versusEnemyName;
 	delete matchCodeButton;
 	delete background;
 	delete backButton;
@@ -132,6 +141,7 @@ LobbyPane::~LobbyPane()
 void LobbyPane::onStart()
 {
 	readyButton->getChild("Ready-Image")->getComponent<SpriteRenderer>()->visible = false;
+	versusEnemyName->getChild("Ready-Image")->getComponent<SpriteRenderer>()->visible = false;
 }
 
 void LobbyPane::onEvent(const SDL_Event *event)
@@ -150,6 +160,11 @@ void LobbyPane::onEvent(const SDL_Event *event)
 	default:
 		break;
 	}
+}
+
+void LobbyPane::onGui(double deltaTime)
+{
+	ErrorManager::showErrors(renderer);
 }
 
 void LobbyPane::back() const

@@ -10,6 +10,7 @@
 #include "lobby.h"
 #include <functional>
 
+#include "../errormanager.h"
 #include "../components/bubbledrawer.h"
 #include "../components/button.h"
 #include "../components/menuballbehaviour.h"
@@ -67,13 +68,13 @@ HomePane::HomePane(SDL_Renderer *renderer) : Pane(renderer)
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 870}, {300, 120}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
 		->apply(false)
-		->usePreset(Presets::textinput(renderer, playerName, FontManager::DEFAULT, sizeof(playerName)-1));
+		->usePreset(Presets::textinput(renderer, playerName, sizeof(playerName)-1, "Name", FontManager::DEFAULT));
 
 	matchCodeInput = EcsManager::addEntity(new Entity("Match-Code-Input"))
 		->transform
 		->apply({RenderWindow::SCREEN_CENTER_X, 0, 1000}, {300, 120}, {0.5f, 0.5f}, 0.0f, RenderIndexes::Menu::UI)
 		->apply(false)
-		->usePreset(Presets::textinput(renderer, matchCode, FontManager::DEFAULT, sizeof(matchCode)-1))
+		->usePreset(Presets::textinput(renderer, matchCode, sizeof(matchCode)-1, "Code", FontManager::DEFAULT))
 		->addChild((new Entity("Continue"))
 			->addComponent(new Button(nullptr, [this] { startOrJoinServer(); }))
 			->addComponent(new SpriteRenderer("res/menuarrow.png", renderer))
@@ -128,6 +129,11 @@ void HomePane::onEvent(const SDL_Event *event)
 	}
 }
 
+void HomePane::onGui(double deltaTime)
+{
+	ErrorManager::showErrors(renderer);
+}
+
 void HomePane::changeGameMode()
 {
 	auto text = magic_enum::enum_name(currentGameMode).data();
@@ -178,17 +184,22 @@ void HomePane::startServer()
 		Pane *lobby = new LobbyPane(renderer, matchCode, playerName);
 		GameManager::switchScene(this, lobby);
 	};
+
 	NetManager::on_match_not_found = [] {
 		SDL_LogWarn(SDL_LOG_CATEGORY_APPLICATION, "Match not found\n");
 	};
-	NetManager::init_matchmaking();
+
+	if (!NetManager::start(nullptr))
+	{
+		ErrorManager::queueError("Could not create an online match.\nCheck logs for further details.");
+	}
 }
 
 void HomePane::joinServer()
 {
 	EcsManager::clear();
 	Pane *lobby = new LobbyPane(renderer, this->matchCode, this->playerName);
-	NetManager::join_match(this->matchCode);
+	NetManager::start(this->matchCode);
 	GameManager::switchScene(this, lobby);
 }
 

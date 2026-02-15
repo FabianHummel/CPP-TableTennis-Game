@@ -16,7 +16,7 @@ Entity::Entity(const char *name)
 Entity::~Entity()
 {
 	EcsManager::removeEntity(this);
-	for (auto &component : components)
+	for (const auto &component : components)
 	{
 		component->onDelete();
 		delete component;
@@ -45,15 +45,49 @@ bool Entity::isVisible() const
 	return this->visible;
 }
 
-void Entity::update(const std::function<void(Component *)> &callback)
+void Entity::initialize()
 {
-	for (auto &component : this->components)
+	runOnComponents([](Component *component)
+	{
+		SDL_LogTrace(SDL_LOG_CATEGORY_APPLICATION, "Initializing %s on %s\n", component->name, component->parent->name);
+		component->onInitialize();
+	});
+}
+
+void Entity::start()
+{
+	runOnComponents([](Component *component)
+	{
+		SDL_LogTrace(SDL_LOG_CATEGORY_APPLICATION, "Starting %s on %s\n", component->name, component->parent->name);
+		component->onStart();
+	});
+}
+
+void Entity::update(const double deltaTime)
+{
+	runOnComponents([deltaTime](Component *component)
+	{
+		component->onUpdate(deltaTime);
+	});
+}
+
+void Entity::event(const SDL_Event *event)
+{
+	runOnComponents([event](Component *component)
+	{
+		component->onEvent(event);
+	});
+}
+
+void Entity::runOnComponents(const std::function<void(Component *)> &callback)
+{
+	for (const auto &component : this->components)
 	{
 		callback(component);
 	}
 
-	std::sort(children.begin(), children.end(), [](const Entity *a, const Entity *b)
-		{
+	std::ranges::sort(children, [](const Entity *a, const Entity *b)
+	{
 		const Transform *trfA = a->transform;
 		const Transform *trfB = b->transform;
 
@@ -67,7 +101,7 @@ void Entity::update(const std::function<void(Component *)> &callback)
 
 	for (const auto &child : this->children)
 	{
-		child->update(callback);
+		child->runOnComponents(callback);
 	}
 }
 
@@ -93,7 +127,7 @@ Entity* Entity::getChild(const char *name) const
 
 Entity* Entity::removeChild(Entity *child)
 {
-	this->children.erase(std::find(children.begin(), children.end(), child));
+	std::erase(this->children, child);
 	return child;
 }
 

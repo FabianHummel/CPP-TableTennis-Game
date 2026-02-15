@@ -2,8 +2,11 @@
 
 #include "home.h"
 #include "../ecsmanager.h"
+#include "../errormanager.h"
 #include "../gamemanager.h"
+#include "../netmanager.h"
 #include "../components/ballmovement.h"
+#include "../components/button.h"
 #include "../components/powerbar.h"
 #include "../components/shadowtransformer.h"
 #include "../components/spriterenderer.h"
@@ -12,6 +15,12 @@
 
 GamePane::GamePane(SDL_Renderer *renderer) : Pane(renderer)
 {
+	NetManager::on_timeout = [this]
+	{
+		ErrorManager::queueError("Connection timed out.\nCheck your connection.");
+		this->back();
+	};
+
 	table = EcsManager::addEntity(new Entity("Table"))
 		->transform
 		->apply({0, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Game::TABLE)
@@ -54,6 +63,12 @@ GamePane::GamePane(SDL_Renderer *renderer) : Pane(renderer)
 		->transform
 		->apply({0, 0, 0}, {RenderWindow::SCREEN_WIDTH, RenderWindow::SCREEN_HEIGHT}, {0.0f, 0.0f}, 0.0f, RenderIndexes::Game::PREDICTION)
 		->addComponent(new Prediction("res/predictionsegment.png", renderer));
+
+	backButton = EcsManager::addEntity(new Entity("Back-Button"))
+		->addComponent(new SpriteRenderer("res/menuarrow.png", renderer))
+		->addComponent(new Button(nullptr, [this] { this->back(); }))
+		->transform
+		->apply({40, 0, 40}, {50, 50}, {0.5f, 0.5f}, 180.0f, RenderIndexes::Menu::UI);
 }
 
 GamePane::~GamePane()
@@ -82,7 +97,7 @@ void GamePane::onEvent(const SDL_Event *event)
 	}
 }
 
-void GamePane::back()
+void GamePane::back() const
 {
 	EcsManager::clear();
 	Pane *pane = new HomePane(renderer);

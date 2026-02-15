@@ -17,8 +17,8 @@ namespace EcsManager
 
 	void initialize();
 	void start();
-	void update(double deltaTime);
 	void event(const SDL_Event *event);
+	void update(double deltaTime);
 	void sort();
 	void clear();
 };
