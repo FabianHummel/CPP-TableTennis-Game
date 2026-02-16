@@ -4,41 +4,41 @@
 
 #include "../game/tableside.h"
 #include "../utility/vector3.h"
-#include "../componentsystem.h"
+#include "componentsystem.h"
 
 class BallMovement : public Component
 {
   private:
-	Transform *transform = nullptr;
+    Transform *transform = nullptr;
 
-	double idleTime = 0;
-	constexpr static double IDLE_TIME = 1;
-	MIX_Track *ballTrack = nullptr;
+    double idle_time = 0;
+    MIX_Track *ball_track = nullptr;
 
   public:
-	BallMovement();
+    BallMovement();
 
-	constexpr static double GRAVITY = 0.2;
-	constexpr static double FRICTION = 5.0;
+    constexpr static double IDLE_TIME = 1.0;
+    constexpr static double GRAVITY = 0.2;
+    constexpr static double FRICTION = 5.0;
 
-	bool fellOff = false;
-	bool idle = false;
-	Vector3 velocity = {0.0f, 0.0f, 0.0f};
+    bool fellOff = false;
+    bool idle = false;
+    Vector3 velocity = {0.0f, 0.0f, 0.0f};
 
-	void onInitialize() override;
-	void onStart() override;
-	void onUpdate(double deltaTime) override;
+    void on_initialize() override;
+    void on_start() override;
+    void on_update(double delta_time) override;
 
-	void applyGravity(double deltaTime);
-	void applyFriction(double deltaTime);
-	void applyVelocity(double deltaTime) const;
-	void applyZIndex() const;
+    void apply_gravity(double delta_time);
+    void apply_friction(double delta_time);
+    void apply_velocity(double delta_time) const;
+    void apply_z_index() const;
 
-	void checkGround(double deltaTime);
-	void checkNet(double deltaTime);
-	void checkIdle(double deltaTime);
-	void checkFellOff() const;
+    void check_ground();
+    void check_net(double delta_time);
+    void check_idle(double delta_time);
+    void check_fell_off() const;
 
-	TableSideX getSideX() const;
-	TableSideY getSideY() const;
+    TableSideX get_side_x() const;
+    TableSideY get_side_y() const;
 };

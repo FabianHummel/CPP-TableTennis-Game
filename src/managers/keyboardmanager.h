@@ -7,12 +7,12 @@
 #include <SDL3/SDL_events.h>
 
 
-namespace KeyboardManager {
+namespace KeyboardManager
+{
+    extern bool is_text_input_requested;
 
-    extern bool isTextInputRequested;
-
-    void preEvent(const SDL_Event *event);
-    void postEvent(SDL_Window *window);
+    void pre_event(const SDL_Event* event);
+    void post_event(SDL_Window * window);
 };
 
 

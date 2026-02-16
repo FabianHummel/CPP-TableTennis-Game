@@ -4,26 +4,27 @@
 
 #include "error.h"
 
-Error::Error(const double closeTime)
+Error::Error(const double close_time)
 {
-    this->closeTime = closeTime;
+    this->close_time = close_time;
 }
 
-void Error::onStart()
+void Error::on_start()
 {
-    AnimationManager::play(Animations::swipeIn(this->parent, true), Easings::easeOut, FADEIN_DURATION);
+    AnimationManager::play(Animations::swipe_in(this->parent, true), Easings::ease_out, FADEIN_DURATION);
 }
 
-void Error::onUpdate(const double deltaTime)
+void Error::on_update(const double delta_time)
 {
-    this->elapsedTime += deltaTime;
+    this->elapsed_time += delta_time;
 
-    if (fadeout == nullptr && this->elapsedTime > this->closeTime - FADEOUT_DURATION)
+    if (fadeout == nullptr && this->elapsed_time > this->close_time - FADEOUT_DURATION)
     {
-        fadeout = AnimationManager::play(Animations::swipeOut(this->parent, true), Easings::easeOut, FADEOUT_DURATION);
+        fadeout = AnimationManager::play(Animations::swipe_out(this->parent, true), Easings::ease_out,
+                                         FADEOUT_DURATION);
     }
 
-    if (this->elapsedTime > this->closeTime)
+    if (this->elapsed_time > this->close_time)
     {
         std::erase(AnimationManager::animations, fadeout);
         delete this->parent;

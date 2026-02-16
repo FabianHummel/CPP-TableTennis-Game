@@ -21,25 +21,25 @@ include(FetchContent)
 FetchContent_Declare(
         SDL3
         GIT_REPOSITORY git@github.com:libsdl-org/SDL.git
-        GIT_TAG        release-3.4.0
+        GIT_TAG release-3.4.0
 )
 
 FetchContent_Declare(
         SDL3_IMAGE
         GIT_REPOSITORY git@github.com:libsdl-org/SDL_image.git
-        GIT_TAG        release-3.4.0
+        GIT_TAG release-3.4.0
 )
 
 FetchContent_Declare(
         SDL3_TTF
         GIT_REPOSITORY git@github.com:libsdl-org/SDL_ttf.git
-        GIT_TAG        release-3.2.2
+        GIT_TAG release-3.2.2
 )
 
 FetchContent_Declare(
         SDL3_MIXER
         GIT_REPOSITORY git@github.com:libsdl-org/SDL_mixer.git
-        GIT_TAG        prerelease-3.1.2
+        GIT_TAG prerelease-3.1.2
 )
 FetchContent_MakeAvailable(SDL3 SDL3_IMAGE SDL3_TTF SDL3_MIXER)
 

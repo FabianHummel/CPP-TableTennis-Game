@@ -2,12 +2,12 @@
 
 enum class TableSideX
 {
-	LEFT,
-	RIGHT
+    LEFT,
+    RIGHT
 };
 
 enum class TableSideY
 {
-	TOP,
-	BOTTOM
+    TOP,
+    BOTTOM
 };

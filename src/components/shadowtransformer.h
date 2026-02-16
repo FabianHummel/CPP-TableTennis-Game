@@ -1,17 +1,17 @@
 #pragma once
 
-#include "../componentsystem.h"
+#include "componentsystem.h"
 
 class ShadowTransformer : public Component
 {
-  private:
-	Transform *ball{};
-	Transform *transform{};
-	Entity *target;
+private:
+    Transform* ball{};
+    Transform* transform{};
+    Entity* target;
 
-  public:
-	explicit ShadowTransformer(Entity *shadow);
+public:
+    explicit ShadowTransformer(Entity* shadow);
 
-	void onInitialize() override;
-	void onUpdate(double deltaTime) override;
+    void on_initialize() override;
+    void on_update(double delta_time) override;
 };

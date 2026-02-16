@@ -1,38 +1,40 @@
 #pragma once
 
-#include "pane.h"
-#include "../componentsystem.h"
+#include "../components/componentsystem.h"
 #include "../shared/enet.h"
+#include "pane.h"
 
 class LobbyPane : public Pane
 {
   private:
-	const char READY_TEXT[12] = "Ready!     ";
-	const char NOT_READY_TEXT[10] = "Not ready";
+    const char READY_TEXT[12] = "Ready!     ";
+    const char NOT_READY_TEXT[10] = "Not ready";
 
   protected:
-	Entity *versusTitle;
-	Entity *versusEnemyName;
-	Entity *background;
-	Entity *backButton;
-	Entity *matchCodeButton;
-	Entity *readyButton;
+    Entity *versus_title;
+    Entity *versus_enemy_name;
+    Entity *background;
+    Entity *backButton;
+    Entity *match_code_button;
+    Entity *readyButton;
 
-	ENetPeer *enemy;
+    ENetPeer *enemy;
 
-	std::string matchCode;
-	std::string playerName;
-	std::string enemyName;
-	bool isReady;
-	bool isEnemyReady;
+    std::string match_code;
+    std::string player_name;
+    std::string enemy_name;
+    bool is_ready;
+    bool is_enemy_ready;
 
-	void back() const;
+    void back() const;
+    void handle_match_code_button_click() const;
+    void set_match_code_hint_visibility(bool is_visible) const;
 
   public:
-	explicit LobbyPane(SDL_Renderer *renderer, const std::string &match_code, const std::string &player_name);
-	~LobbyPane();
+    explicit LobbyPane(SDL_Renderer *renderer, const std::string &match_code, const std::string &player_name);
+    ~LobbyPane() override;
 
-	void onStart() override;
-	void onEvent(const SDL_Event *event) override;
-	void onGui(double deltaTime) override;
+    void on_start() override;
+    void on_event(const SDL_Event *event) override;
+    void on_gui(double deltaTime) override;
 };

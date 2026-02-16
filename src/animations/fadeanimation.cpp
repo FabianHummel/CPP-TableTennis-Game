@@ -1,17 +1,17 @@
-#include "../animationmanager.h"
+#include "../managers/animationmanager.h"
 
-Animation Animations::fadeIn(Entity *target)
+Animation Animations::fade_in(Entity* target)
 {
-	return [=](double t)
-	{
-		target->opacity = t * 255;
-	};
+    return [=](const double t)
+    {
+        target->opacity = t * 255;
+    };
 }
 
-Animation Animations::fadeOut(Entity *target)
+Animation Animations::fade_out(Entity* target)
 {
-	return [=](double t)
-	{
-		target->opacity = (1-t) * 255;
-	};
+    return [=](const double t)
+    {
+        target->opacity = (1 - t) * 255;
+    };
 }

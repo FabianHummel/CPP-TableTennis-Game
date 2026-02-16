@@ -4,18 +4,17 @@
 
 #ifndef TABLETENNIS_ONSTART_H
 #define TABLETENNIS_ONSTART_H
-#include "../componentsystem.h"
+#include "componentsystem.h"
 
-
-class OnStart : public Component {
-
+class OnStart : public Component
+{
 private:
-    std::function<void()> onStartCb;
+    std::function<void()> on_start_cb;
 
 public:
-    explicit OnStart(const std::function<void()> &onStart);
+    explicit OnStart(const std::function<void()>& on_start);
 
-    void onStart() override;
+    void on_start() override;
 };
 
 

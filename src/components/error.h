@@ -5,22 +5,23 @@
 #ifndef TABLETENNIS_ERROR_H
 #define TABLETENNIS_ERROR_H
 
-#include "../animationmanager.h"
+#include "../managers/animationmanager.h"
 
-class Error : public Component {
+class Error : public Component
+{
 private:
     constexpr static double FADEOUT_DURATION = 0.3;
     constexpr static double FADEIN_DURATION = 0.3;
 
-    double closeTime;
-    double elapsedTime{0};
-    AnimationInstance *fadeout{nullptr};
+    double close_time;
+    double elapsed_time{0};
+    AnimationInstance* fadeout{nullptr};
 
 public:
-    explicit Error(double closeTime);
+    explicit Error(double close_time);
 
-    void onStart() override;
-    void onUpdate(double deltaTime) override;
+    void on_start() override;
+    void on_update(double delta_time) override;
 };
 
 

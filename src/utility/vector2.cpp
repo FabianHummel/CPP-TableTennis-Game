@@ -5,123 +5,125 @@
 #include "vector2.h"
 #include <cmath>
 
-Vector2::Vector2(const double x, const double y) : x(x), y(y){};
+Vector2::Vector2(const double x, const double y) : x(x), y(y)
+{
+}
 
 Vector2::~Vector2() = default;
 
-Vector2 Vector2::operator+(const Vector2 &other) const
+Vector2 Vector2::operator+(const Vector2& other) const
 {
-	return {this->x + other.x, this->y + other.y};
+    return {this->x + other.x, this->y + other.y};
 }
 
-Vector2 Vector2::operator-(const Vector2 &other) const
+Vector2 Vector2::operator-(const Vector2& other) const
 {
-	return {this->x - other.x, this->y - other.y};
+    return {this->x - other.x, this->y - other.y};
 }
 
-Vector2 Vector2::operator*(const Vector2 &other) const
+Vector2 Vector2::operator*(const Vector2& other) const
 {
-	return {this->x * other.x, this->y * other.y};
+    return {this->x * other.x, this->y * other.y};
 }
 
-Vector2 Vector2::operator/(const Vector2 &other) const
+Vector2 Vector2::operator/(const Vector2& other) const
 {
-	return {this->x / other.x, this->y / other.y};
+    return {this->x / other.x, this->y / other.y};
 }
 
-Vector2 Vector2::operator+(const double &other) const
+Vector2 Vector2::operator+(const double& other) const
 {
-	return {this->x + other, this->y + other};
+    return {this->x + other, this->y + other};
 }
 
-Vector2 Vector2::operator-(const double &other) const
+Vector2 Vector2::operator-(const double& other) const
 {
-	return {this->x - other, this->y - other};
+    return {this->x - other, this->y - other};
 }
 
-Vector2 Vector2::operator*(const double &other) const
+Vector2 Vector2::operator*(const double& other) const
 {
-	return {this->x * other, this->y * other};
+    return {this->x * other, this->y * other};
 }
 
-Vector2 Vector2::operator/(const double &other) const
+Vector2 Vector2::operator/(const double& other) const
 {
-	return {this->x / other, this->y / other};
+    return {this->x / other, this->y / other};
 }
 
-Vector2 &Vector2::operator+=(const Vector2 &other)
+Vector2& Vector2::operator+=(const Vector2& other)
 {
-	this->x += other.x;
-	this->y += other.y;
-	return *this;
+    this->x += other.x;
+    this->y += other.y;
+    return *this;
 }
 
-Vector2 &Vector2::operator-=(const Vector2 &other)
+Vector2& Vector2::operator-=(const Vector2& other)
 {
-	this->x -= other.x;
-	this->y -= other.y;
-	return *this;
+    this->x -= other.x;
+    this->y -= other.y;
+    return *this;
 }
 
-Vector2 &Vector2::operator*=(const Vector2 &other)
+Vector2& Vector2::operator*=(const Vector2& other)
 {
-	this->x *= other.x;
-	this->y *= other.y;
-	return *this;
+    this->x *= other.x;
+    this->y *= other.y;
+    return *this;
 }
 
-Vector2 &Vector2::operator/=(const Vector2 &other)
+Vector2& Vector2::operator/=(const Vector2& other)
 {
-	this->x /= other.x;
-	this->y /= other.y;
-	return *this;
+    this->x /= other.x;
+    this->y /= other.y;
+    return *this;
 }
 
-Vector2 &Vector2::operator+=(const double &other)
+Vector2& Vector2::operator+=(const double& other)
 {
-	this->x += other;
-	this->y += other;
-	return *this;
+    this->x += other;
+    this->y += other;
+    return *this;
 }
 
-Vector2 &Vector2::operator-=(const double &other)
+Vector2& Vector2::operator-=(const double& other)
 {
-	this->x -= other;
-	this->y -= other;
-	return *this;
+    this->x -= other;
+    this->y -= other;
+    return *this;
 }
 
-Vector2 &Vector2::operator*=(const double &other)
+Vector2& Vector2::operator*=(const double& other)
 {
-	this->x *= other;
-	this->y *= other;
-	return *this;
+    this->x *= other;
+    this->y *= other;
+    return *this;
 }
 
-Vector2 &Vector2::operator/=(const double &other)
+Vector2& Vector2::operator/=(const double& other)
 {
-	this->x /= other;
-	this->y /= other;
-	return *this;
+    this->x /= other;
+    this->y /= other;
+    return *this;
 }
 
-bool Vector2::operator==(const Vector2 &other) const
+bool Vector2::operator==(const Vector2& other) const
 {
-	return this->x == other.x && this->y == other.y;
+    return this->x == other.x && this->y == other.y;
 }
 
-bool Vector2::operator!=(const Vector2 &other) const
+bool Vector2::operator!=(const Vector2& other) const
 {
-	return !(*this == other);
+    return !(*this == other);
 }
 
 double Vector2::magnitude() const
 {
-	return sqrt(this->x * this->x + this->y * this->y);
+    return sqrt(this->x * this->x + this->y * this->y);
 }
 
 Vector2 Vector2::normalized() const
 {
-	const double magnitude = this->magnitude();
-	return {this->x / magnitude, this->y / magnitude};
+    const double magnitude = this->magnitude();
+    return {this->x / magnitude, this->y / magnitude};
 }

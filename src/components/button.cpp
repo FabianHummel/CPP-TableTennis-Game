@@ -1,73 +1,80 @@
 #include "button.h"
-#include "../cursormanager.h"
+#include "../managers/cursormanager.h"
+#include "button.h"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_mouse.h>
 
-Button::Button(
-	const std::function<void()> &onMouseDown,
-	const std::function<void()> &onMouseUp,
-	const std::function<void()> &onMouseOver,
-	const std::function<void()> &onMouseExit)
+Button::Button(const EventHandlers &event_handlers)
 {
-	this->name = "Button";
-	this->onMouseDown = onMouseDown;
-	this->onMouseUp = onMouseUp;
-	this->onMouseOver = onMouseOver;
-	this->onMouseExit = onMouseExit;
-};
-
-void Button::onInitialize()
-{
-	this->transform = parent->transform;
+    this->name = "Button";
+    this->on_mouse_down = event_handlers.on_mouse_down;
+    this->on_mouse_up = event_handlers.on_mouse_up;
+    this->on_mouse_over = event_handlers.on_mouse_over;
+    this->on_mouse_exit = event_handlers.on_mouse_exit;
 }
 
-void Button::onUpdate(double deltaTime)
+Button::Button(const std::function<void()> &on_click)
+    : Button(EventHandlers{
+          .on_mouse_up = on_click,
+      })
 {
-	if (!parent->isVisible()) return;
-
-	float x, y;
-	SDL_GetMouseState(&x, &y);
-	x *= 2;
-	y *= 2;
-
-	CursorManager::requestCursor(transform->inTransformBounds(x, y)
-		? CursorManager::handCursor
-		: CursorManager::arrowCursor);
 }
 
-void Button::onEvent(const SDL_Event *event)
+void Button::on_initialize()
 {
-	if (!parent->isVisible()) return;
+    this->transform = parent->transform;
+}
 
-	float x, y;
-	SDL_GetMouseState(&x, &y);
-	x *= 2;
-	y *= 2;
+void Button::on_update(double deltaTime)
+{
+    if (!parent->is_visible())
+        return;
 
-	switch (event->type)
-	{
-	case SDL_EVENT_MOUSE_MOTION:
-		if (transform->inTransformBounds(x, y) && !isMouseOver)
-		{
-			isMouseOver = true;
-			if (onMouseOver)
-				onMouseOver();
-		}
-		else if (!transform->inTransformBounds(x, y) && isMouseOver)
-		{
-			isMouseOver = false;
-			if (onMouseExit)
-				onMouseExit();
-		}
-		break;
-	case SDL_EVENT_MOUSE_BUTTON_DOWN:
-		if (onMouseDown && transform->inTransformBounds(x, y))
-			onMouseDown();
-		break;
+    float x, y;
+    SDL_GetMouseState(&x, &y);
+    x *= 2;
+    y *= 2;
 
-	case SDL_EVENT_MOUSE_BUTTON_UP:
-		if (onMouseUp && transform->inTransformBounds(x, y))
-			onMouseUp();
-		break;
-	}
+    CursorManager::request_cursor(transform->in_transform_bounds(x, y) ? CursorManager::hand_cursor
+                                                                      : CursorManager::arrow_cursor);
+}
+
+void Button::on_event(const SDL_Event *event)
+{
+    if (!parent->is_visible())
+        return;
+
+    float x, y;
+    SDL_GetMouseState(&x, &y);
+    x *= 2;
+    y *= 2;
+
+    switch (event->type)
+    {
+    case SDL_EVENT_MOUSE_MOTION:
+        if (transform->in_transform_bounds(x, y) && !is_mouse_over)
+        {
+            is_mouse_over = true;
+            if (on_mouse_over)
+                on_mouse_over();
+        }
+        else if (!transform->in_transform_bounds(x, y) && is_mouse_over)
+        {
+            is_mouse_over = false;
+            if (on_mouse_exit)
+                on_mouse_exit();
+        }
+        break;
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        if (on_mouse_down && transform->in_transform_bounds(x, y))
+            on_mouse_down();
+        break;
+
+    case SDL_EVENT_MOUSE_BUTTON_UP:
+        if (on_mouse_up && transform->in_transform_bounds(x, y))
+            on_mouse_up();
+        break;
+    default:
+        break;
+    }
 }

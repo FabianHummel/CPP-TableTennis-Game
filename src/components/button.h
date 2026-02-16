@@ -1,26 +1,31 @@
 #pragma once
 
-#include "../componentsystem.h"
+#include "componentsystem.h"
 #include <functional>
 
 class Button : public Component
 {
   private:
-	Transform *transform{nullptr};
-	std::function<void()> onMouseDown;
-	std::function<void()> onMouseUp;
-	std::function<void()> onMouseOver;
-	std::function<void()> onMouseExit;
+    Transform *transform{nullptr};
+    std::function<void()> on_mouse_down;
+    std::function<void()> on_mouse_up;
+    std::function<void()> on_mouse_over;
+    std::function<void()> on_mouse_exit;
 
   public:
-	bool isMouseOver{};
+    struct EventHandlers
+    {
+        const std::function<void()> &on_mouse_down = nullptr;
+        const std::function<void()> &on_mouse_up = nullptr;
+        const std::function<void()> &on_mouse_over = nullptr;
+        const std::function<void()> &on_mouse_exit = nullptr;
+    };
 
-	Button(
-		const std::function<void()> &onMouseDown = nullptr,
-		const std::function<void()> &onMouseUp = nullptr,
-		const std::function<void()> &onMouseOver = nullptr,
-		const std::function<void()> &onMouseExit = nullptr);
-	void onInitialize() override;
-	void onUpdate(double deltaTime) override;
-	void onEvent(const SDL_Event *event) override;
+    bool is_mouse_over{};
+
+    explicit Button(const EventHandlers &event_handlers);
+    explicit Button(const std::function<void()> &on_click);
+    void on_initialize() override;
+    void on_update(double deltaTime) override;
+    void on_event(const SDL_Event *event) override;
 };

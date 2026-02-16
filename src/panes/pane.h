@@ -5,24 +5,24 @@
 class Pane
 {
   protected:
-	SDL_Renderer *renderer;
+    SDL_Renderer *renderer;
 
   public:
-	explicit Pane(SDL_Renderer *renderer);
-	~Pane();
+    explicit Pane(SDL_Renderer *renderer);
+    virtual ~Pane();
 
-	/**
-	 * @brief Called once when the game starts.
-	 */
-	virtual void onStart(){};
+    /**
+     * @brief Called once when the game starts.
+     */
+    virtual void on_start() {};
 
-	/**
-	 * @brief Called every frame.
-	 */
-	virtual void onGui(double deltaTime){};
+    /**
+     * @brief Called every frame.
+     */
+    virtual void on_gui(double delta_time) {};
 
-	/**
-	 * @brief Called when an event fires.
-	 */
-	virtual void onEvent(const SDL_Event *event){};
+    /**
+     * @brief Called when an event fires.
+     */
+    virtual void on_event(const SDL_Event *event) {};
 };

@@ -1,26 +1,24 @@
 #include "menuballbehaviour.h"
 #include <cmath>
 
-double initialPosition;
-
 MenuBallBehaviour::MenuBallBehaviour()
 {
-	this->name = "Menu Ball Behaviour";
+    this->name = "Menu Ball Behaviour";
 }
 
-void MenuBallBehaviour::onInitialize()
+void MenuBallBehaviour::on_initialize()
 {
-	this->transform = this->parent->transform;
-	initialPosition = transform->position.z;
+    this->transform = this->parent->transform;
+    this->initial_position = transform->position.z;
 }
 
 double height(const double x)
 {
-	return (x-2)*(x-2)+4;
+    return (x - 2) * (x - 2) + 4;
 }
 
-void MenuBallBehaviour::onUpdate(const double deltaTime)
+void MenuBallBehaviour::on_update(const double delta_time)
 {
-	time += deltaTime;
-	this->transform->position.z = initialPosition + HEIGHT * height(fmod(time * SPEED, 4));
+    time += delta_time;
+    this->transform->position.z = initial_position + HEIGHT * height(fmod(time * SPEED, 4));
 }

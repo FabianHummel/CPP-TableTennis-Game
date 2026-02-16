@@ -5,6 +5,5 @@
     "preprocess": "node scripts/generate_index.js"
   },
   "dependencies": {
-
   }
 }

@@ -4,11 +4,11 @@
 
 #include "onstart.h"
 
-OnStart::OnStart(const std::function<void()> &onStart) : onStartCb(onStart)
+OnStart::OnStart(const std::function<void()>& on_start) : on_start_cb(on_start)
 {
 }
 
-void OnStart::onStart()
+void OnStart::on_start()
 {
-    this->onStartCb();
+    this->on_start_cb();
 }

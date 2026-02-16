@@ -1,2 +1,6 @@
 BasedOnStyle: Microsoft
-UseTab: AlignWithSpaces
+AllowShortLambdasOnASingleLine: None
+NamespaceIndentation: All
+PenaltyBreakAssignment: 9999
+BraceWrapping:
+  BeforeLambdaBody: true

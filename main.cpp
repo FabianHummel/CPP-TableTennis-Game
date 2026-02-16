@@ -1,18 +1,18 @@
 #define ENET_IMPLEMENTATION
 #define SDL_MAIN_USE_CALLBACKS
 
-#include "src/animationmanager.h"
-#include "src/cursormanager.h"
-#include "src/keyboardmanager.h"
-#include "src/ecsmanager.h"
-#include "src/fontmanager.h"
-#include "src/gamemanager.h"
-#include "src/netmanager.h"
+#include "src/managers/cursormanager.h"
+#include "src/managers/gamemanager.h"
+#include "src/managers/keyboardmanager.h"
+#include "src/managers/animationmanager.h"
+#include "src/managers/ecsmanager.h"
+#include "src/managers/fontmanager.h"
+#include "src/managers/netmanager.h"
 #include "src/panes/home.h"
-#include "src/utility/renderwindow.h"
 #include "src/shared/enet.h"
-#include <SDL3/SDL_main.h>
+#include "src/utility/renderwindow.h"
 #include <SDL3/SDL_init.h>
+#include <SDL3/SDL_main.h>
 #include <SDL3_mixer/SDL_mixer.h>
 #include <cstdio>
 
@@ -21,13 +21,13 @@ struct AppState
 	SDL_Window *window{nullptr};
 	SDL_Renderer *renderer{nullptr};
 	bool running{true};
-	uint64_t currentTick{0};
-	uint64_t lastTick{0};
+	uint64_t current_tick{0};
+	uint64_t last_tick{0};
 };
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
 {
-	*appstate = new AppState;
+	*appstate = new AppState();
 	AppState& state = *static_cast<AppState*>(*appstate);
 
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
@@ -63,18 +63,18 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	CursorManager::loadCursors();
+	CursorManager::load_cursors();
 	FontManager::init();
-	GameManager::switchScene(nullptr, new HomePane(state.renderer));
+	GameManager::switch_scene(nullptr, new HomePane(state.renderer));
 
-	state.currentTick = SDL_GetPerformanceCounter();
+	state.current_tick = SDL_GetPerformanceCounter();
 
 	return SDL_APP_CONTINUE;
 }
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
-	AppState& state = *static_cast<AppState*>(appstate);
+    const auto *state = static_cast<AppState*>(appstate);
 
 	switch (event->type)
 	{
@@ -83,10 +83,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 		}
 
 		default:
-			KeyboardManager::preEvent(event);
-			GameManager::currentPane->onEvent(event);
+			KeyboardManager::pre_event(event);
+			GameManager::current_pane->on_event(event);
 			EcsManager::event(event);
-			KeyboardManager::postEvent(state.window);
+			KeyboardManager::post_event(state->window);
 	}
 
 	return SDL_APP_CONTINUE;
@@ -94,37 +94,37 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
-	AppState& state = *static_cast<AppState*>(appstate);
+    auto *state = static_cast<AppState*>(appstate);
 
-	state.lastTick = state.currentTick;
-	state.currentTick = SDL_GetPerformanceCounter();
-	double deltaTime = (double)(state.currentTick - state.lastTick) / (double)SDL_GetPerformanceFrequency();
+	state->last_tick = state->current_tick;
+	state->current_tick = SDL_GetPerformanceCounter();
+    const double delta_time = (double)(state->current_tick - state->last_tick) / (double)SDL_GetPerformanceFrequency();
 
-	if (SDL_GetWindowFlags(state.window) & SDL_WINDOW_OCCLUDED)
+	if (SDL_GetWindowFlags(state->window) & SDL_WINDOW_OCCLUDED)
 	{
 		SDL_Delay(100);
 	}
 
 	EcsManager::sort();
-	CursorManager::forceSetCursor(CursorManager::arrowCursor);
+	CursorManager::force_set_cursor(CursorManager::arrow_cursor);
 
-	SDL_SetRenderDrawColor(state.renderer, 203, 211, 235, 255);
-	SDL_RenderClear(state.renderer);
+	SDL_SetRenderDrawColor(state->renderer, 203, 211, 235, 255);
+	SDL_RenderClear(state->renderer);
 
-	NetManager::update(deltaTime);
-	EcsManager::update(deltaTime);
-	GameManager::currentPane->onGui(deltaTime);
-	AnimationManager::update(deltaTime);
+	NetManager::update(delta_time);
+	EcsManager::update(delta_time);
+	GameManager::current_pane->on_gui(delta_time);
+	AnimationManager::update(delta_time);
 	CursorManager::update();
 
-	SDL_RenderPresent(state.renderer);
+	SDL_RenderPresent(state->renderer);
 
 	return SDL_APP_CONTINUE;
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
-	AppState* state = static_cast<AppState*>(appstate);
+    const auto *state = static_cast<AppState*>(appstate);
 	delete state;
 
 	FontManager::close();

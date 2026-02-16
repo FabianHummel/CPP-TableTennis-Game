@@ -6,14 +6,14 @@
 class Cursor : public Component
 {
 private:
-    Transform *transform{};
-    TextInput *textInput{};
-    SpriteRenderer *spriteRenderer{};
+    Transform* transform{};
+    TextInput* text_input{};
+    SpriteRenderer* sprite_renderer{};
     double time;
-    int ptSize;
+    int pt_size;
 
 public:
     Cursor(int ptSize);
-    void onInitialize() override;
-    void onUpdate(double deltaTime) override;
+    void on_initialize() override;
+    void on_update(double deltaTime) override;
 };

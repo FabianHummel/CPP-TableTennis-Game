@@ -14,8 +14,8 @@ private:
     static std::vector<const char*> errors;
 
 public:
-    static void queueError(const char *error);
-    static void showErrors(SDL_Renderer *renderer);
+    static void queue_error(const char* error);
+    static void show_errors(SDL_Renderer* renderer);
 };
 
 

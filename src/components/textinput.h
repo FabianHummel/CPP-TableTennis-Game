@@ -1,22 +1,22 @@
 #pragma once
 
+#include "componentsystem.h"
 #include "textrenderer.h"
-#include "../componentsystem.h"
 
 class TextInput : public Component
 {
 private:
-	Transform *transform{};
-	std::function<void(char*text)> onInputChanged;
-	size_t max_length;
+    Transform* transform{};
+    std::function<void(char* text)> on_input_changed;
+    size_t max_length;
 
 public:
-	char *text;
-  	bool isFocused{};
+    char* text;
+    bool is_focused{};
 
-	TextInput(char *text, size_t max_length, const std::function<void(char *text)> &onInputChanged);
+    TextInput(char* text, size_t max_length, const std::function<void(char* text)>& on_input_changed);
 
-	void onInitialize() override;
-	void onUpdate(double deltaTime) override;
-	void onEvent(const SDL_Event *event) override;
+    void on_initialize() override;
+    void on_update(double delta_time) override;
+    void on_event(const SDL_Event* event) override;
 };
